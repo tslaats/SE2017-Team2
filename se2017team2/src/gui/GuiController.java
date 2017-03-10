@@ -203,77 +203,101 @@ public class GuiController {
 	}
 
 	/**
+	 * Creates a Cr Event
 	 * 
-	 * @param pos 
-	 * @param name 
-	 * @throws Exception 
+	 * @param pos Position of the Event
+	 * @param name Name of the Event
+	 * @throws Exception If there was problem creating the Event
 	 */
 	public void CreateEvent(Position pos, String name) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
 		}
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.addEvent(pos, name);		
 	}
 
 	/**
+	 * Deletes a Cr Event
 	 * 
-	 * @param eventID 
-	 * @throws Exception 
+	 * @param eventID ID of the Event
+	 * @throws Exception If there was a problem deleting the Event
 	 */
 	public void DeleteEvent(int eventID) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
 		}
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.deleteEvent(eventID);	
 	}
 
 	/**
+	 * Creates a Cr Response Relation
 	 * 
-	 * @param incomingID 
-	 * @param outgoingID 
-	 * @throws Exception 
+	 * @param incomingID ID of the incoming Event
+	 * @param outgoingID ID of the outgoing Event
+	 * @throws Exception If there was a problem creating the Response Relation
 	 */
 	public void CreateResponse(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
 		}
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.addResponse(incomingID, outgoingID);
 	}
 
 	/**
+	 * Deletes a Cr Response Relation
 	 * 
-	 * @param crObjID 
-	 * @throws Exception 
+	 * @param crObjID ID of the Response Relation
+	 * @throws Exception If there was a problem deleting the Response Relation
 	 */
 	public void DeleteResponse(int crObjID) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
 		}
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.deleteResponse(crObjID);
 	}
 
 	/**
+	 * Creates a Cr Condition Relation
 	 * 
-	 * @param incomingID 
-	 * @param outgoingID 
-	 * @throws Exception 
+	 * @param incomingID ID of the incoming Event
+	 * @param outgoingID ID of the outgoing Event
+	 * @throws Exception If there was a problem creating the Condition Relation
 	 */
 	public void CreateCondition(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
 		}
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.addCondition(incomingID, outgoingID);
 	}
 
 	/**
+	 * Deletes a Cr Condition Relation
 	 * 
-	 * @param crObjID 
-	 * @throws Exception 
+	 * @param crObjID ID of the Condition Relation
+	 * @throws Exception If there was a problem deleting the Condition Relation
 	 */
 	public void DeleteCondition(int crObjID) throws Exception {
 		// Make sure that active graph is a Cr Graph 
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
-		}
+		}		
+		
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.deleteCondition(crObjID);
 	}
 };

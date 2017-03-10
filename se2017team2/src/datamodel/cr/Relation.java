@@ -6,6 +6,7 @@ public abstract class Relation extends CrObject {
 	private final Event outgoing;
 	
 	protected Relation(Event in, Event out) {
+		super();
 		this.incoming = in;
 		this.outgoing = out;
 	}

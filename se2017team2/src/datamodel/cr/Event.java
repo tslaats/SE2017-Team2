@@ -15,6 +15,16 @@ public class Event extends CrObject {
 	private Petrinet petrinet;
 	
 	/**
+	 * Basic Event constructor using default parameters
+	 */
+	public Event(Position pos, String name) {
+		this.pos = pos;
+		this.name = name;
+		this.pending = false;
+		this.executed = false;
+	}
+	
+	/**
 	 * Creates a CR graph Event
 	 * Default: 
 	 * isPending = false
@@ -25,6 +35,7 @@ public class Event extends CrObject {
 	 */
 	public Event(final Position coords, final String name, final boolean pending,
 					final boolean checkmark, final Petrinet petri) {
+		super();
 		this.setPosition(coords);
 		this.name = name;
 		this.setPending(pending);
