@@ -38,13 +38,15 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	/**
 	 * Adds an Event to the Cr Graph
 	 * 
+	 * @return The id of the added Event
 	 * @param pos Position of the Event
 	 * @param name Name of the Event
 	 */
-	public void addEvent(Position pos, String name) {
+	public int addEvent(Position pos, String name) {
 		Event e = new Event(pos, name);
-		
-		this.crObjects.put(e.getID(), e);
+		int id = e.getID();
+		this.crObjects.put(id, e);
+		return id;
 	}
 	
 	/**
@@ -73,12 +75,13 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	/**
 	 * Adds a condition relation between the two Event IDs
 	 * 
+	 * @return The id of the added Condition relation
 	 * @param incomingEventID ID of the incoming Event
 	 * @param outgoingEventID ID of the outgoing Event
 	 * @throws Exception If the IDs are identical, the IDs does not exists, or if the IDs does not
 	 * correspond to Events.
 	 */
-	public void addCondition(int incomingEventID, int outgoingEventID) throws Exception {
+	public int addCondition(int incomingEventID, int outgoingEventID) throws Exception {
 		if (incomingEventID == outgoingEventID) {
 			throw new Exception("A condition can't be added between the same Event");
 		}
@@ -104,7 +107,9 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 		
 		// Finally create a Condition Relation between the two Events
 		Conditional c = new Conditional(in, out);
-		this.crObjects.put(c.getID(), c);		
+		int id = c.getID();
+		this.crObjects.put(id, c);	
+		return id;
 	}
 	
 	/**
@@ -133,12 +138,13 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	/**
 	 * Adds a response relation between the two Event IDs
 	 * 
+	 * @return The id of the added Response relation
 	 * @param incomingEventID ID of the incoming Event
 	 * @param outgoingEventID ID of the outgoing Event
 	 * @throws Exception If the IDs are identical, the IDs does not exists, or if the IDs does not
 	 * correspond to Events.
 	 */
-	public void addResponse(int incomingEventID, int outgoingEventID) throws Exception {
+	public int addResponse(int incomingEventID, int outgoingEventID) throws Exception {
 		if (incomingEventID == outgoingEventID) {
 			throw new Exception("A response can't be added between the same Event");
 		}
@@ -164,7 +170,9 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 		
 		// Finally create a Response Relation between the two Events
 		Response r = new Response(in, out);
-		this.crObjects.put(r.getID(), r);		
+		int id = r.getID();
+		this.crObjects.put(id, r);	
+		return id;
 	}
 	
 	/**
