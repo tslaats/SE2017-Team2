@@ -4,7 +4,7 @@ import java.awt.event.*;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
+
 import javax.swing.JTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -194,6 +194,7 @@ public class Menu implements ActionListener, ItemListener {
 		JTextField outgoingIDs;
 		int ID;
 		int option;
+		String invID = "ID's must be integers";
 
 		switch (action) {
 		case "new_cr":
@@ -240,33 +241,41 @@ public class Menu implements ActionListener, ItemListener {
 			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the Event you want to delete");
 			// if the name is successfully entered, add Event
 			if (name != null) {
-				// evvent id
-				ID = Integer.parseInt(name);
 				try {
-					Main.guiControlller.DeleteEvent(ID);
-					Main.updateUserMsg("Deleted eventID: " + ID);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					Main.updateUserMsg(e1.getMessage());
+					// evvent id
+					ID = Integer.parseInt(name);
+					try {
+						Main.guiControlller.DeleteEvent(ID);
+						Main.updateUserMsg("Deleted eventID: " + ID);
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 			break;
 		case "new_condition":
 
 			incomingIDs = new JTextField();
-			outgoingIDs = new JPasswordField();
+			outgoingIDs = new JTextField();
 			Object[] message = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
 
 			option = JOptionPane.showConfirmDialog(null, message, "Add Condition", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
-				int incomingID = Integer.parseInt(incomingIDs.getText());
-				int outgoingID = Integer.parseInt(outgoingIDs.getText());
 				try {
-					Main.guiControlller.CreateCondition(incomingID, outgoingID);
-					Main.updateUserMsg(String.format("Added condition from %d to %d", incomingID, outgoingID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					int incomingID = Integer.parseInt(incomingIDs.getText());
+					int outgoingID = Integer.parseInt(outgoingIDs.getText());
+					try {
+						Main.guiControlller.CreateCondition(incomingID, outgoingID);
+						Main.updateUserMsg(String.format("Added condition from %d to %d", incomingID, outgoingID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
+
 			}
 			break;
 		case "delete_condition":
@@ -275,13 +284,18 @@ public class Menu implements ActionListener, ItemListener {
 			// if the id is successfully entered, delete condition
 			if (name != null) {
 				// condition id
-				ID = Integer.parseInt(name);
 
 				try {
-					Main.guiControlller.DeleteCondition(ID);
-					Main.updateUserMsg(String.format("Deleted condition %d", ID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					ID = Integer.parseInt(name);
+
+					try {
+						Main.guiControlller.DeleteCondition(ID);
+						Main.updateUserMsg(String.format("Deleted condition %d", ID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 
@@ -289,19 +303,23 @@ public class Menu implements ActionListener, ItemListener {
 		case "new_response":
 
 			incomingIDs = new JTextField();
-			outgoingIDs = new JPasswordField();
+			outgoingIDs = new JTextField();
 			Object[] respMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
 
 			option = JOptionPane.showConfirmDialog(null, respMessage, "Add response", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
-				int incomingID = Integer.parseInt(incomingIDs.getText());
-				int outgoingID = Integer.parseInt(outgoingIDs.getText());
-
 				try {
-					Main.guiControlller.CreateResponse(incomingID, outgoingID);
-					Main.updateUserMsg(String.format("Added response from %d to %d", incomingID, outgoingID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					int incomingID = Integer.parseInt(incomingIDs.getText());
+					int outgoingID = Integer.parseInt(outgoingIDs.getText());
+
+					try {
+						Main.guiControlller.CreateResponse(incomingID, outgoingID);
+						Main.updateUserMsg(String.format("Added response from %d to %d", incomingID, outgoingID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 			break;
@@ -311,12 +329,16 @@ public class Menu implements ActionListener, ItemListener {
 			// if the id is successfully entered, delete response
 			if (name != null) {
 				// response id
-				ID = Integer.parseInt(name);
 				try {
-					Main.guiControlller.DeleteResponse(ID);
-					Main.updateUserMsg(String.format("Deleted response with ID %d", ID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					ID = Integer.parseInt(name);
+					try {
+						Main.guiControlller.DeleteResponse(ID);
+						Main.updateUserMsg(String.format("Deleted response with ID %d", ID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 			break;
@@ -336,12 +358,16 @@ public class Menu implements ActionListener, ItemListener {
 			// if the id is successfully entered, delete place
 			if (name != null) {
 				// place id
-				ID = Integer.parseInt(name);
 				try {
-					Main.guiControlller.DeletePlace(ID);
-					Main.updateUserMsg(String.format("Deleted place with ID %d", ID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					ID = Integer.parseInt(name);
+					try {
+						Main.guiControlller.DeletePlace(ID);
+						Main.updateUserMsg(String.format("Deleted place with ID %d", ID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 			break;
@@ -368,13 +394,17 @@ public class Menu implements ActionListener, ItemListener {
 			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the transition you want to delete");
 			// if the id is successfully entered, delete transition
 			if (name != null) {
-				// transition id
-				ID = Integer.parseInt(name);
 				try {
-					Main.guiControlller.DeleteTransition(ID);
-					Main.updateUserMsg(String.format("Deleted trasition with ID: %d", ID));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
+					// transition id
+					ID = Integer.parseInt(name);
+					try {
+						Main.guiControlller.DeleteTransition(ID);
+						Main.updateUserMsg(String.format("Deleted trasition with ID: %d", ID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
 				}
 			}
 			break;
