@@ -9,11 +9,15 @@ package datamodel;
  * 
  */
 public abstract class Graph {
+	
 	/**
-	 * 
+	 * The different types of graphs which are supported
 	 */
 	public enum GraphTypes {PETRI, CR};
 	
+	/**
+	 * The type of this graph
+	 */
 	private GraphTypes graphType;
 	/**
 	 * 
@@ -31,4 +35,8 @@ public abstract class Graph {
 	public void setGraphType(GraphTypes graphType) {
 		this.graphType = graphType;
 	}
+	
+	public GraphTypes getGraphType() {
+		return this.graphType;
+	} 
 };

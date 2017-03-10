@@ -4,7 +4,9 @@
 
 package gui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import datamodel.Graph;
 import datamodel.Position;
@@ -15,11 +17,11 @@ import datamodel.Position;
  */
 public class GuiController {
 	/**
-	 * 
+	 * Map of graphs maintained by the GUIController
 	 */
-	private List<Graph> Graphs;
+	private Map<Integer, Graph> Graphs = new HashMap<>();
 	/**
-	 * 
+	 * ID of the current active/selected graph
 	 */
 	public int activeGraphID;
 

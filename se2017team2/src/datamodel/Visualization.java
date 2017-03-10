@@ -4,6 +4,8 @@
 
 package datamodel;
 
+import java.awt.image.BufferedImage;
+
 /************************************************************/
 /**
  * 
@@ -11,7 +13,9 @@ package datamodel;
 public interface Visualization {
 
 	/**
+	 * Draws the graph of the class implementing this interface (PetriNet and CrGraph)
 	 * 
+	 * @return The BufferedImage of the Graph
 	 */
-	public void draw();
+	public BufferedImage draw();
 };
