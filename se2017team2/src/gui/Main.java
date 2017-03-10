@@ -5,16 +5,17 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 public class Main {
 
-	static JFrame frame = new JFrame("Graph");
-	static InitPage initpage = new InitPage();
-	static GUIPane guiPane = new GUIPane();
+	private static JFrame frame = new JFrame("Graph");
+	private static InitPage initpage = new InitPage();
+	private static GUIPane guiPane = new GUIPane();
 	private static MessageField messageField;
-	static JPanel panel = new JPanel();
+	private static JPanel panel = new JPanel();
 
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
@@ -45,13 +46,21 @@ public class Main {
 
 		// JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
+		
+
+		//JScrollPane scroller = new JScrollPane(actPane);
+		
 		panel.add(initpage, BorderLayout.CENTER);
+		
+	
+
 
 		messageField = new MessageField();
 		JPanel msgpanel = messageField.getMsgPanel();
 		panel.add(msgpanel, BorderLayout.PAGE_END);
 
 		contenpane.add(panel);
+
 
 		// Display the window.
 		// frame.pack();
@@ -69,6 +78,7 @@ public class Main {
 		if (GUIPane.getTabNum() == 0) {
 			Menu.disableCRMenu();
 			Menu.disablePetriMenu();
+			Menu.disableVisMenu();
 			panel.remove(guiPane);
 			panel.add(initpage);
 			panel.setSize(400, 400);
@@ -88,6 +98,14 @@ public class Main {
 
 	public static void updateUserMsg(String msg) {
 		messageField.setMsgText(msg);
+	}
+	
+	public static void showPossibleActions(){
+		guiPane.showActionPane();
+	}
+	
+	public static void hidePossibleActions(){
+		guiPane.removeActionPane();
 	}
 
 }
