@@ -4,6 +4,7 @@
 
 package datamodel.petri;
 
+import datamodel.Position;
 import datamodel.petri.PetriObject;
 
 /************************************************************/
@@ -11,8 +12,24 @@ import datamodel.petri.PetriObject;
  * 
  */
 public class Place extends PetriObject {
+	
 	/**
-	 * 
+	 * True if this Place holds a token
 	 */
 	private boolean token;
+	
+	public Place(Position pos) {
+		super(pos);
+		// TODO Auto-generated constructor stub
+	}
+
+	public boolean hasToken() {
+		return token;
+	}
+
+	public void setToken(boolean token) {
+		this.token = token;
+	}
+
+
 };

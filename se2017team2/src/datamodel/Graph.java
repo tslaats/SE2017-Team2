@@ -19,6 +19,8 @@ public abstract class Graph {
 	 * The type of this graph
 	 */
 	private GraphTypes graphType;
+	
+	private static int latestID;	
 	/**
 	 * 
 	 */
@@ -27,6 +29,12 @@ public abstract class Graph {
 	 * 
 	 */
 	private String name;
+	
+	protected Graph(String name) {
+		this.name = name;
+		latestID++;
+		this.setID(latestID);
+	}
 
 	/**
 	 * 
@@ -38,5 +46,13 @@ public abstract class Graph {
 	
 	public GraphTypes getGraphType() {
 		return this.graphType;
+	}
+
+	public int getID() {
+		return ID;
+	}
+
+	private void setID(int id) {
+		ID = id;
 	} 
 };

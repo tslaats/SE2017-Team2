@@ -13,7 +13,9 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	private List<Event> trace;
 	public ArrayList<CrObject> graph;
 	
-	public CrGraph() {
+	public CrGraph(String name) {
+		super(name);
+		
 		this.setGraphType(GraphTypes.CR);
 		this.graph = new ArrayList<CrObject>();
 	}
