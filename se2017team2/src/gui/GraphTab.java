@@ -7,16 +7,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 
 public class GraphTab {
 
-	Container panel;
-	ImageIcon icon;
-	ImageIcon image;
+	private Container panel;
+	private ImageIcon icon;
+	private ImageIcon image;
 	private Boolean CrGraph;
+	private JScrollPane scrPane;
 
 	public GraphTab(Boolean CrGraph) {
+		
 
 		this.CrGraph = CrGraph;
 		if (CrGraph) {
@@ -31,11 +34,15 @@ public class GraphTab {
 		} else {
 			this.panel = new JLabel(image);
 		}
+		
+		this.scrPane = new JScrollPane(panel);
+		//add(scrPane);
+
 
 	}
 
 	public Container getpanel() {
-		return panel;
+		return scrPane;
 	}
 
 	public ImageIcon getIcon() {

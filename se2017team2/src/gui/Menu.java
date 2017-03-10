@@ -16,7 +16,7 @@ public class Menu implements ActionListener, ItemListener {
 
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
-	private static JMenu menuCR, MenuPetri;
+	private static JMenu menuCR, MenuPetri, menuVis;
 	private JMenuItem menuItem;
 
 	public JMenuBar createMenuBar() {
@@ -140,6 +140,39 @@ public class Menu implements ActionListener, ItemListener {
 		MenuPetri.add(submenu);
 
 		menuBar.add(MenuPetri);
+		
+		
+
+		// Build the first menu.
+		menuVis = new JMenu("Visualization");
+		menu.setMnemonic(KeyEvent.VK_V);
+		menu.getAccessibleContext().setAccessibleDescription("Menu for Visualization");
+		menuBar.add(menuVis);
+		
+		
+		
+		
+		menuItem = new JMenuItem("Start Visualization", KeyEvent.VK_S);
+		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("Start Visualization");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("start_visualization");
+		menuVis.add(menuItem);
+		
+		menuItem = new JMenuItem("Stop Visualization", KeyEvent.VK_T);
+		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("Stop Visualization");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("stop_visualization");
+		menuVis.add(menuItem);
+		
+		
+		
+
+		
+		
 
 		return menuBar;
 	}
@@ -201,8 +234,17 @@ public class Menu implements ActionListener, ItemListener {
 		case "delete_transition":
 			Main.updateUserMsg("Delete transition, not implemented yet");
 			break;
+		case "start_visualization":
+			Main.showPossibleActions();
+			Main.updateUserMsg("Started visualization");
+			break;
+		case "stop_visualization":
+			Main.hidePossibleActions();
+			Main.updateUserMsg("Stopped visualization");
+			break;
 		default:
-			System.out.println("Invalid Button pressed!");
+			System.out.println(action);
+			Main.updateUserMsg("Invalid Button pressed!");
 			break;
 		}
 
@@ -267,6 +309,16 @@ public class Menu implements ActionListener, ItemListener {
 
 	public static void disablePetriMenu() {
 		MenuPetri.setEnabled(false);
+
+	}
+	
+	public static void enableVisMenu() {
+		menuVis.setEnabled(true);
+
+	}
+
+	public static void disableVisMenu() {
+		menuVis.setEnabled(false);
 
 	}
 
