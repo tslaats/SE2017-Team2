@@ -1,7 +1,6 @@
-package datamodel.cr.graphobject.event;
+package datamodel.cr;
 
 import datamodel.Position;
-import datamodel.cr.graphobject.CrObject;
 import datamodel.petri.Petrinet;
 
 /*

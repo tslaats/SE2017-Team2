@@ -10,11 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import datamodel.cr.graphobject.CrObject;
-import datamodel.cr.graphobject.event.Event;
-import datamodel.cr.graphobject.relation.Conditional;
-import datamodel.cr.graphobject.relation.Relation;
-import datamodel.cr.graphobject.relation.Response;
 import datamodel.Position;
 
 /**

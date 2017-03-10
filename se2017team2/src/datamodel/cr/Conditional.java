@@ -1,6 +1,6 @@
-package datamodel.cr.graphobject.relation;
+package datamodel.cr;
 
-import datamodel.cr.graphobject.event.Event;
+import datamodel.cr.Relation.Type;
 
 public class Conditional extends Relation {
 

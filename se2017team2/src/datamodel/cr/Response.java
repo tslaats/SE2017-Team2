@@ -1,6 +1,4 @@
-package datamodel.cr.graphobject.relation;
-
-import datamodel.cr.graphobject.event.Event;
+package datamodel.cr;
 
 public class Response extends Relation {
 	

@@ -1,7 +1,4 @@
-package datamodel.cr.graphobject.relation;
-
-import datamodel.cr.graphobject.CrObject;
-import datamodel.cr.graphobject.event.Event;
+package datamodel.cr;
 
 public abstract class Relation extends CrObject {
 

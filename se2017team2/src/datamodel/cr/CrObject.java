@@ -1,4 +1,4 @@
-package datamodel.cr.graphobject;
+package datamodel.cr;
 
 public abstract class CrObject {
 

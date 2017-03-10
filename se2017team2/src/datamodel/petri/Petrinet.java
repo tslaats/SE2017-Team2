@@ -4,6 +4,7 @@
 
 package datamodel.petri;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import datamodel.Graph;
@@ -53,8 +54,9 @@ public class Petrinet extends Graph implements Visualization, Semantics {
 	}
 
 	@Override
-	public void draw() {
+	public BufferedImage draw() {
 		// TODO Auto-generated method stub
+		return null;
 		
 	}
 };

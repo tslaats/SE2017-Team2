@@ -1,13 +1,12 @@
 package datamodel.cr;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 import datamodel.Graph;
 import datamodel.Semantics;
 import datamodel.Visualization;
-import datamodel.cr.graphobject.CrObject;
-import datamodel.cr.graphobject.event.Event;
 
 public class CrGraph extends Graph implements Visualization, Semantics {
 
@@ -30,7 +29,7 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	}
 
 	@Override
-	public void draw() {
-		CrDrawing.instance.draw(this);	
+	public BufferedImage draw() {
+		return CrDrawing.instance.draw(this);
 	}
 };
