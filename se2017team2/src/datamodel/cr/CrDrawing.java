@@ -9,6 +9,7 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import datamodel.Position;
 
@@ -47,7 +48,7 @@ public class CrDrawing {
 		  // Setup background
 		  g.setColor(Color.WHITE);
 		  g.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
-		  ArrayList<CrObject> graf = crgraph.getCrObjects();
+		  Collection<CrObject> graf = crgraph.getCrObjects();
 		  for (CrObject o: graf) {
 		    	if (o.getClass().equals(Event.class)) {
 		    		Event e = (Event) o;

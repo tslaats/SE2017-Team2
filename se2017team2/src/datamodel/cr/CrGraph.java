@@ -2,6 +2,7 @@ package datamodel.cr;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,8 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	 * 
 	 * @return ArrayList of objects CrObjects
 	 */
-	public ArrayList<CrObject> getCrObjects() {
-		return (ArrayList<CrObject>) this.crObjects.values();
+	public Collection<CrObject> getCrObjects() {
+		return this.crObjects.values();
 	}
 	
 	/**
