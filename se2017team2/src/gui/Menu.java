@@ -4,10 +4,16 @@ import java.awt.event.*;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.KeyStroke;
 import javax.swing.ImageIcon;
+
+import datamodel.Graph;
+import datamodel.Graph.GraphTypes;
+import datamodel.Position;
 
 /*
  */
@@ -18,6 +24,7 @@ public class Menu implements ActionListener, ItemListener {
 	private JMenu menu, submenu;
 	private static JMenu menuCR, MenuPetri, menuVis;
 	private JMenuItem menuItem;
+	JFrame inputDialog = new JFrame("InputDialog");
 
 	public JMenuBar createMenuBar() {
 
@@ -140,39 +147,30 @@ public class Menu implements ActionListener, ItemListener {
 		MenuPetri.add(submenu);
 
 		menuBar.add(MenuPetri);
-		
-		
 
 		// Build the first menu.
 		menuVis = new JMenu("Visualization");
 		menu.setMnemonic(KeyEvent.VK_V);
 		menu.getAccessibleContext().setAccessibleDescription("Menu for Visualization");
 		menuBar.add(menuVis);
-		
-		
-		
-		
+
 		menuItem = new JMenuItem("Start Visualization", KeyEvent.VK_S);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Start Visualization");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("start_visualization");
 		menuVis.add(menuItem);
-		
+
 		menuItem = new JMenuItem("Stop Visualization", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Stop Visualization");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("stop_visualization");
 		menuVis.add(menuItem);
-		
-		
-		
-
-		
-		
 
 		return menuBar;
 	}
@@ -191,48 +189,194 @@ public class Menu implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 
 		String action = e.getActionCommand();
+		String name;
+		JTextField incomingIDs;
+		JTextField outgoingIDs;
+		int ID;
+		int option;
 
 		switch (action) {
 		case "new_cr":
-			newCR();
-			Main.updateUserMsg("Added a new CR Graph");
-			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
-
+			String CrName = newCR();
+			if (CrName != null) {
+				try {
+					Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
+					Main.updateUserMsg("Added a new CR Graph");
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+				// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
+			}
 			break;
 		case "new_petri":
-			newPetri();
-			Main.updateUserMsg("Added a new Petri Net");
+			String petriName = newPetri();
+			if (petriName != null) {
+				try {
+					Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
+					Main.updateUserMsg("Added a new Petri Net");
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 
 		case "new_event":
-			Main.updateUserMsg("Add event, not implemented yet");
+
+			// prompt the user to enter the name of the new Event
+			String nameEvent = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Event");
+
+			// if the name is successfully entered, add Event
+			if (nameEvent != null) {
+				try {
+					Main.guiControlller.CreateEvent(new Position(1, 1), nameEvent);
+					Main.updateUserMsg(String.format("Added Event %s", nameEvent));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "delete_event":
-			Main.updateUserMsg("Delete event, not implemented yet");
+			// prompt the user to enter the name of the new Event
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the Event you want to delete");
+			// if the name is successfully entered, add Event
+			if (name != null) {
+				// evvent id
+				ID = Integer.parseInt(name);
+				try {
+					Main.guiControlller.DeleteEvent(ID);
+					Main.updateUserMsg("Deleted eventID: " + ID);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "new_condition":
-			Main.updateUserMsg("Add condition, not implemented yet");
+
+			incomingIDs = new JTextField();
+			outgoingIDs = new JPasswordField();
+			Object[] message = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+
+			option = JOptionPane.showConfirmDialog(null, message, "Add Condition", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				int incomingID = Integer.parseInt(incomingIDs.getText());
+				int outgoingID = Integer.parseInt(outgoingIDs.getText());
+				try {
+					Main.guiControlller.CreateCondition(incomingID, outgoingID);
+					Main.updateUserMsg(String.format("Added condition from %d to %d", incomingID, outgoingID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "delete_condition":
-			Main.updateUserMsg("Delete condition, not implemented yet");
+			// prompt the user to enter the id of the condition to delete
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the Event you want to delete");
+			// if the id is successfully entered, delete condition
+			if (name != null) {
+				// condition id
+				ID = Integer.parseInt(name);
+
+				try {
+					Main.guiControlller.DeleteCondition(ID);
+					Main.updateUserMsg(String.format("Deleted condition %d", ID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
+
 			break;
 		case "new_response":
-			Main.updateUserMsg("Add response, not implemented yet");
+
+			incomingIDs = new JTextField();
+			outgoingIDs = new JPasswordField();
+			Object[] respMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+
+			option = JOptionPane.showConfirmDialog(null, respMessage, "Add response", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				int incomingID = Integer.parseInt(incomingIDs.getText());
+				int outgoingID = Integer.parseInt(outgoingIDs.getText());
+
+				try {
+					Main.guiControlller.CreateResponse(incomingID, outgoingID);
+					Main.updateUserMsg(String.format("Added response from %d to %d", incomingID, outgoingID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "delete_response":
-			Main.updateUserMsg("Delete response, not implemented yet");
+			// prompt the user to enter the id of the response to delete
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the response you want to delete");
+			// if the id is successfully entered, delete response
+			if (name != null) {
+				// response id
+				ID = Integer.parseInt(name);
+				try {
+					Main.guiControlller.DeleteResponse(ID);
+					Main.updateUserMsg(String.format("Deleted response with ID %d", ID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "new_place":
-			Main.updateUserMsg("Add place, not implemented yet");
+			Position pos = new Position(1, 1);
+			try {
+				Main.guiControlller.CreatePlace(pos);
+				Main.updateUserMsg("Add place");
+			} catch (Exception e1) {
+				Main.updateUserMsg(e1.getMessage());
+			}
+
 			break;
 		case "delete_place":
-			Main.updateUserMsg("Delete place, not implemented yet");
+			// prompt the user to enter the id of the place to delete
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the place you want to delete");
+			// if the id is successfully entered, delete place
+			if (name != null) {
+				// place id
+				ID = Integer.parseInt(name);
+				try {
+					Main.guiControlller.DeletePlace(ID);
+					Main.updateUserMsg(String.format("Deleted place with ID %d", ID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "new_transition":
-			Main.updateUserMsg("Add transition, not implemented yet");
+
+			// prompt the user to enter the name of the new Event
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Event");
+
+			// if the name is successfully entered, add Event
+			if (name != null) {
+
+				pos = new Position(1, 1);
+
+				try {
+					Main.guiControlller.CreateTransition(pos, name);
+					Main.updateUserMsg(String.format("Added place: %s", name));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "delete_transition":
-			Main.updateUserMsg("Delete transition, not implemented yet");
+			// prompt the user to enter the id of the transition to delete
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the ID of the transition you want to delete");
+			// if the id is successfully entered, delete transition
+			if (name != null) {
+				// transition id
+				ID = Integer.parseInt(name);
+				try {
+					Main.guiControlller.DeleteTransition(ID);
+					Main.updateUserMsg(String.format("Deleted trasition with ID: %d", ID));
+				} catch (Exception e1) {
+					Main.updateUserMsg(e1.getMessage());
+				}
+			}
 			break;
 		case "start_visualization":
 			Main.showPossibleActions();
@@ -248,7 +392,6 @@ public class Menu implements ActionListener, ItemListener {
 			break;
 		}
 
-
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -260,14 +403,13 @@ public class Menu implements ActionListener, ItemListener {
 		System.out.println(s);
 	}
 
-
 	protected String getClassName(Object o) {
 		String classString = o.getClass().getName();
 		int dotIndex = classString.lastIndexOf(".");
 		return classString.substring(dotIndex + 1);
 	}
 
-	public static void newCR() {
+	public static String newCR() {
 		JFrame frameCR = new JFrame("InputDialog");
 		// prompt the user to enter the name of the new petri graph
 		String nameCR = JOptionPane.showInputDialog(frameCR, "Please enter the name of the new CR graph");
@@ -276,10 +418,10 @@ public class Menu implements ActionListener, ItemListener {
 			GUIPane.addGraphTab(nameCR + " #" + tabNum, true);
 			Main.updateFrame();
 		}
-
+		return nameCR;
 	}
 
-	public static void newPetri() {
+	public static String newPetri() {
 
 		JFrame framePetri = new JFrame("InputDialog");
 		// prompt the user to enter the name of the new petri graph
@@ -289,7 +431,7 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateFrame();
 
 		}
-
+		return namePetri;
 	}
 
 	public static void enableCRMenu() {
@@ -311,7 +453,7 @@ public class Menu implements ActionListener, ItemListener {
 		MenuPetri.setEnabled(false);
 
 	}
-	
+
 	public static void enableVisMenu() {
 		menuVis.setEnabled(true);
 

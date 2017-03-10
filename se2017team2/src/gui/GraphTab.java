@@ -35,6 +35,7 @@ public class GraphTab {
 			this.panel = new JLabel(image);
 		}
 		
+
 		this.scrPane = new JScrollPane(panel);
 		//add(scrPane);
 

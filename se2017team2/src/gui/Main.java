@@ -16,6 +16,7 @@ public class Main {
 	private static GUIPane guiPane = new GUIPane();
 	private static MessageField messageField;
 	private static JPanel panel = new JPanel();
+	public static GuiController guiControlller =  new GuiController();
 
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
