@@ -29,7 +29,7 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	/**
 	 * Get CrObjects contained in the HashMap
 	 * 
-	 * @return ArrayList of objects CrObjects
+	 * @return Collection of CrObjects objects
 	 */
 	public Collection<CrObject> getCrObjects() {
 		return this.crObjects.values();

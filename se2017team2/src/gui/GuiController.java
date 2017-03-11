@@ -5,7 +5,6 @@
 package gui;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import datamodel.Graph;
@@ -299,5 +298,19 @@ public class GuiController {
 		
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
 		crGraph.deleteCondition(crObjID);
+	}
+	
+	/**
+	 * Get the current active graph
+	 * 
+	 * @return The activ Graph object
+	 * @throws Exception If the ActiveGraphID does not exist
+	 */
+	public Graph getActiveGraph() throws Exception {
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		
+		return this.graphs.get(ActiveGraphID);
 	}
 };

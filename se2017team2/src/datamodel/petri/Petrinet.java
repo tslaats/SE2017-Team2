@@ -5,6 +5,7 @@
 package datamodel.petri;
 
 import java.awt.image.BufferedImage;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,14 +66,35 @@ public class Petrinet extends Graph implements Visualization, Semantics {
 	}
 	
 	/**
+	 * Get Transition objects contained in the HashMap
+	 * 
+	 * @return Collection of Transition objects
+	 */
+	public Collection<Transition> getTransitions() {
+		return this.transitions.values();
+	}
+	
+	/**
+	 * Get Place objects contained in the HashMap
+	 * 
+	 * @return Collection of Place objects
+	 */
+	public Collection<Place> getPlaces() {
+		return this.places.values();
+	}
+	
+	/**
 	 * Adds a new Place to the Petri Net
 	 * 
+	 * @return ID of the new Place
 	 * @param pos Position of the new Place
 	 */
-	public void addPlace(Position pos) {
+	public int addPlace(Position pos) {
 		Place newPlace = new Place(pos);
 		
-		this.places.put(newPlace.id, newPlace);
+		this.places.put(newPlace.getID(), newPlace);
+		
+		return newPlace.getID();
 	}
 	
 	/**
@@ -98,13 +120,16 @@ public class Petrinet extends Graph implements Visualization, Semantics {
 	/**
 	 * Adds a new Transition to the Petri Net
 	 * 
+	 * @return Id of the new Transition
 	 * @param pos Position of the new Transition
 	 * @param name Name of the new Transition
 	 */
-	public void addTransition(Position pos, String name) {
+	public int addTransition(Position pos, String name) {
 		Transition t = new Transition(pos, name);
 		
-		this.transitions.put(t.id, t);
+		this.transitions.put(t.getID(), t);
+		
+		return t.getID();
 	}
 	
 	/**
