@@ -252,4 +252,9 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 		return null;
 		
 	}
+
+    @Override
+    public boolean isDone() {
+        return this.end.hasToken();
+    }
 };

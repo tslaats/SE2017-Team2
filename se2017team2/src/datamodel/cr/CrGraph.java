@@ -209,13 +209,6 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
     }
 
     /**
-     * @return true if no events are pending
-     */
-    public boolean isDone() {
-	    return this.getPendingEvents().size() == 0;
-    }
-
-    /**
      * @return current CR Graph trace
      */
     public List<Event> getTrace() {
@@ -223,8 +216,6 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
     }
 
     /**
-     * Returns a list of executable events
-     *
      * @return List of legal, executable events
      */
 	@Override
@@ -255,10 +246,20 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
         return new ArrayList<>(visited);
     }
 
+    /**
+     * Executes given event and returns updated CrGraph
+     * @param event to be executed
+     * @return CrGraph
+     * @throws IllegalArgumentException is the passed event isn't executable
+     */
     @Override
     public CrGraph executeAction(Event event) throws IllegalArgumentException {
 	    if (!this.getPossibleActions().contains(event)) {
 	        throw new IllegalArgumentException("Event not executable");
+        }
+
+        if (event.getPetrinet() != null && !event.getPetrinet().isDone()) {
+	        throw new IllegalArgumentException("Event's Petri net has not reached end place yet");
         }
 
 	    // Execute event
@@ -284,4 +285,12 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	public BufferedImage draw() {
 		return CrDrawing.instance.draw(this);
 	}
+
+    /**
+     * @return true if graph is 'done' (has no more pending events)
+     */
+    @Override
+    public boolean isDone() {
+        return this.getPendingEvents().size() == 0;
+    }
 };

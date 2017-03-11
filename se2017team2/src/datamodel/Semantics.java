@@ -14,12 +14,18 @@ import java.util.List;
 public interface Semantics<T1> {
 
 	/**
-	 * 
+	 * @return List of objects which can executed
 	 */
 	public List<T1> getPossibleActions();
 
 	/**
-	 * 
+	 * @param object to be executed in graph
+	 * @return Graph
 	 */
 	public Graph executeAction(T1 object);
+
+	/**
+	 * @return true if the graph is 'done'
+	 */
+	public boolean isDone();
 }
