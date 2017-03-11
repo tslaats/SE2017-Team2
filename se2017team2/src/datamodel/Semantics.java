@@ -5,18 +5,21 @@
 package datamodel;
 
 /************************************************************/
+
+import java.util.List;
+
 /**
  * 
  */
-public interface Semantics {
+public interface Semantics<T1> {
 
 	/**
 	 * 
 	 */
-	public void getPossibleActions();
+	public List<T1> getPossibleActions();
 
 	/**
 	 * 
 	 */
-	public void executeAction();
-};
+	public Graph executeAction(T1 object);
+}

@@ -1,18 +1,14 @@
 package datamodel.cr;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import datamodel.Graph;
 import datamodel.Position;
 import datamodel.Semantics;
 import datamodel.Visualization;
 
-public class CrGraph extends Graph implements Visualization, Semantics {
+public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 
 	private List<Event> trace;
 	//public ArrayList<CrObject> graph;
@@ -23,6 +19,7 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 		super(name);
 		
 		this.setGraphType(GraphTypes.CR);
+		this.trace = new ArrayList<>();
 		//this.graph = new ArrayList<CrObject>();
 	}
 
@@ -200,16 +197,51 @@ public class CrGraph extends Graph implements Visualization, Semantics {
 	
 	
 	@Override
-	public void getPossibleActions() {
-		// TODO Auto-generated method stub
-	}
+	public List<Event> getPossibleActions() {
+		Set<Event> blocked = new HashSet<>();
+		Set<Event> visited = new HashSet<>();
 
-	@Override
-	public void executeAction() {
-		// TODO Auto-generated method stub
-	}
+        // Iterate Conditionals to determine other, if any, possible events we can fire
+		for (CrObject o : this.crObjects.values()) {
+            if (o instanceof Conditional) {
+                Event A = ((Conditional) o).getIn();
+                Event B = ((Conditional) o).getOut();
+                visited.add(A);
+                visited.add(B);
 
-	@Override
+                if (!A.isExecuted()) {
+                    blocked.add(B);
+                }
+            }
+        }
+
+        // Remove all blocked events
+        visited.removeAll(blocked);
+        return new ArrayList<>(visited);
+    }
+
+    @Override
+    public CrGraph executeAction(Event event) {
+	    // Execute event
+        event.setExecuted(true);
+        event.setPending(false);
+        this.crObjects.put(event.getID(), event);
+
+        // Set pending for any response related events
+        for (CrObject o : this.crObjects.values()) {
+            if (o instanceof Response && ((Response) o).getIn().getID() == event.getID()) {
+                Event pendingEvent = ((Response) o).getOut();
+                pendingEvent.setPending(true);
+                this.crObjects.put(pendingEvent.getID(), pendingEvent);
+            }
+        }
+
+        // Add event to trace
+        this.trace.add(event);
+        return this;
+    }
+
+    @Override
 	public BufferedImage draw() {
 		return CrDrawing.instance.draw(this);
 	}

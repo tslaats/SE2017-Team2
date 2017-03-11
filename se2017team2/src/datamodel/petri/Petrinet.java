@@ -7,6 +7,7 @@ package datamodel.petri;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import datamodel.Graph;
@@ -20,7 +21,7 @@ import datamodel.petri.Transition;
 /**
  * 
  */
-public class Petrinet extends Graph implements Visualization, Semantics {
+public class Petrinet extends Graph implements Visualization, Semantics<Transition> {
 	
 	// Default starting and end position of the initial places
 	private final Position placeStartPos = new Position(1,1);
@@ -233,14 +234,15 @@ public class Petrinet extends Graph implements Visualization, Semantics {
 	}
 	
 	@Override
-	public void getPossibleActions() {
+	public List<Transition> getPossibleActions() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void executeAction() {
+	public Petrinet executeAction(Transition object) {
 		// TODO Auto-generated method stub
+        return this;
 		
 	}
 
