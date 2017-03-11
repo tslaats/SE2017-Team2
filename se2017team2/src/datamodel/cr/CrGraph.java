@@ -194,8 +194,39 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 		this.crObjects.remove(resID);
 		r = null; // Set the Response as null		
 	}
-	
-	
+
+    /**
+     * @return list of pending events for the CR graph
+     */
+	public List<Event> getPendingEvents() {
+	    List<Event> pendingList = new ArrayList<>();
+        for (CrObject o : this.crObjects.values()) {
+            if (o instanceof Event && ((Event) o).isPending()) {
+                pendingList.add((Event) o);
+            }
+        }
+        return pendingList;
+    }
+
+    /**
+     * @return true if no events are pending
+     */
+    public boolean isDone() {
+	    return this.getPendingEvents().size() == 0;
+    }
+
+    /**
+     * @return current CR Graph trace
+     */
+    public List<Event> getTrace() {
+        return this.trace;
+    }
+
+    /**
+     * Returns a list of executable events
+     *
+     * @return List of legal, executable events
+     */
 	@Override
 	public List<Event> getPossibleActions() {
 		Set<Event> blocked = new HashSet<>();
@@ -212,6 +243,10 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
                 if (!A.isExecuted()) {
                     blocked.add(B);
                 }
+            }
+
+            if (o instanceof Event) {
+                visited.add((Event) o);
             }
         }
 
