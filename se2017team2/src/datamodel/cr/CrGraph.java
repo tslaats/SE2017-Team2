@@ -222,9 +222,7 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 
     @Override
     public CrGraph executeAction(Event event) throws IllegalArgumentException {
-	    List<Event> legalActions = this.getPossibleActions();
-
-	    if (!legalActions.contains(event)) {
+	    if (!this.getPossibleActions().contains(event)) {
 	        throw new IllegalArgumentException("Event not executable");
         }
 
