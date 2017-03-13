@@ -9,15 +9,17 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import datamodel.Position;
+
 public class Main {
 
 	private static JFrame frame = new JFrame("Graph");
 	private static InitPage initpage = new InitPage();
-	private static GUIPane guiPane = new GUIPane();
+	public static GUIPane guiPane = new GUIPane();
 	private static MessageField messageField;
 	private static JPanel panel = new JPanel();
 	public static GuiController guiControlller =  new GuiController();
-
+	private static Menu crMenu;
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
@@ -39,7 +41,7 @@ public class Main {
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		Menu crMenu = new Menu();
+		crMenu = new Menu();
 		frame.setJMenuBar(crMenu.createMenuBar());
 
 		Container contenpane = frame.getContentPane();
@@ -108,5 +110,16 @@ public class Main {
 	public static void hidePossibleActions(){
 		guiPane.removeActionPane();
 	}
+	
+	public static GraphTab getActiveTab(){
+		return guiPane.getCurrentTab();
+	}
+	
+	public static void imageClicked(Position position){
+		crMenu.createEvent(position);
 
+	}
+
+
+	
 }

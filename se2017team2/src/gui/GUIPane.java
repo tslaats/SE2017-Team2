@@ -78,8 +78,8 @@ public class GUIPane extends JPanel implements ChangeListener {
 	}
 	
 	// add a graph tab to the tabbed pane
-	static void addGraphTab(String label, Boolean CrGraph) {
-		GraphTab newTab = new GraphTab(CrGraph);
+	static void addGraphTab(String label, Boolean CrGraph, Integer ID) {
+		GraphTab newTab = new GraphTab(CrGraph, ID);
 		graphTabs.add(newTab);
 		// select the added tab
 		tabbedPane.addTab(label, newTab.getIcon(), newTab.getpanel(), "Does nothing");
@@ -99,6 +99,12 @@ public class GUIPane extends JPanel implements ChangeListener {
 		int index = sourceTabbedPane.getSelectedIndex();
 		Main.updateUserMsg("Tab changed to: " + sourceTabbedPane.getTitleAt(index));
 		GraphTab graphTab = graphTabs.get(index);
+		try {
+			GuiController.ActiveGraphID = graphTab.getId();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// toggle menus for the correct graph type
 		if (graphTab.getCrGraph()) {
 			graphTab.updateImage("images/test.png");
@@ -110,5 +116,10 @@ public class GUIPane extends JPanel implements ChangeListener {
 			Menu.disableCRMenu();
 		}
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
+	}
+	
+	public GraphTab getCurrentTab(){
+		int index = tabbedPane.getSelectedIndex();
+		return graphTabs.get(index);
 	}
 }

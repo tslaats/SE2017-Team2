@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -9,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import datamodel.Position;
 
 public class GraphTab {
 
@@ -17,10 +20,12 @@ public class GraphTab {
 	private ImageIcon image;
 	private Boolean CrGraph;
 	private JScrollPane scrPane;
+	private boolean clickListenerActive;
+	private Integer id;
 
-	public GraphTab(Boolean CrGraph) {
-		
-
+	public GraphTab(Boolean CrGraph, Integer id) {
+		this.setId(id);
+		this.clickListenerActive = false;
 		this.CrGraph = CrGraph;
 		if (CrGraph) {
 			this.icon = createImageIcon("images/crIcon.gif");
@@ -33,12 +38,20 @@ public class GraphTab {
 			this.panel = makeTextPanel("Unable to load graph first");
 		} else {
 			this.panel = new JLabel(image);
+			this.panel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(clickListenerActive){
+					System.out.println(e.getPoint());
+					System.out.println(e.getX());
+					Main.imageClicked(new Position(e.getX(),e.getY()));
+					}
+				}
+			});
 		}
-		
 
 		this.scrPane = new JScrollPane(panel);
-		//add(scrPane);
-
+		// add(scrPane);
 
 	}
 
@@ -90,6 +103,22 @@ public class GraphTab {
 	 */
 	public Boolean getCrGraph() {
 		return CrGraph;
+	}
+	
+	public void activateClickListener(){
+		this.clickListenerActive = true;
+	}
+	
+	public void deactivateClickListener(){
+		this.clickListenerActive = false;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

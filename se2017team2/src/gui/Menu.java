@@ -24,12 +24,14 @@ public class Menu implements ActionListener, ItemListener {
 	private JMenu menu, submenu;
 	private static JMenu menuCR, MenuPetri, menuVis;
 	private JMenuItem menuItem;
-	JFrame inputDialog = new JFrame("InputDialog");
+	private JFrame inputDialog = new JFrame("InputDialog");
+	private String clickArgument;
 
 	public JMenuBar createMenuBar() {
 
 		// Create the menu bar.
 		menuBar = new JMenuBar();
+		this.clickArgument = "";
 
 		// Build the first menu.
 		menu = new JMenu("New");
@@ -198,29 +200,11 @@ public class Menu implements ActionListener, ItemListener {
 
 		switch (action) {
 		case "new_cr":
-			String CrName = newCR();
-			if (CrName != null) {
-				try {
-					Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
-					Main.updateUserMsg("Added a new CR Graph");
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
-				}
-				// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
-			}
+			createGraph(true);
 			break;
 		case "new_petri":
-			String petriName = newPetri();
-			if (petriName != null) {
-				try {
-					Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
-					Main.updateUserMsg("Added a new Petri Net");
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
-				}
-			}
+			createGraph(false);
 			break;
-
 		case "new_event":
 
 			// prompt the user to enter the name of the new Event
@@ -228,12 +212,12 @@ public class Menu implements ActionListener, ItemListener {
 
 			// if the name is successfully entered, add Event
 			if (nameEvent != null) {
-				try {
-					Main.guiControlller.CreateEvent(new Position(1, 1), nameEvent);
-					Main.updateUserMsg(String.format("Added Event %s", nameEvent));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
-				}
+				this.disableMenubar();
+				Main.guiPane.setEnabled(false);
+				GraphTab graphtab = Main.getActiveTab();
+				graphtab.activateClickListener();
+				this.clickArgument = nameEvent;	
+				Main.updateUserMsg(String.format("Please click where you want to ad event %s", nameEvent));
 			}
 			break;
 		case "delete_event":
@@ -439,29 +423,56 @@ public class Menu implements ActionListener, ItemListener {
 		return classString.substring(dotIndex + 1);
 	}
 
-	public static String newCR() {
-		JFrame frameCR = new JFrame("InputDialog");
+	// public static String newCR() {
+	// JFrame frameCR = new JFrame("InputDialog");
+	// // prompt the user to enter the name of the new petri graph
+	// String nameCR = JOptionPane.showInputDialog(frameCR, "Please enter the
+	// name of the new CR graph");
+	// if (nameCR != null) {
+	// int tabNum = GUIPane.getTabNum() + 1;
+	// GUIPane.addGraphTab(nameCR + " #" + tabNum, true);
+	// Main.updateFrame();
+	// }
+	// return nameCR;
+	// }
+
+	// public static String newPetri() {
+	//
+	// JFrame framePetri = new JFrame("InputDialog");
+	// // prompt the user to enter the name of the new petri graph
+	// String namePetri = JOptionPane.showInputDialog(framePetri, "Please enter
+	// the name of the new Petri graph");
+	// if (namePetri != null) {
+	// GUIPane.addGraphTab(namePetri + " #" + (GUIPane.getTabNum() + 1), false);
+	// Main.updateFrame();
+	//
+	// }
+	// return namePetri;
+	// }
+
+	public static void createGraph(Boolean CrGraph) {
+		JFrame dialog = new JFrame("dialog");
 		// prompt the user to enter the name of the new petri graph
-		String nameCR = JOptionPane.showInputDialog(frameCR, "Please enter the name of the new CR graph");
-		if (nameCR != null) {
-			int tabNum = GUIPane.getTabNum() + 1;
-			GUIPane.addGraphTab(nameCR + " #" + tabNum, true);
-			Main.updateFrame();
+		String name = JOptionPane.showInputDialog(dialog, "Please enter the name of the graph");
+		if (name != null) {
+			try {
+				int tabNum = GUIPane.getTabNum() + 1;
+				if (CrGraph) {
+					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
+					Main.updateUserMsg("Added a new CR Graph");
+					GUIPane.addGraphTab(name + " #" + tabNum, true, ID);
+				}else{
+					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
+					Main.updateUserMsg("Added a new Petri Graph");
+					GUIPane.addGraphTab(name + " #" + tabNum, false, ID);
+				}
+				Main.updateFrame();
+			} catch (Exception e1) {
+				Main.updateUserMsg(e1.getMessage());
+			}
+			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
 		}
-		return nameCR;
-	}
 
-	public static String newPetri() {
-
-		JFrame framePetri = new JFrame("InputDialog");
-		// prompt the user to enter the name of the new petri graph
-		String namePetri = JOptionPane.showInputDialog(framePetri, "Please enter the name of the new Petri graph");
-		if (namePetri != null) {
-			GUIPane.addGraphTab(namePetri + " #" + (GUIPane.getTabNum() + 1), false);
-			Main.updateFrame();
-
-		}
-		return namePetri;
 	}
 
 	public static void enableCRMenu() {
@@ -493,5 +504,31 @@ public class Menu implements ActionListener, ItemListener {
 		menuVis.setEnabled(false);
 
 	}
+	
+	public void createEvent(Position position){
+		String nameEvent = clickArgument;
+		try {
+			Main.guiControlller.CreateEvent(position, nameEvent);
+			Main.updateUserMsg(String.format("Added Event %s", nameEvent));
+		} catch (Exception e1) {
+			Main.updateUserMsg(e1.getMessage());
+		}
+		
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
+		this.enambleMenubar();
+		Main.guiPane.setEnabled(true);
+		
+	}
+	
+	public void disableMenubar(){
+		menuBar.setEnabled(false);
+	}
+	
+	public void enambleMenubar(){
+		menuBar.setEnabled(true);
+	}
 
+
+	
 }

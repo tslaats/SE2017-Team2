@@ -44,11 +44,11 @@ public class InitPage extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "new_cr") {
-			Menu.newCR();
-			Main.updateUserMsg("Added a new CR Graph");
+			Menu.createGraph(true);
+///			Main.updateUserMsg("Added a new CR Graph");
 		} else {
-			Menu.newPetri();
-			Main.updateUserMsg("Added a new Petri Net");
+			Menu.createGraph(false);
+	//		Main.updateUserMsg("Added a new Petri Net");
 		}
 	}
 
