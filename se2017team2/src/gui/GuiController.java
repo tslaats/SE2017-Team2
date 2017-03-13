@@ -32,11 +32,13 @@ public class GuiController {
 	 * 
 	 * @param name Name of the graph
 	 * @param graphType Type of the graph
+	 * @return 
 	 * @throws Exception If the graph type is not supported
 	 */
-	public void CreateGraph(String name, Graph.GraphTypes graphType) throws Exception {
+	public int CreateGraph(String name, Graph.GraphTypes graphType) throws Exception {
 		
 		Graph newGraph = null;
+		int id;
 		
 		switch (graphType) {
 		case PETRI:
@@ -54,8 +56,9 @@ public class GuiController {
 		}
 		
 		// Store the new graph in the hashmap
-		this.graphs.put(newGraph.getID(), newGraph);
-		
+		id = newGraph.getID();
+		this.graphs.put(id , newGraph);
+		return id;
 	}
 
 	/**
