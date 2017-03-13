@@ -115,6 +115,14 @@ public class Main {
 		return guiPane.getCurrentTab();
 	}
 	
+	public static void  disableTabs(){
+		 guiPane.disableTabs();
+	}
+	
+	public static void  enableTabs(){
+		 guiPane.enableTabs();
+	}
+	
 	public static void imageClicked(Position position){
 		crMenu.createEvent(position);
 

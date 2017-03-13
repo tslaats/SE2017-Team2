@@ -43,7 +43,7 @@ public class GraphTab {
 				public void mouseClicked(MouseEvent e) {
 					if(clickListenerActive){
 					System.out.println(e.getPoint());
-					System.out.println(e.getX());
+				//	System.out.println(e.getX());
 					Main.imageClicked(new Position(e.getX(),e.getY()));
 					}
 				}

@@ -1,6 +1,10 @@
 package gui;
 
+import java.awt.Component;
 import java.awt.event.*;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -26,11 +30,13 @@ public class Menu implements ActionListener, ItemListener {
 	private JMenuItem menuItem;
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
+	private Set<JMenuItem> disabledMenus;
 
 	public JMenuBar createMenuBar() {
 
 		// Create the menu bar.
 		menuBar = new JMenuBar();
+		this.disabledMenus = new HashSet<JMenuItem>();
 		this.clickArgument = "";
 
 		// Build the first menu.
@@ -212,12 +218,12 @@ public class Menu implements ActionListener, ItemListener {
 
 			// if the name is successfully entered, add Event
 			if (nameEvent != null) {
-				this.disableMenubar();
-				Main.guiPane.setEnabled(false);
+				disableMenubar();
 				GraphTab graphtab = Main.getActiveTab();
+				Main.disableTabs();
 				graphtab.activateClickListener();
-				this.clickArgument = nameEvent;	
-				Main.updateUserMsg(String.format("Please click where you want to ad event %s", nameEvent));
+				this.clickArgument = nameEvent;
+				Main.updateUserMsg(String.format("Please click where you want to ad event: %s", nameEvent));
 			}
 			break;
 		case "delete_event":
@@ -461,7 +467,7 @@ public class Menu implements ActionListener, ItemListener {
 					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
 					Main.updateUserMsg("Added a new CR Graph");
 					GUIPane.addGraphTab(name + " #" + tabNum, true, ID);
-				}else{
+				} else {
 					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
 					Main.updateUserMsg("Added a new Petri Graph");
 					GUIPane.addGraphTab(name + " #" + tabNum, false, ID);
@@ -504,31 +510,36 @@ public class Menu implements ActionListener, ItemListener {
 		menuVis.setEnabled(false);
 
 	}
-	
-	public void createEvent(Position position){
+
+	public void createEvent(Position position) {
 		String nameEvent = clickArgument;
 		try {
 			Main.guiControlller.CreateEvent(position, nameEvent);
-			Main.updateUserMsg(String.format("Added Event %s", nameEvent));
+			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 		}
-		
+
 		GraphTab graphtab = Main.getActiveTab();
 		graphtab.deactivateClickListener();
-		this.enambleMenubar();
-		Main.guiPane.setEnabled(true);
-		
-	}
-	
-	public void disableMenubar(){
-		menuBar.setEnabled(false);
-	}
-	
-	public void enambleMenubar(){
-		menuBar.setEnabled(true);
+		Main.enableTabs();
+		enableMenubar();
+
 	}
 
+	public void disableMenubar() {
+		for (Component menuItem : menuBar.getComponents()) {
+			if (menuItem.isEnabled()) {
+				menuItem.setEnabled(false);
+				disabledMenus.add((JMenuItem) menuItem);
+			}
+		}
+	}
 
-	
+	public void enableMenubar() {
+		for (JMenuItem menuItem :disabledMenus) {
+			menuItem.setEnabled(true);
+		}
+	}
+
 }
