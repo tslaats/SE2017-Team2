@@ -58,10 +58,10 @@ public class CrDrawing {
 		    for (CrObject o: graf) {
 		    	if (o.getClass().equals(Conditional.class)) {
 		    		Relation r = (Relation) o;
-		    		drawConditional(g, r.getIn(), r.getOut());
+		    		drawConditional(g, r.getIn(), r.getOut(), r.getID());
 		    	} else if (o.getClass().equals(Response.class)) {
 		    		Response r = (Response) o;
-		    		drawResponse(g, r.getIn(), r.getOut());
+		    		drawResponse(g, r.getIn(), r.getOut(), r.getID());
 		    	}
 		    	
 		    }
@@ -69,15 +69,15 @@ public class CrDrawing {
 		    return bi;
 	  }
 
-	  private void drawConditional(Graphics2D g, Event e1, Event e2) {
-		  drawArrow(g, e1, e2, Color.BLUE);
+	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
+		  drawArrow(g, e1, e2, Color.BLUE,""+id);
 	  }
 	  
-	  private void drawResponse(Graphics2D g, Event e1, Event e2) {
-		  drawArrow(g, e1, e2, Color.ORANGE);
+	  private void drawResponse(Graphics2D g, Event e1, Event e2, int id) {
+		  drawArrow(g, e1, e2, Color.ORANGE, ""+id);
 	  }
 	    
-	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c) {
+	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id) {
 		  int x1 = e1.getX();
 		  int y1 = e1.getY();
 		  int x2 = e2.getX();
@@ -116,12 +116,21 @@ public class CrDrawing {
 	      AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
 	      at.concatenate(AffineTransform.getRotateInstance(angle));
 	      g.transform(at);
+		  Font font = new Font("Times New Roman", Font.BOLD, 18);
+	      FontMetrics metrics = g.getFontMetrics(font);
+	      // Determine the X coordinate for the text
+	      // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+	      // Set the font
+	      g.setFont(font);
 	      // Draw horizontal arrow starting in (0, 0)
 	      g.drawLine(0, 0, len, 0);
 	      g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
 	                    new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
 	      //reset
 	      g.setStroke(oldS);
+	      //g.setColor(Color.BLACK);
+	      g.drawString(id, (len/2)-metrics.stringWidth(id), -2);
+
 	      g.setTransform(oldXForm);
 	  }
 	  
