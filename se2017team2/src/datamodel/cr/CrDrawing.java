@@ -174,13 +174,13 @@ public class CrDrawing {
 		  g.setColor(Color.BLACK);
 		  g.drawRect(x-1, y-1, EVENT_WIDTH+1, EVENT_HEIGHT+1);
 		  g.setColor(Color.LIGHT_GRAY);
-		  // draw event name
 		  g.fillRect(x, y, EVENT_WIDTH, EVENT_HEIGHT);
-		  drawCenteredString(g, event.getName(), EVENT_WIDTH, EVENT_HEIGHT,x,y);
-		  // draw line under text
 		  g.setColor(Color.BLACK);
 		  // DRAWS LINE		  
 		  g.drawLine(x, y+LINE_HEIGHT, x+EVENT_WIDTH, y+LINE_HEIGHT);
+		  // draw texts under line
+		  drawCenteredString(g, event.getName(), EVENT_WIDTH, EVENT_HEIGHT,x,y);
+		  drawCenteredString(g, "(" +event.getID()+")", EVENT_WIDTH, EVENT_HEIGHT,x,y+LINE_HEIGHT);
 		  
 		  // draw Petri
 		  if (event.getPetrinet() != null) {
