@@ -358,7 +358,7 @@ public class Menu implements ActionListener, ItemListener {
 			// prompt the user to enter the name of the new Place
 			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Place");
 
-			// if the name is successfully entered, add Event
+			// if the name is successfully entered, add Place
 			if (name != null) {
 				disableMenubar();
 				GraphTab graphtab = Main.getActiveTab();
@@ -499,6 +499,9 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateUserMsg("Invalid Button pressed!");
 			break;
 		}
+		System.out.println("hvvvvvad");
+	//	Main.getActiveTab().updateImage();
+		Main.guiPane.updatePane();
 
 	}
 
@@ -553,10 +556,12 @@ public class Menu implements ActionListener, ItemListener {
 				int tabNum = GUIPane.getTabNum() + 1;
 				if (CrGraph) {
 					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
+					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new CR Graph");
 					GUIPane.addGraphTab(name + " #" + tabNum, true, ID);
 				} else {
 					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
+					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new Petri Graph");
 					GUIPane.addGraphTab(name + " #" + tabNum, false, ID);
 				}
@@ -614,6 +619,7 @@ public class Menu implements ActionListener, ItemListener {
 		Main.enableTabs();
 		enableMenubar();
 		this.clickArgument = "";
+		
 	}
 
 	public void createTransition(Position position) {
@@ -665,6 +671,7 @@ public class Menu implements ActionListener, ItemListener {
 			break;
 		}
 
+		Main.guiPane.updatePane();
 	}
 
 	public void disableMenubar() {
