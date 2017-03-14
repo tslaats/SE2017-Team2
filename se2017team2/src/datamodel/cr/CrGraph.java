@@ -45,6 +45,17 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 		this.crObjects.put(id, e);
 		return id;
 	}
+
+	/**
+	 * Adds an already instantiated Event to the Cr Graph (For testing, mostly)
+	 *
+	 * @param event
+	 * @return The id of the event
+	 */
+	public int addEvent(Event event) {
+		this.crObjects.put(event.getID(), event);
+		return event.getID();
+	}
 	
 	/**
 	 * Deletes the Event with the given ID
