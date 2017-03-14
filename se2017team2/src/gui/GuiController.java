@@ -5,13 +5,16 @@
 package gui;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import datamodel.Graph;
 import datamodel.Graph.GraphTypes;
 import datamodel.Position;
 import datamodel.cr.CrGraph;
+import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
 
 /************************************************************/
@@ -345,8 +348,8 @@ public class GuiController {
 	 * Get the current active graph
 	 * 
 	 * @return The activ Graph object
-	 * @throws Exception
-	 *             If the ActiveGraphID does not exist
+	 * @throws Exception If the ActiveGraphID does not exist
+	 *             
 	 */
 	public Graph getActiveGraph() throws Exception {
 		if (!this.graphs.containsKey(ActiveGraphID)) {
@@ -375,7 +378,72 @@ public class GuiController {
 		}
 
 		return img;
-
 	}
+	
+	/**
+	 * Returns a List of possible Actions for the Active Graph
+	 * 
+	 * @return List of Action objects
+	 * @throws Exception If the ActiveGraphID does not exist, or if there was a problem calling the Semantics interface
+	 */
+	public List<Action<?>> getPossibleActions() throws Exception {
+		
+		List<Action<?>> actions = new ArrayList<>();
+		
+		Graph graph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		graph = this.graphs.get(ActiveGraphID);
+
+		if (this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			List<Event> events = crgraph.getPossibleActions();
+			// Create actions for each event
+			for (Event e : events) {
+				Action<Event> a = new Action<Event>(e.getName(), e.getID(), GraphTypes.CR, e);
+				actions.add(a);
+			}
+		} else {
+			Petrinet petrinet = (Petrinet) graph;
+			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+		}		
+		
+		return actions;		
+	}
+	
+	/**
+	 * Executes the given action on the active graph
+	 * 
+	 * @param action The action object to be executed
+	 * @throws Exception If the ActiveGraphID does not exist, if the given 
+	 * action and the active graph does not have matching types, or if there was a problem
+	 * calling the Semantics interface
+	 */
+	public void ExecuteAction(Action<?> action) throws Exception {
+		Graph graph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		graph = this.graphs.get(ActiveGraphID);		
+		
+		if (action.getGraphType() == GraphTypes.CR && this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			// Execute the event and update the graph entry in the hash map
+			CrGraph updatedGraph = crgraph.executeAction((Event)action.getActionObject());
+			this.graphs.put(ActiveGraphID, updatedGraph);
+		}
+		else if (action.getGraphType() == GraphTypes.PETRI && this.isActiveGraphPetri()) {
+			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+		}
+		else {
+			throw new Exception("The given action and the active graph does not have matching types");
+		}
+		
+	}
+	
+	
 
 };
