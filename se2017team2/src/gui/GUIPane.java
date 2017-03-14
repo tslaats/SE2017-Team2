@@ -3,15 +3,9 @@ package gui;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,6 +127,5 @@ public class GUIPane extends JPanel implements ChangeListener {
 			tabbedPane.setEnabledAt(i, true);
 		}
 	}
-	
-	
+
 }

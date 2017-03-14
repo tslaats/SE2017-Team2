@@ -16,7 +16,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ImageIcon;
 
 import datamodel.Graph;
-import datamodel.Graph.GraphTypes;
 import datamodel.Position;
 
 /*
@@ -31,6 +30,11 @@ public class Menu implements ActionListener, ItemListener {
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
 	private Set<JMenuItem> disabledMenus;
+	private ClickType clickType;
+
+	private enum ClickType {
+		EVENT, TRANSITION, PLACE
+	}
 
 	public JMenuBar createMenuBar() {
 
@@ -154,6 +158,22 @@ public class Menu implements ActionListener, ItemListener {
 		submenu.add(menuItem);
 		MenuPetri.add(submenu);
 
+		submenu = new JMenu("Arc");
+		submenu.setMnemonic(KeyEvent.VK_A);
+
+		menuItem = new JMenuItem("Add");
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("new_arc");
+		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Delete");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_arc");
+		submenu.add(menuItem);
+		MenuPetri.add(submenu);
+
 		menuBar.add(MenuPetri);
 
 		// Build the first menu.
@@ -224,6 +244,7 @@ public class Menu implements ActionListener, ItemListener {
 				graphtab.activateClickListener();
 				this.clickArgument = nameEvent;
 				Main.updateUserMsg(String.format("Please click where you want to ad event: %s", nameEvent));
+				clickType = ClickType.EVENT;
 			}
 			break;
 		case "delete_event":
@@ -333,12 +354,19 @@ public class Menu implements ActionListener, ItemListener {
 			}
 			break;
 		case "new_place":
-			Position pos = new Position(1, 1);
-			try {
-				Main.guiControlller.CreatePlace(pos);
-				Main.updateUserMsg("Add place");
-			} catch (Exception e1) {
-				Main.updateUserMsg(e1.getMessage());
+
+			// prompt the user to enter the name of the new Place
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Place");
+
+			// if the name is successfully entered, add Event
+			if (name != null) {
+				disableMenubar();
+				GraphTab graphtab = Main.getActiveTab();
+				Main.disableTabs();
+				graphtab.activateClickListener();
+				this.clickArgument = name;
+				Main.updateUserMsg(String.format("Please click where you want to ad Place: %s", name));
+				clickType = ClickType.PLACE;
 			}
 
 			break;
@@ -363,21 +391,36 @@ public class Menu implements ActionListener, ItemListener {
 			break;
 		case "new_transition":
 
-			// prompt the user to enter the name of the new Event
-			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Event");
+			// prompt the user to enter the name of the new Transition
+			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Transition");
 
-			// if the name is successfully entered, add Event
+			// if the name is successfully entered, add Transition
 			if (name != null) {
-
-				pos = new Position(1, 1);
-
-				try {
-					Main.guiControlller.CreateTransition(pos, name);
-					Main.updateUserMsg(String.format("Added place: %s", name));
-				} catch (Exception e1) {
-					Main.updateUserMsg(e1.getMessage());
-				}
+				disableMenubar();
+				GraphTab graphtab = Main.getActiveTab();
+				Main.disableTabs();
+				graphtab.activateClickListener();
+				this.clickArgument = name;
+				Main.updateUserMsg(String.format("Please click where you want to ad Transition: %s", name));
+				clickType = ClickType.TRANSITION;
 			}
+
+			// // prompt the user to enter the name of the new Event
+			// name = JOptionPane.showInputDialog(inputDialog, "Please enter the
+			// name of the new transition");
+			//
+			// // if the name is successfully entered, add Event
+			// if (name != null) {
+			//
+			// pos = new Position(1, 1);
+			//
+			// try {
+			// Main.guiControlller.CreateTransition(pos, name);
+			// Main.updateUserMsg(String.format("Added transition: %s", name));
+			// } catch (Exception e1) {
+			// Main.updateUserMsg(e1.getMessage());
+			// }
+			// }
 			break;
 		case "delete_transition":
 			// prompt the user to enter the id of the transition to delete
@@ -405,6 +448,51 @@ public class Menu implements ActionListener, ItemListener {
 		case "stop_visualization":
 			Main.hidePossibleActions();
 			Main.updateUserMsg("Stopped visualization");
+			break;
+		case "new_arc":
+			incomingIDs = new JTextField();
+			outgoingIDs = new JTextField();
+			Object[] arcMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+
+			option = JOptionPane.showConfirmDialog(null, arcMessage, "Add Arc", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				try {
+					int incomingID = Integer.parseInt(incomingIDs.getText());
+					int outgoingID = Integer.parseInt(outgoingIDs.getText());
+
+					try {
+						Main.guiControlller.CreateArc(incomingID, outgoingID);
+						Main.updateUserMsg(String.format("Added Arc from %d to %d", incomingID, outgoingID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
+				}
+			}
+
+			break;
+		case "delete_arc":
+			incomingIDs = new JTextField();
+			outgoingIDs = new JTextField();
+			Object[] delarcMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+
+			option = JOptionPane.showConfirmDialog(null, delarcMessage, "Delete Arc", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				try {
+					int incomingID = Integer.parseInt(incomingIDs.getText());
+					int outgoingID = Integer.parseInt(outgoingIDs.getText());
+
+					try {
+						Main.guiControlller.DeleteArc(incomingID, outgoingID);
+						Main.updateUserMsg(String.format("Deleted Arc from %d to %d", incomingID, outgoingID));
+					} catch (Exception e1) {
+						Main.updateUserMsg(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
+				}
+			}
 			break;
 		default:
 			System.out.println(action);
@@ -518,12 +606,64 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
+			this.clickArgument = "";
 		}
 
 		GraphTab graphtab = Main.getActiveTab();
 		graphtab.deactivateClickListener();
 		Main.enableTabs();
 		enableMenubar();
+		this.clickArgument = "";
+	}
+
+	public void createTransition(Position position) {
+		String name = clickArgument;
+		try {
+			Main.guiControlller.CreateTransition(position, name);
+			Main.updateUserMsg(String.format("Added Transition: %s", name));
+		} catch (Exception e1) {
+			Main.updateUserMsg(e1.getMessage());
+			this.clickArgument = "";
+		}
+
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
+		Main.enableTabs();
+		enableMenubar();
+		this.clickArgument = "";
+	}
+
+	public void createPlace(Position position) {
+		String nameEvent = clickArgument;
+		try {
+			Main.guiControlller.CreatePlace(position);
+			Main.updateUserMsg(String.format("Added Place: %s", nameEvent));
+		} catch (Exception e1) {
+			Main.updateUserMsg(e1.getMessage());
+		}
+
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
+		Main.enableTabs();
+		enableMenubar();
+	}
+
+	public void canvasClicked(Position position) {
+
+		switch (clickType) {
+		case PLACE:
+			createPlace(position);
+			break;
+		case EVENT:
+			createEvent(position);
+			break;
+		case TRANSITION:
+			createTransition(position);
+			break;
+		default:
+			Main.updateUserMsg("Invalid ClickEvent");
+			break;
+		}
 
 	}
 
@@ -537,7 +677,7 @@ public class Menu implements ActionListener, ItemListener {
 	}
 
 	public void enableMenubar() {
-		for (JMenuItem menuItem :disabledMenus) {
+		for (JMenuItem menuItem : disabledMenus) {
 			menuItem.setEnabled(true);
 		}
 	}

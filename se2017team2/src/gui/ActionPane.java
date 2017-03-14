@@ -2,13 +2,10 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,11 +15,16 @@ import javax.swing.JScrollPane;
 
 public class ActionPane extends JPanel implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private List<String> possibleActions;
 
 	private JPanel actions;
 
-	//GridLayout experimentLayout = new GridLayout(0, 1);
+	// GridLayout experimentLayout = new GridLayout(0, 1);
 
 	public ActionPane() {
 
@@ -56,10 +58,9 @@ public class ActionPane extends JPanel implements ActionListener {
 
 		// this.panel.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-	//	this.panel.setLayout(experimentLayout);
+		// this.panel.setLayout(experimentLayout);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
-		
+
 		for (String actions : possibleActions) {
 
 			JButton b1 = new JButton(actions);
@@ -73,11 +74,11 @@ public class ActionPane extends JPanel implements ActionListener {
 
 		}
 		this.actions.setLayout(new BoxLayout(this.actions, BoxLayout.Y_AXIS));
-		this.add(new JScrollPane(this.actions, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-		//this.add(this.actions);
-		
+		this.add(new JScrollPane(this.actions, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		// this.add(this.actions);
 
-		//this.add(this.panel);
+		// this.add(this.panel);
 	}
 
 	@Override

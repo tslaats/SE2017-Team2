@@ -5,7 +5,6 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -18,8 +17,9 @@ public class Main {
 	public static GUIPane guiPane = new GUIPane();
 	private static MessageField messageField;
 	private static JPanel panel = new JPanel();
-	public static GuiController guiControlller =  new GuiController();
+	public static GuiController guiControlller = new GuiController();
 	private static Menu crMenu;
+
 	public static void main(String[] args) {
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
@@ -49,21 +49,16 @@ public class Main {
 
 		// JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		
 
-		//JScrollPane scroller = new JScrollPane(actPane);
-		
+		// JScrollPane scroller = new JScrollPane(actPane);
+
 		panel.add(initpage, BorderLayout.CENTER);
-		
-	
-
 
 		messageField = new MessageField();
 		JPanel msgpanel = messageField.getMsgPanel();
 		panel.add(msgpanel, BorderLayout.PAGE_END);
 
 		contenpane.add(panel);
-
 
 		// Display the window.
 		// frame.pack();
@@ -102,32 +97,30 @@ public class Main {
 	public static void updateUserMsg(String msg) {
 		messageField.setMsgText(msg);
 	}
-	
-	public static void showPossibleActions(){
+
+	public static void showPossibleActions() {
 		guiPane.showActionPane();
 	}
-	
-	public static void hidePossibleActions(){
+
+	public static void hidePossibleActions() {
 		guiPane.removeActionPane();
 	}
-	
-	public static GraphTab getActiveTab(){
+
+	public static GraphTab getActiveTab() {
 		return guiPane.getCurrentTab();
 	}
-	
-	public static void  disableTabs(){
-		 guiPane.disableTabs();
+
+	public static void disableTabs() {
+		guiPane.disableTabs();
 	}
-	
-	public static void  enableTabs(){
-		 guiPane.enableTabs();
+
+	public static void enableTabs() {
+		guiPane.enableTabs();
 	}
-	
-	public static void imageClicked(Position position){
-		crMenu.createEvent(position);
+
+	public static void imageClicked(Position position) {
+		crMenu.canvasClicked(position);
 
 	}
 
-
-	
 }

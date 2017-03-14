@@ -41,10 +41,10 @@ public class GraphTab {
 			this.panel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					if(clickListenerActive){
-					System.out.println(e.getPoint());
-				//	System.out.println(e.getX());
-					Main.imageClicked(new Position(e.getX(),e.getY()));
+					if (clickListenerActive) {
+						System.out.println(e.getPoint());
+						// System.out.println(e.getX());
+						Main.imageClicked(new Position(e.getX(), e.getY()));
 					}
 				}
 			});
@@ -104,12 +104,12 @@ public class GraphTab {
 	public Boolean getCrGraph() {
 		return CrGraph;
 	}
-	
-	public void activateClickListener(){
+
+	public void activateClickListener() {
 		this.clickListenerActive = true;
 	}
-	
-	public void deactivateClickListener(){
+
+	public void deactivateClickListener() {
 		this.clickListenerActive = false;
 	}
 
