@@ -25,7 +25,7 @@ public class Menu implements ActionListener, ItemListener {
 
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
-	private static JMenu menuCR, MenuPetri, menuVis;
+	private static JMenu menuCR, MenuPetri, menuSimulation;
 	private JMenuItem menuItem;
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
@@ -153,6 +153,8 @@ public class Menu implements ActionListener, ItemListener {
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
+		
+		
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_transition");
 		submenu.add(menuItem);
@@ -177,28 +179,29 @@ public class Menu implements ActionListener, ItemListener {
 		menuBar.add(MenuPetri);
 
 		// Build the first menu.
-		menuVis = new JMenu("Visualization");
+		menuSimulation = new JMenu("Simulation");
 		menu.setMnemonic(KeyEvent.VK_V);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for Visualization");
-		menuBar.add(menuVis);
+		menu.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
+		menuBar.add(menuSimulation);
 
-		menuItem = new JMenuItem("Start Visualization", KeyEvent.VK_S);
+		menuItem = new JMenuItem("Start Simulation", KeyEvent.VK_S);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Start Visualization");
+		menuItem.getAccessibleContext().setAccessibleDescription("Start Simulation");
 		menuItem.addActionListener(this);
-		menuItem.setActionCommand("start_visualization");
-		menuVis.add(menuItem);
+		menuItem.setActionCommand("start_simulation");
+		menuSimulation.add(menuItem);
 
-		menuItem = new JMenuItem("Stop Visualization", KeyEvent.VK_T);
+		menuItem = new JMenuItem("Stop Simulation", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Stop Visualization");
+		menuItem.getAccessibleContext().setAccessibleDescription("Stop Simulation");
 		menuItem.addActionListener(this);
-		menuItem.setActionCommand("stop_visualization");
-		menuVis.add(menuItem);
+		menuItem.setActionCommand("stop_simulation");
+		menuSimulation.add(menuItem);
+		menuSimulation.setEnabled(false);
 
 		return menuBar;
 	}
@@ -245,6 +248,7 @@ public class Menu implements ActionListener, ItemListener {
 				this.clickArgument = nameEvent;
 				Main.updateUserMsg(String.format("Please click where you want to ad event: %s", nameEvent));
 				clickType = ClickType.EVENT;
+
 			}
 			break;
 		case "delete_event":
@@ -441,13 +445,22 @@ public class Menu implements ActionListener, ItemListener {
 				}
 			}
 			break;
-		case "start_visualization":
+		case "start_simulation":
 			Main.showPossibleActions();
-			Main.updateUserMsg("Started visualization");
+			//Menu.menuCR.setEnabled(false);
+			
+			disableMenubar();
+			menuSimulation.setEnabled(true);
+			Main.disableTabs();
+			
+			
+			Main.updateUserMsg("Started Simulation");
 			break;
-		case "stop_visualization":
+		case "stop_simulation":
 			Main.hidePossibleActions();
-			Main.updateUserMsg("Stopped visualization");
+			Main.updateUserMsg("Stopped Simulation");
+			Main.enableTabs();
+			enableMenubar();
 			break;
 		case "new_arc":
 			incomingIDs = new JTextField();
@@ -499,10 +512,7 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateUserMsg("Invalid Button pressed!");
 			break;
 		}
-		System.out.println("hvvvvvad");
-	//	Main.getActiveTab().updateImage();
 		Main.guiPane.updatePane();
-
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -594,13 +604,13 @@ public class Menu implements ActionListener, ItemListener {
 
 	}
 
-	public static void enableVisMenu() {
-		menuVis.setEnabled(true);
+	public static void enableSimulationMenu() {
+		menuSimulation.setEnabled(true);
 
 	}
 
-	public static void disableVisMenu() {
-		menuVis.setEnabled(false);
+	public static void disableSimulationMenu() {
+		menuSimulation.setEnabled(false);
 
 	}
 
@@ -614,12 +624,6 @@ public class Menu implements ActionListener, ItemListener {
 			this.clickArgument = "";
 		}
 
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
-		this.clickArgument = "";
-		
 	}
 
 	public void createTransition(Position position) {
@@ -632,11 +636,6 @@ public class Menu implements ActionListener, ItemListener {
 			this.clickArgument = "";
 		}
 
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
-		this.clickArgument = "";
 	}
 
 	public void createPlace(Position position) {
@@ -647,11 +646,6 @@ public class Menu implements ActionListener, ItemListener {
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 		}
-
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
 	}
 
 	public void canvasClicked(Position position) {
@@ -670,12 +664,20 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateUserMsg("Invalid ClickEvent");
 			break;
 		}
+		
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
+		Main.enableTabs();
+		enableMenubar();
+		this.clickArgument = "";
 
 		Main.guiPane.updatePane();
+		
 	}
 
 	public void disableMenubar() {
 		for (Component menuItem : menuBar.getComponents()) {
+			//System.out.println(menuItem.getA);
 			if (menuItem.isEnabled()) {
 				menuItem.setEnabled(false);
 				disabledMenus.add((JMenuItem) menuItem);
