@@ -34,6 +34,8 @@ public abstract class PetriObject {
 	 */
 	protected Position pos;
 	
+
+
 	/**
 	 * If false, then this PetriObject can't be deleted from the Petri Net
 	 */
@@ -125,6 +127,10 @@ public abstract class PetriObject {
 				po.removeIncomingObject(this.id);
 			}
 		}
+	}
+	
+	public Position getPos() {
+		return pos;
 	}
 	
 };
