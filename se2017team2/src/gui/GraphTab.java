@@ -33,7 +33,14 @@ public class GraphTab {
 			this.icon = createImageIcon("images/PIcon.gif");
 		}
 
-		this.image = createImageIcon("images/test.png");
+		// this.image = createImageIcon("images/test.png");
+		try {
+			this.image = new ImageIcon(Main.guiControlller.draw());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		if (this.image == null) {
 			this.panel = makeTextPanel("Unable to load graph first");
 		} else {
@@ -83,18 +90,11 @@ public class GraphTab {
 		return panel;
 	}
 
-	public void updateImage(String path) {
-
-		this.panel.removeAll();
-
-		this.image = createImageIcon(path);
-		if (this.image == null) {
+	public void updateImage() {
+		try {
+			this.image.setImage(Main.guiControlller.draw());
+		} catch (Exception e) {
 			System.out.println("Unable to load graph");
-			String workingDir = System.getProperty("user.dir");
-			System.out.println("Current working directory : " + workingDir);
-		} else {
-			this.panel = new JLabel(image);
-			System.out.println("new img loaded");
 		}
 	}
 

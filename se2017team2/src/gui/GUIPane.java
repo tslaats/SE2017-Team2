@@ -98,17 +98,47 @@ public class GUIPane extends JPanel implements ChangeListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		
+		graphTab.updateImage();
+		
 		// toggle menus for the correct graph type
 		if (graphTab.getCrGraph()) {
-			graphTab.updateImage("images/test.png");
 			Menu.enableCRMenu();
 			Menu.disablePetriMenu();
 		} else {
-			graphTab.updateImage("images/test2.png");
 			Menu.enablePetriMenu();
 			Menu.disableCRMenu();
 		}
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
+		sourceTabbedPane.repaint();
+		
+		
+	}
+	
+	
+
+	public void updatePane() {
+
+		int index = tabbedPane.getSelectedIndex();
+		GraphTab graphTab = graphTabs.get(index);
+
+		
+		
+		graphTab.updateImage();
+		
+		// toggle menus for the correct graph type
+		if (graphTab.getCrGraph()) {
+			Menu.enableCRMenu();
+			Menu.disablePetriMenu();
+		} else {
+			Menu.enablePetriMenu();
+			Menu.disableCRMenu();
+		}
+		tabbedPane.setComponentAt(index, graphTab.getpanel());
+		tabbedPane.repaint();
+		
+		
 	}
 
 	public GraphTab getCurrentTab() {
