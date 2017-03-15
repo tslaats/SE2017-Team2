@@ -25,6 +25,8 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	
 	// Default starting and end position of the initial places
 	private final Position placeStartPos = new Position(1,1);
+	
+
 	private final Position placeEndPos = new Position(10,1);
 	
 	/**
@@ -71,7 +73,7 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	 * 
 	 * @return Collection of Transition objects
 	 */
-	public Collection<Transition> getTransitions() {
+	public Collection<Transition> getTransitionValues() {
 		return this.transitions.values();
 	}
 	
@@ -80,10 +82,18 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	 * 
 	 * @return Collection of Place objects
 	 */
-	public Collection<Place> getPlaces() {
+	public Collection<Place> getPlaceValues() {
 		return this.places.values();
 	}
 	
+	public Map<Integer, Transition> getTransitions() {
+		return transitions;
+	}
+
+	public Map<Integer, Place> getPlaces() {
+		return places;
+	}
+
 	/**
 	 * Adds a new Place to the Petri Net
 	 * 
@@ -257,4 +267,13 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
     public boolean isDone() {
         return this.end.hasToken();
     }
+    
+    public Place getStart() {
+		return start;
+	}
+
+	public Place getEnd() {
+		return end;
+	}
+
 };

@@ -26,6 +26,8 @@ public class GuiController {
 	 * Map of graphs maintained by the GUIController
 	 */
 	private Map<Integer, Graph> graphs = new HashMap<>();
+
+
 	/**
 	 * ID of the current active/selected graph. Determines which graph gets
 	 * edited
@@ -444,6 +446,10 @@ public class GuiController {
 		
 	}
 	
-	
+
+	public Map<Integer, Graph> getGraphs() {
+		return graphs;
+	}
+
 
 };
