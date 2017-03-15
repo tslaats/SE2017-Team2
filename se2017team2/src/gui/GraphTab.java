@@ -33,10 +33,9 @@ public class GraphTab {
 			this.icon = createImageIcon("images/PIcon.gif");
 		}
 
-		this.image = createImageIcon("images/test.png");
-		if (this.image == null) {
-			this.panel = makeTextPanel("Unable to load graph first");
-		} else {
+		// this.image = createImageIcon("images/test.png");
+		try {
+			this.image = new ImageIcon(Main.guiControlller.draw());
 			this.panel = new JLabel(image);
 			this.panel.addMouseListener(new MouseAdapter() {
 				@Override
@@ -48,7 +47,12 @@ public class GraphTab {
 					}
 				}
 			});
+		} catch (Exception e1) {
+			this.panel = makeTextPanel("Unable to load graph first");
+			Main.updateUserMsg(e1.getMessage());
 		}
+
+
 
 		this.scrPane = new JScrollPane(panel);
 		// add(scrPane);
@@ -83,18 +87,11 @@ public class GraphTab {
 		return panel;
 	}
 
-	public void updateImage(String path) {
-
-		this.panel.removeAll();
-
-		this.image = createImageIcon(path);
-		if (this.image == null) {
+	public void updateImage() {
+		try {
+			this.image.setImage(Main.guiControlller.draw());
+		} catch (Exception e) {
 			System.out.println("Unable to load graph");
-			String workingDir = System.getProperty("user.dir");
-			System.out.println("Current working directory : " + workingDir);
-		} else {
-			this.panel = new JLabel(image);
-			System.out.println("new img loaded");
 		}
 	}
 
