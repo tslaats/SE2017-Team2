@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 public class ActionPane extends JPanel implements ActionListener {
 
@@ -51,8 +52,7 @@ public class ActionPane extends JPanel implements ActionListener {
 		try {
 			Main.guiControlller.ExecuteAction(posActions.get(Integer.parseInt(e.getActionCommand())));
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			Main.updateUserMsg(e1.getMessage());
 		}
 		Main.guiPane.updatePane();
 		//updateActionPane();
@@ -74,6 +74,7 @@ public class ActionPane extends JPanel implements ActionListener {
 				actionName = posAction.toString();
 				System.out.println(actionName);
 				JButton b1 = new JButton(actionName);
+				b1.setHorizontalAlignment(SwingConstants.LEFT);
 				b1.addActionListener(this);
 				b1.setActionCommand(Integer.toString(i));
 				b1.setMaximumSize(new Dimension(Integer.MAX_VALUE, b1.getMinimumSize().height));
@@ -87,10 +88,10 @@ public class ActionPane extends JPanel implements ActionListener {
 			this.repaint();
 
 //			actionsScrollPane.setSize(Integer.MAX_VALUE, 50);
+			
 //			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Main.updateUserMsg(e.getMessage());
 
 		}
 		
