@@ -24,6 +24,14 @@ public abstract class PetriObject {
 	 */
 	protected Map<Integer, PetriObject> outgoing;
 	
+	public Map<Integer, PetriObject> getIncoming() {
+		return incoming;
+	}
+
+	public Map<Integer, PetriObject> getOutgoing() {
+		return outgoing;
+	}
+
 	private static int LatestID;
 	/**
 	 * 
