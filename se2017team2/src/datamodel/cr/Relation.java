@@ -19,7 +19,7 @@ public abstract class Relation extends CrObject {
 		return this.outgoing;
 	}
 	
-	enum Type {
+	public enum Type {
 	    Conditional, Response 
 	}
 	
