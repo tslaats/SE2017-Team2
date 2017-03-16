@@ -279,7 +279,7 @@ public class Menu implements ActionListener {
 			String nameEvent = nameField.getText();
 
 			// if the name is successfully entered, add Event
-			if (nameEvent != null) {
+			if (option == JOptionPane.OK_OPTION) {
 				disableMenubar();
 				GraphTab graphtab = Main.getActiveTab();
 				Main.disableTabs();
