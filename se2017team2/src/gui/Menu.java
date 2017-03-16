@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -34,6 +34,7 @@ public class Menu implements ActionListener {
 	private String clickArgument;
 	private Set<JMenuItem> disabledMenus;
 	private ClickType clickType;
+	private Boolean isPending;
 	private GUIPane guiPane;
 
 
@@ -51,6 +52,7 @@ public class Menu implements ActionListener {
 	public Menu(GUIPane guiPane) {
 
 		this.guiPane = guiPane;
+		this.isPending = false;
 
 		// Create the menu bar.
 		menuBar = new JMenuBar();
@@ -262,8 +264,19 @@ public class Menu implements ActionListener {
 			break;
 		case "new_event":
 
+	
+			
+			JTextField nameField = new JTextField();
+			JRadioButton pending = new JRadioButton();
+			Object[] message1 = { "Please enter the name of the new Event:", nameField, "Pending?:", pending };
+
+			option = JOptionPane.showConfirmDialog(null, message1, "Add Event", JOptionPane.OK_CANCEL_OPTION);
+			
+			
+			this.isPending = pending.isSelected(); 
+			
 			// prompt the user to enter the name of the new Event
-			String nameEvent = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Event");
+			String nameEvent = nameField.getText();
 
 			// if the name is successfully entered, add Event
 			if (nameEvent != null) {
@@ -605,13 +618,14 @@ public class Menu implements ActionListener {
 	public void createEvent(Position position) {
 		String nameEvent = clickArgument;
 		try {
-			Main.guiControlller.createEvent(position, nameEvent);
+			Main.guiControlller.createEvent(position, nameEvent, this.isPending);
 			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 			this.clickArgument = "";
+			this.isPending = false;
 		}
-
+		this.isPending = false;
 	}
 
 	/**
@@ -633,10 +647,10 @@ public class Menu implements ActionListener {
 	 * @param position
 	 */
 	public void createPlace(Position position) {
-		String nameEvent = clickArgument;
+		String namePlace= clickArgument;
 		try {
 			Main.guiControlller.createPlace(position);
-			Main.updateUserMsg(String.format("Added Place: %s", nameEvent));
+			Main.updateUserMsg(String.format("Added Place: %s", namePlace));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 		}
