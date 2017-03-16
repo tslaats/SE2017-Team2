@@ -24,6 +24,14 @@ public abstract class PetriObject {
 	 */
 	protected Map<Integer, PetriObject> outgoing;
 	
+	public Map<Integer, PetriObject> getIncoming() {
+		return incoming;
+	}
+
+	public Map<Integer, PetriObject> getOutgoing() {
+		return outgoing;
+	}
+
 	private static int LatestID;
 	/**
 	 * 
@@ -34,6 +42,8 @@ public abstract class PetriObject {
 	 */
 	protected Position pos;
 	
+
+
 	/**
 	 * If false, then this PetriObject can't be deleted from the Petri Net
 	 */
@@ -125,6 +135,10 @@ public abstract class PetriObject {
 				po.removeIncomingObject(this.id);
 			}
 		}
+	}
+	
+	public Position getPos() {
+		return pos;
 	}
 	
 };

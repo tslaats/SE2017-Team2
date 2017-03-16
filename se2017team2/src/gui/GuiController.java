@@ -5,13 +5,16 @@
 package gui;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import datamodel.Graph;
 import datamodel.Graph.GraphTypes;
 import datamodel.Position;
 import datamodel.cr.CrGraph;
+import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
 
 /************************************************************/
@@ -23,6 +26,8 @@ public class GuiController {
 	 * Map of graphs maintained by the GUIController
 	 */
 	private Map<Integer, Graph> graphs = new HashMap<>();
+
+
 	/**
 	 * ID of the current active/selected graph. Determines which graph gets
 	 * edited
@@ -40,7 +45,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the graph type is not supported
 	 */
-	public int CreateGraph(String name, Graph.GraphTypes graphType) throws Exception {
+	public int createGraph(String name, Graph.GraphTypes graphType) throws Exception {
 
 		Graph newGraph = null;
 		int id;
@@ -74,7 +79,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the given graphID does not exist
 	 */
-	public void DeleteCrGraph(int graphID) throws Exception {
+	public void deleteCrGraph(int graphID) throws Exception {
 
 		if (!this.graphs.containsKey(graphID)) {
 			throw new Exception("The given graphID does not exist");
@@ -120,7 +125,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Place could not be added
 	 */
-	public void CreatePlace(Position pos) throws Exception {
+	public void createPlace(Position pos) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -139,7 +144,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Place could not be deleted
 	 */
-	public void DeletePlace(int placeID) throws Exception {
+	public void deletePlace(int placeID) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -159,7 +164,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Transition could not be added
 	 */
-	public void CreateTransition(Position pos, String name) throws Exception {
+	public void createTransition(Position pos, String name) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -177,7 +182,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Transition could not be deleted
 	 */
-	public void DeleteTransition(int transitionID) throws Exception {
+	public void deleteTransition(int transitionID) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -197,7 +202,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Arc could not be added
 	 */
-	public void CreateArc(int incomingID, int outgoingID) throws Exception {
+	public void createArc(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -217,7 +222,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If the Arc could not be deleted
 	 */
-	public void DeleteArc(int incomingID, int outgoingID) throws Exception {
+	public void deleteArc(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -237,7 +242,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was problem creating the Event
 	 */
-	public void CreateEvent(Position pos, String name) throws Exception {
+	public void createEvent(Position pos, String name) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -255,7 +260,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was a problem deleting the Event
 	 */
-	public void DeleteEvent(int eventID) throws Exception {
+	public void deleteEvent(int eventID) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -275,7 +280,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was a problem creating the Response Relation
 	 */
-	public void CreateResponse(int incomingID, int outgoingID) throws Exception {
+	public void createResponse(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -293,7 +298,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was a problem deleting the Response Relation
 	 */
-	public void DeleteResponse(int crObjID) throws Exception {
+	public void deleteResponse(int crObjID) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -313,7 +318,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was a problem creating the Condition Relation
 	 */
-	public void CreateCondition(int incomingID, int outgoingID) throws Exception {
+	public void createCondition(int incomingID, int outgoingID) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -331,7 +336,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was a problem deleting the Condition Relation
 	 */
-	public void DeleteCondition(int crObjID) throws Exception {
+	public void deleteCondition(int crObjID) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -345,8 +350,8 @@ public class GuiController {
 	 * Get the current active graph
 	 * 
 	 * @return The activ Graph object
-	 * @throws Exception
-	 *             If the ActiveGraphID does not exist
+	 * @throws Exception If the ActiveGraphID does not exist
+	 *             
 	 */
 	public Graph getActiveGraph() throws Exception {
 		if (!this.graphs.containsKey(ActiveGraphID)) {
@@ -375,7 +380,76 @@ public class GuiController {
 		}
 
 		return img;
-
 	}
+	
+	/**
+	 * Returns a List of possible Actions for the Active Graph
+	 * 
+	 * @return List of Action objects
+	 * @throws Exception If the ActiveGraphID does not exist, or if there was a problem calling the Semantics interface
+	 */
+	public List<Action<?>> getPossibleActions() throws Exception {
+		
+		List<Action<?>> actions = new ArrayList<>();
+		
+		Graph graph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		graph = this.graphs.get(ActiveGraphID);
+
+		if (this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			List<Event> events = crgraph.getPossibleActions();
+			// Create actions for each event
+			for (Event e : events) {
+				Action<Event> a = new Action<Event>(e.getName(), e.getID(), GraphTypes.CR, e);
+				actions.add(a);
+			}
+		} else {
+			Petrinet petrinet = (Petrinet) graph;
+			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+		}		
+		
+		return actions;		
+	}
+	
+	/**
+	 * Executes the given action on the active graph
+	 * 
+	 * @param action The action object to be executed
+	 * @throws Exception If the ActiveGraphID does not exist, if the given 
+	 * action and the active graph does not have matching types, or if there was a problem
+	 * calling the Semantics interface
+	 */
+	public void executeAction(Action<?> action) throws Exception {
+		Graph graph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		graph = this.graphs.get(ActiveGraphID);		
+		
+		if (action.getGraphType() == GraphTypes.CR && this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			// Execute the event and update the graph entry in the hash map
+			CrGraph updatedGraph = crgraph.executeAction((Event)action.getActionObject());
+			this.graphs.put(ActiveGraphID, updatedGraph);
+		}
+		else if (action.getGraphType() == GraphTypes.PETRI && this.isActiveGraphPetri()) {
+			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+		}
+		else {
+			throw new Exception("The given action and the active graph does not have matching types");
+		}
+		
+	}
+	
+
+	public Map<Integer, Graph> getGraphs() {
+		return graphs;
+	}
+
 
 };

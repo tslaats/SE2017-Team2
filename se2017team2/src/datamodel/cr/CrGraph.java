@@ -28,8 +28,13 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	 * 
 	 * @return Collection of CrObjects objects
 	 */
-	public Collection<CrObject> getCrObjects() {
+	public Collection<CrObject> getCrObjectValues() {
 		return this.crObjects.values();
+	}
+	
+	
+	public Map<Integer, CrObject> getCrObjects() {
+		return crObjects;
 	}
 	
 	/**
@@ -44,6 +49,17 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 		int id = e.getID();
 		this.crObjects.put(id, e);
 		return id;
+	}
+
+	/**
+	 * Adds an already instantiated Event to the Cr Graph (For testing, mostly)
+	 *
+	 * @param event
+	 * @return The id of the event
+	 */
+	public int addEvent(Event event) {
+		this.crObjects.put(event.getID(), event);
+		return event.getID();
 	}
 	
 	/**

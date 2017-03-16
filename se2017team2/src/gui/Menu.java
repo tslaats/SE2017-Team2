@@ -20,23 +20,37 @@ import datamodel.Position;
 
 /*
  */
-public class Menu implements ActionListener, ItemListener {
-	private String newline = "\n";
+/**
+ * @author MultiPeden
+ *
+ */
+public class Menu implements ActionListener {
 
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
-	private static JMenu menuCR, MenuPetri, menuVis;
+	private static JMenu menuCR, MenuPetri, menuSimulation;
 	private JMenuItem menuItem;
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
 	private Set<JMenuItem> disabledMenus;
 	private ClickType clickType;
+	private GUIPane guiPane;
 
+
+	/**
+	 * @author MultiPeden
+	 *
+	 */
 	private enum ClickType {
 		EVENT, TRANSITION, PLACE
 	}
 
-	public JMenuBar createMenuBar() {
+	/**
+	 * @param guiPane
+	 */
+	public Menu(GUIPane guiPane) {
+
+		this.guiPane = guiPane;
 
 		// Create the menu bar.
 		menuBar = new JMenuBar();
@@ -153,6 +167,7 @@ public class Menu implements ActionListener, ItemListener {
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
+
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_transition");
 		submenu.add(menuItem);
@@ -177,33 +192,44 @@ public class Menu implements ActionListener, ItemListener {
 		menuBar.add(MenuPetri);
 
 		// Build the first menu.
-		menuVis = new JMenu("Visualization");
+		menuSimulation = new JMenu("Simulation");
 		menu.setMnemonic(KeyEvent.VK_V);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for Visualization");
-		menuBar.add(menuVis);
+		menu.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
+		menuBar.add(menuSimulation);
 
-		menuItem = new JMenuItem("Start Visualization", KeyEvent.VK_S);
+		menuItem = new JMenuItem("Start Simulation", KeyEvent.VK_S);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Start Visualization");
+		menuItem.getAccessibleContext().setAccessibleDescription("Start Simulation");
 		menuItem.addActionListener(this);
-		menuItem.setActionCommand("start_visualization");
-		menuVis.add(menuItem);
+		menuItem.setActionCommand("start_simulation");
+		menuSimulation.add(menuItem);
 
-		menuItem = new JMenuItem("Stop Visualization", KeyEvent.VK_T);
+		menuItem = new JMenuItem("Stop Simulation", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Stop Visualization");
+		menuItem.getAccessibleContext().setAccessibleDescription("Stop Simulation");
 		menuItem.addActionListener(this);
-		menuItem.setActionCommand("stop_visualization");
-		menuVis.add(menuItem);
+		menuItem.setActionCommand("stop_simulation");
+		menuSimulation.add(menuItem);
+		menuSimulation.setEnabled(false);
 
+	}
+
+	/**
+	 * @return
+	 */
+	public JMenuBar getMenubar() {
 		return menuBar;
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
+	/**
+	 * @param path
+	 * @return
+	 */
 	protected static ImageIcon createImageIcon(String path) {
 		java.net.URL imgURL = Menu.class.getResource(path);
 		if (imgURL != null) {
@@ -214,6 +240,9 @@ public class Menu implements ActionListener, ItemListener {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent e) {
 
 		String action = e.getActionCommand();
@@ -245,6 +274,7 @@ public class Menu implements ActionListener, ItemListener {
 				this.clickArgument = nameEvent;
 				Main.updateUserMsg(String.format("Please click where you want to ad event: %s", nameEvent));
 				clickType = ClickType.EVENT;
+
 			}
 			break;
 		case "delete_event":
@@ -253,10 +283,10 @@ public class Menu implements ActionListener, ItemListener {
 			// if the name is successfully entered, add Event
 			if (name != null) {
 				try {
-					// evvent id
+					// event id
 					ID = Integer.parseInt(name);
 					try {
-						Main.guiControlller.DeleteEvent(ID);
+						Main.guiControlller.deleteEvent(ID);
 						Main.updateUserMsg("Deleted eventID: " + ID);
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -278,7 +308,7 @@ public class Menu implements ActionListener, ItemListener {
 					int incomingID = Integer.parseInt(incomingIDs.getText());
 					int outgoingID = Integer.parseInt(outgoingIDs.getText());
 					try {
-						Main.guiControlller.CreateCondition(incomingID, outgoingID);
+						Main.guiControlller.createCondition(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added condition from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -300,7 +330,7 @@ public class Menu implements ActionListener, ItemListener {
 					ID = Integer.parseInt(name);
 
 					try {
-						Main.guiControlller.DeleteCondition(ID);
+						Main.guiControlller.deleteCondition(ID);
 						Main.updateUserMsg(String.format("Deleted condition %d", ID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -324,7 +354,7 @@ public class Menu implements ActionListener, ItemListener {
 					int outgoingID = Integer.parseInt(outgoingIDs.getText());
 
 					try {
-						Main.guiControlller.CreateResponse(incomingID, outgoingID);
+						Main.guiControlller.createResponse(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added response from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -343,7 +373,7 @@ public class Menu implements ActionListener, ItemListener {
 				try {
 					ID = Integer.parseInt(name);
 					try {
-						Main.guiControlller.DeleteResponse(ID);
+						Main.guiControlller.deleteResponse(ID);
 						Main.updateUserMsg(String.format("Deleted response with ID %d", ID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -379,7 +409,7 @@ public class Menu implements ActionListener, ItemListener {
 				try {
 					ID = Integer.parseInt(name);
 					try {
-						Main.guiControlller.DeletePlace(ID);
+						Main.guiControlller.deletePlace(ID);
 						Main.updateUserMsg(String.format("Deleted place with ID %d", ID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -404,23 +434,6 @@ public class Menu implements ActionListener, ItemListener {
 				Main.updateUserMsg(String.format("Please click where you want to ad Transition: %s", name));
 				clickType = ClickType.TRANSITION;
 			}
-
-			// // prompt the user to enter the name of the new Event
-			// name = JOptionPane.showInputDialog(inputDialog, "Please enter the
-			// name of the new transition");
-			//
-			// // if the name is successfully entered, add Event
-			// if (name != null) {
-			//
-			// pos = new Position(1, 1);
-			//
-			// try {
-			// Main.guiControlller.CreateTransition(pos, name);
-			// Main.updateUserMsg(String.format("Added transition: %s", name));
-			// } catch (Exception e1) {
-			// Main.updateUserMsg(e1.getMessage());
-			// }
-			// }
 			break;
 		case "delete_transition":
 			// prompt the user to enter the id of the transition to delete
@@ -431,7 +444,7 @@ public class Menu implements ActionListener, ItemListener {
 					// transition id
 					ID = Integer.parseInt(name);
 					try {
-						Main.guiControlller.DeleteTransition(ID);
+						Main.guiControlller.deleteTransition(ID);
 						Main.updateUserMsg(String.format("Deleted trasition with ID: %d", ID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -441,13 +454,18 @@ public class Menu implements ActionListener, ItemListener {
 				}
 			}
 			break;
-		case "start_visualization":
+		case "start_simulation":
 			Main.showPossibleActions();
-			Main.updateUserMsg("Started visualization");
+			disableMenubar();
+			menuSimulation.setEnabled(true);
+			Main.disableTabs();
+			Main.updateUserMsg("Started Simulation");
 			break;
-		case "stop_visualization":
+		case "stop_simulation":
 			Main.hidePossibleActions();
-			Main.updateUserMsg("Stopped visualization");
+			Main.updateUserMsg("Stopped Simulation");
+			Main.enableTabs();
+			enableMenubar();
 			break;
 		case "new_arc":
 			incomingIDs = new JTextField();
@@ -461,7 +479,7 @@ public class Menu implements ActionListener, ItemListener {
 					int outgoingID = Integer.parseInt(outgoingIDs.getText());
 
 					try {
-						Main.guiControlller.CreateArc(incomingID, outgoingID);
+						Main.guiControlller.createArc(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added Arc from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -484,7 +502,7 @@ public class Menu implements ActionListener, ItemListener {
 					int outgoingID = Integer.parseInt(outgoingIDs.getText());
 
 					try {
-						Main.guiControlller.DeleteArc(incomingID, outgoingID);
+						Main.guiControlller.deleteArc(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Deleted Arc from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
 						Main.updateUserMsg(e1.getMessage());
@@ -499,55 +517,14 @@ public class Menu implements ActionListener, ItemListener {
 			Main.updateUserMsg("Invalid Button pressed!");
 			break;
 		}
-		System.out.println("hvvvvvad");
-	//	Main.getActiveTab().updateImage();
 		Main.guiPane.updatePane();
-
 	}
 
-	public void itemStateChanged(ItemEvent e) {
-		JMenuItem source = (JMenuItem) (e.getSource());
-		String s = "Item event detected." + newline + "    Event source: " + source.getText() + " (an instance of "
-				+ getClassName(source) + ")" + newline + "    New state: "
-				+ ((e.getStateChange() == ItemEvent.SELECTED) ? "selected" : "unselected");
-		source.getAction();
-		System.out.println(s);
-	}
 
-	protected String getClassName(Object o) {
-		String classString = o.getClass().getName();
-		int dotIndex = classString.lastIndexOf(".");
-		return classString.substring(dotIndex + 1);
-	}
-
-	// public static String newCR() {
-	// JFrame frameCR = new JFrame("InputDialog");
-	// // prompt the user to enter the name of the new petri graph
-	// String nameCR = JOptionPane.showInputDialog(frameCR, "Please enter the
-	// name of the new CR graph");
-	// if (nameCR != null) {
-	// int tabNum = GUIPane.getTabNum() + 1;
-	// GUIPane.addGraphTab(nameCR + " #" + tabNum, true);
-	// Main.updateFrame();
-	// }
-	// return nameCR;
-	// }
-
-	// public static String newPetri() {
-	//
-	// JFrame framePetri = new JFrame("InputDialog");
-	// // prompt the user to enter the name of the new petri graph
-	// String namePetri = JOptionPane.showInputDialog(framePetri, "Please enter
-	// the name of the new Petri graph");
-	// if (namePetri != null) {
-	// GUIPane.addGraphTab(namePetri + " #" + (GUIPane.getTabNum() + 1), false);
-	// Main.updateFrame();
-	//
-	// }
-	// return namePetri;
-	// }
-
-	public static void createGraph(Boolean CrGraph) {
+	/**
+	 * @param CrGraph
+	 */
+	public void createGraph(Boolean CrGraph) {
 		JFrame dialog = new JFrame("dialog");
 		// prompt the user to enter the name of the new petri graph
 		String name = JOptionPane.showInputDialog(dialog, "Please enter the name of the graph");
@@ -555,15 +532,15 @@ public class Menu implements ActionListener, ItemListener {
 			try {
 				int tabNum = GUIPane.getTabNum() + 1;
 				if (CrGraph) {
-					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.CR);
+					int ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.CR);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new CR Graph");
-					GUIPane.addGraphTab(name + " #" + tabNum, true, ID);
+					guiPane.addGraphTab(name + " #" + tabNum, true, ID);
 				} else {
-					int ID = Main.guiControlller.CreateGraph("name", Graph.GraphTypes.PETRI);
+					int ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.PETRI);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new Petri Graph");
-					GUIPane.addGraphTab(name + " #" + tabNum, false, ID);
+					guiPane.addGraphTab(name + " #" + tabNum, false, ID);
 				}
 				Main.updateFrame();
 			} catch (Exception e1) {
@@ -574,86 +551,100 @@ public class Menu implements ActionListener, ItemListener {
 
 	}
 
+	/**
+	 * 
+	 */
 	public static void enableCRMenu() {
 		menuCR.setEnabled(true);
 
 	}
 
+	/**
+	 * 
+	 */
 	public static void disableCRMenu() {
 		menuCR.setEnabled(false);
 
 	}
 
+	/**
+	 * 
+	 */
 	public static void enablePetriMenu() {
 		MenuPetri.setEnabled(true);
 
 	}
 
+	/**
+	 * 
+	 */
 	public static void disablePetriMenu() {
 		MenuPetri.setEnabled(false);
 
 	}
 
-	public static void enableVisMenu() {
-		menuVis.setEnabled(true);
+	/**
+	 * 
+	 */
+	public static void enableSimulationMenu() {
+		menuSimulation.setEnabled(true);
 
 	}
 
-	public static void disableVisMenu() {
-		menuVis.setEnabled(false);
+	/**
+	 * 
+	 */
+	public static void disableSimulationMenu() {
+		menuSimulation.setEnabled(false);
 
 	}
 
+	/**
+	 * @param position
+	 */
 	public void createEvent(Position position) {
 		String nameEvent = clickArgument;
 		try {
-			Main.guiControlller.CreateEvent(position, nameEvent);
+			Main.guiControlller.createEvent(position, nameEvent);
 			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 			this.clickArgument = "";
 		}
 
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
-		this.clickArgument = "";
-		
 	}
 
+	/**
+	 * @param position
+	 */
 	public void createTransition(Position position) {
 		String name = clickArgument;
 		try {
-			Main.guiControlller.CreateTransition(position, name);
+			Main.guiControlller.createTransition(position, name);
 			Main.updateUserMsg(String.format("Added Transition: %s", name));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 			this.clickArgument = "";
 		}
 
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
-		this.clickArgument = "";
 	}
 
+	/**
+	 * @param position
+	 */
 	public void createPlace(Position position) {
 		String nameEvent = clickArgument;
 		try {
-			Main.guiControlller.CreatePlace(position);
+			Main.guiControlller.createPlace(position);
 			Main.updateUserMsg(String.format("Added Place: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserMsg(e1.getMessage());
 		}
-
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
-		Main.enableTabs();
-		enableMenubar();
 	}
 
+	/**
+	 * @param position
+	 */
 	public void canvasClicked(Position position) {
 
 		switch (clickType) {
@@ -671,9 +662,19 @@ public class Menu implements ActionListener, ItemListener {
 			break;
 		}
 
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
+		Main.enableTabs();
+		enableMenubar();
+		this.clickArgument = "";
+
 		Main.guiPane.updatePane();
+
 	}
 
+	/**
+	 * 
+	 */
 	public void disableMenubar() {
 		for (Component menuItem : menuBar.getComponents()) {
 			if (menuItem.isEnabled()) {
@@ -683,6 +684,9 @@ public class Menu implements ActionListener, ItemListener {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void enableMenubar() {
 		for (JMenuItem menuItem : disabledMenus) {
 			menuItem.setEnabled(true);

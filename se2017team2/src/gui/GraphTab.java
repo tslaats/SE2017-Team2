@@ -23,6 +23,10 @@ public class GraphTab {
 	private boolean clickListenerActive;
 	private Integer id;
 
+	/**
+	 * @param CrGraph
+	 * @param id
+	 */
 	public GraphTab(Boolean CrGraph, Integer id) {
 		this.setId(id);
 		this.clickListenerActive = false;
@@ -36,14 +40,6 @@ public class GraphTab {
 		// this.image = createImageIcon("images/test.png");
 		try {
 			this.image = new ImageIcon(Main.guiControlller.draw());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		if (this.image == null) {
-			this.panel = makeTextPanel("Unable to load graph first");
-		} else {
 			this.panel = new JLabel(image);
 			this.panel.addMouseListener(new MouseAdapter() {
 				@Override
@@ -55,17 +51,28 @@ public class GraphTab {
 					}
 				}
 			});
+		} catch (Exception e1) {
+			this.panel = makeTextPanel("Unable to load graph first");
+			Main.updateUserMsg(e1.getMessage());
 		}
+
+
 
 		this.scrPane = new JScrollPane(panel);
 		// add(scrPane);
 
 	}
 
+	/**
+	 * @return
+	 */
 	public Container getpanel() {
 		return scrPane;
 	}
 
+	/**
+	 * @return
+	 */
 	public ImageIcon getIcon() {
 		return icon;
 	}
@@ -105,18 +112,30 @@ public class GraphTab {
 		return CrGraph;
 	}
 
+	/**
+	 * 
+	 */
 	public void activateClickListener() {
 		this.clickListenerActive = true;
 	}
 
+	/**
+	 * 
+	 */
 	public void deactivateClickListener() {
 		this.clickListenerActive = false;
 	}
 
+	/**
+	 * @return
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}

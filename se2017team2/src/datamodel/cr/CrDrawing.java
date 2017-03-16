@@ -48,7 +48,7 @@ public class CrDrawing {
 		  // Setup background
 		  g.setColor(Color.WHITE);
 		  g.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
-		  Collection<CrObject> graf = crgraph.getCrObjects();
+		  Collection<CrObject> graf = crgraph.getCrObjectValues();
 		  for (CrObject o: graf) {
 	    	if (o.getClass().equals(Event.class)) {
 	    		Event e = (Event) o;
