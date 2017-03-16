@@ -12,7 +12,7 @@ import datamodel.Position;
 import datamodel.cr.Conditional;
 import datamodel.cr.Event;
 
-public class RelationTests {
+public class ConditionalTests {
 
 	private static Conditional conditional;
 	
