@@ -24,8 +24,8 @@ public class GuiControllerTests {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		CRGraphID = controller.CreateGraph(testname, Graph.GraphTypes.CR);
-		PetrinetID = controller.CreateGraph(testname, Graph.GraphTypes.PETRI);
+		CRGraphID = controller.createGraph(testname, Graph.GraphTypes.CR);
+		PetrinetID = controller.createGraph(testname, Graph.GraphTypes.PETRI);
 	}
 
 
@@ -37,7 +37,7 @@ public class GuiControllerTests {
 		Graph testgraph = new Petrinet(testname);
 		
 		try{
-			int graphid = controller.CreateGraph(testname, Graph.GraphTypes.PETRI);
+			int graphid = controller.createGraph(testname, Graph.GraphTypes.PETRI);
 			
 			
 			assertTrue(controller.getGraphs().get(graphid).getName() == testgraph.getName()
@@ -54,7 +54,7 @@ public class GuiControllerTests {
 		Graph testgraph = new CrGraph(testname);
 		
 		try{
-			int graphid = controller.CreateGraph(testname, Graph.GraphTypes.CR);
+			int graphid = controller.createGraph(testname, Graph.GraphTypes.CR);
 			
 			
 			assertTrue(controller.getGraphs().get(graphid).getName() == testgraph.getName()
@@ -70,7 +70,7 @@ public class GuiControllerTests {
 	public void CreateNullGraphTest(){
 		
 		try{
-			controller.CreateGraph(testname, null);
+			controller.createGraph(testname, null);
 			fail();
 		} catch (Exception e){
 			assertTrue(true);
@@ -82,9 +82,9 @@ public class GuiControllerTests {
 	public void DeleteCrGraphTest(){
 		int graphid;
 		try{
-			graphid = controller.CreateGraph(testname, Graph.GraphTypes.CR);
+			graphid = controller.createGraph(testname, Graph.GraphTypes.CR);
 			
-			controller.DeleteCrGraph(graphid);
+			controller.deleteCrGraph(graphid);
 		} catch (Exception e){
 			e.printStackTrace();
 			fail();
