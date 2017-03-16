@@ -15,6 +15,8 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	
 	private Map<Integer, CrObject> crObjects = new HashMap<>();
 	
+	
+
 	public CrGraph(String name) {
 		super(name);
 		
@@ -28,8 +30,13 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	 * 
 	 * @return Collection of CrObjects objects
 	 */
-	public Collection<CrObject> getCrObjects() {
+	public Collection<CrObject> getCrObjectValues() {
 		return this.crObjects.values();
+	}
+	
+	
+	public Map<Integer, CrObject> getCrObjects() {
+		return crObjects;
 	}
 	
 	/**
