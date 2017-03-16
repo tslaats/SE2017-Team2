@@ -2,10 +2,7 @@ package datamodel.petri.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import datamodel.Position;
@@ -20,7 +17,7 @@ public class TransitionTest {
 	
 	private static Position pos = new Position(2,3);
 	
-	@BeforeClass
+	@Before
 	public static void setUpBeforeClass() throws Exception {
 		transition = new Transition(pos, testname);
 	}

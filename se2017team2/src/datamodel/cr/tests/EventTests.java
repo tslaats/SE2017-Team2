@@ -2,10 +2,7 @@ package datamodel.cr.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import datamodel.Position;
@@ -25,7 +22,7 @@ public class EventTests {
 	private static final Petrinet petrinet = new Petrinet(testname);;
 	
 	
-	@BeforeClass
+	@Before
 	public static void setUpBeforeClass() throws Exception {
 		event1 = new Event(testpos, testname);
 		event2 = new Event(testpos, testname, true, true, petrinet);
@@ -93,7 +90,7 @@ public class EventTests {
 			return;
 		}
 		
-		event1.setPending(executed);
+		event1.setExecuted(executed);
 		
 		assertTrue(event1.isExecuted());
 	}

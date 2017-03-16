@@ -2,10 +2,7 @@ package datamodel.cr.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import datamodel.Position;
@@ -29,7 +26,7 @@ public class ResponseTest {
 	
 	private static final Position eventOutPos = new Position(6,7);
 	
-	@BeforeClass
+	@Before
 	public static void setUpBeforeClass() throws Exception {
 		eventIn = new Event(eventInPos, eventInName);
 		eventOut = new Event(eventOutPos, eventOutName);

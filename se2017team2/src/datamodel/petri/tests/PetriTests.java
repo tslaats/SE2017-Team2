@@ -2,10 +2,7 @@ package datamodel.petri.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import datamodel.Position;
@@ -17,7 +14,7 @@ public class PetriTests {
 	
 	private static Petrinet petrinet;
 	
-	@BeforeClass
+	@Before
 	public static void setUpBeforeClass() throws Exception {
 		petrinet = new Petrinet(testname);
 	}
@@ -183,13 +180,6 @@ public class PetriTests {
 	@Test
 	public void AddArcNoMatch(){
 		
-		
-		Position pos1 = new Position(5,5);
-		Position pos2 = new Position(7,7);
-
-		int placeID = petrinet.addPlace(pos1);
-		int transID = petrinet.addTransition(pos2, testname);
-		
 		try{
 			petrinet.addArc(-1, -2);
 			fail();
@@ -239,10 +229,8 @@ public class PetriTests {
 		
 		
 		Position pos1 = new Position(5,5);
-		Position pos2 = new Position(7,7);
 
 		int placeID = petrinet.addPlace(pos1);
-		int transID = petrinet.addTransition(pos2, testname);
 		
 		try{
 			petrinet.addArc(placeID, -2);
@@ -257,10 +245,8 @@ public class PetriTests {
 		
 		
 		Position pos1 = new Position(5,5);
-		Position pos2 = new Position(7,7);
 
 		int placeID = petrinet.addPlace(pos1);
-		int transID = petrinet.addTransition(pos2, testname);
 		
 		try{
 			petrinet.addArc(-2, placeID);
