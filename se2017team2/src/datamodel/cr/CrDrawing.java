@@ -144,16 +144,39 @@ public class CrDrawing {
 	   */
 	  private void drawCenteredString(Graphics2D g, String text, int width, int height, int X, int Y) {
 	      // Get the FontMetrics
-		  Font font = new Font("Serif", Font.BOLD, 12);
-		  g.setColor(Color.BLACK);
+		  Font font = new Font("Serif", Font.TRUETYPE_FONT, 12);
 	      FontMetrics metrics = g.getFontMetrics(font);
+	      
 	      // Determine the X coordinate for the text
-	      int x = (width - metrics.stringWidth(text)) / 2;
+	      int x = ((width - metrics.stringWidth(text)) / 2) + X;
 	      // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
 	      // Set the font
+		  g.setColor(Color.BLACK);
 	      g.setFont(font);
 	      // Draw the String
-	      g.drawString(text, x+X, Y+metrics.getHeight() + LINE_HEIGHT);
+	      int lineWidth = EVENT_WIDTH;
+	      int y = Y+metrics.getHeight() + LINE_HEIGHT;
+	      if(metrics.stringWidth(text) < lineWidth) {
+	    	  g.drawString(text, x, y);
+	      }
+	      else {
+	    	  String[] words = text.split(" ");
+	          String currentLine = words[0];
+	          for(int i = 1; i < words.length; i++) {
+	              if(metrics.stringWidth(currentLine+words[i]) < lineWidth) {
+	                  currentLine += " "+words[i];
+	              } else {
+	            	  x = ((width - metrics.stringWidth(currentLine)) / 2)+X;
+	    	    	  g.drawString(currentLine, x, y);
+	                  y += metrics.getHeight();
+	                  currentLine = words[i];
+	              }
+	          }
+	          if(currentLine.trim().length() > 0) {
+	        	  x = ((width - metrics.stringWidth(currentLine)) / 2)+X;
+	              g.drawString(currentLine, x, y);
+	          }
+	      }
 	  }
 	  
 	  /**
@@ -191,7 +214,7 @@ public class CrDrawing {
 		  g.drawLine(x, y+LINE_HEIGHT, x+EVENT_WIDTH, y+LINE_HEIGHT);
 		  // draw texts under line
 		  drawCenteredString(g, event.getName(), EVENT_WIDTH, EVENT_HEIGHT,x,y);
-		  drawCenteredString(g, "(" +event.getID()+")", EVENT_WIDTH, EVENT_HEIGHT,x,y+LINE_HEIGHT);
+		  drawCenteredString(g, "(" +event.getID()+")", EVENT_WIDTH, EVENT_HEIGHT,x,y-LINE_HEIGHT);
 		  
 		  // draw Petri
 		  if (event.getPetrinet() != null) {
