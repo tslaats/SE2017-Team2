@@ -50,6 +50,21 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 		this.crObjects.put(id, e);
 		return id;
 	}
+	
+	/**
+	 * Adds an Event to the Cr Graph
+	 * 
+	 * @param pos Position of the Event
+	 * @param name Name of the Event
+	 * @param isPending If the Event should start out being pending or not
+	 * @return The id of the added Event
+	 */
+	public int addEvent(Position pos, String name, boolean isPending) {
+		Event e = new Event(pos, name, isPending);
+		int id = e.getID();
+		this.crObjects.put(id, e);
+		return id;
+	}
 
 	/**
 	 * Adds an already instantiated Event to the Cr Graph (For testing, mostly)

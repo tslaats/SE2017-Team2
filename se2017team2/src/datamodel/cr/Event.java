@@ -25,6 +25,16 @@ public class Event extends CrObject {
 	}
 	
 	/**
+	 * Basic Event constructor using with custom pending
+	 */
+	public Event(Position pos, String name, boolean isPending) {
+		this.pos = pos;
+		this.name = name;
+		this.pending = isPending;
+		this.executed = false;
+	}
+	
+	/**
 	 * Creates a CR graph Event
 	 * Default: 
 	 * isPending = false

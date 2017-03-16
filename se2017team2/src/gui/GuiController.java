@@ -251,6 +251,28 @@ public class GuiController {
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
 		crGraph.addEvent(pos, name);
 	}
+	
+	/**
+	 * Creates a Cr Event
+	 * 
+	 * @param pos
+	 *            Position of the Event
+	 * @param name
+	 *            Name of the Event
+	 * @parem isPending
+	 * 			  If the Event should start out being pending or not
+	 * @throws Exception
+	 *             If there was problem creating the Event
+	 */
+	public void createEvent(Position pos, String name, boolean isPending) throws Exception {
+		// Make sure that active graph is a Cr Graph
+		if (!this.isActiveGraphCr()) {
+			throw new Exception("The active graph is not Cr Graph");
+		}
+
+		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
+		crGraph.addEvent(pos, name, isPending);
+	}
 
 	/**
 	 * Deletes a Cr Event
