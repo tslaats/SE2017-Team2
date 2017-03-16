@@ -76,14 +76,14 @@ public class Main {
 		if (GUIPane.getTabNum() == 0) {
 			Menu.disableCRMenu();
 			Menu.disablePetriMenu();
-			Menu.disableVisMenu();
+			Menu.disableSimulationMenu();
 			panel.remove(guiPane);
 			panel.add(initpage);
 			panel.setSize(400, 400);
 		} else {
 			// remove initpage and set guiPane with tabs
 			System.out.println("remove initpage");
-
+			Menu.enableSimulationMenu();
 			panel.remove(initpage);
 			panel.add(guiPane);
 
@@ -99,8 +99,10 @@ public class Main {
 	}
 
 	public static void showPossibleActions() {
+		guiPane.updateActions();
 		guiPane.showActionPane();
 	}
+
 
 	public static void hidePossibleActions() {
 		guiPane.removeActionPane();
