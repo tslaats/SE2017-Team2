@@ -86,21 +86,11 @@ public class ActionPane extends JPanel implements ActionListener {
 			actions.revalidate();
 			actions.repaint();
 			this.repaint();
-<<<<<<< HEAD
-=======
 
-//			actionsScrollPane.setSize(Integer.MAX_VALUE, 50);
-			
-//			
->>>>>>> branch 'master' of https://github.com/tslaats/SE2017-Team2.git
 		} catch (Exception e) {
-<<<<<<< HEAD
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-=======
 			Main.updateUserMsg(e.getMessage());
-
->>>>>>> branch 'master' of https://github.com/tslaats/SE2017-Team2.git
 		}
 	}
 }
