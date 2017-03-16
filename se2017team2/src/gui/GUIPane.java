@@ -9,15 +9,22 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author MultiPeden
+ *
+ */
 public class GUIPane extends JPanel implements ChangeListener {
 	static JTabbedPane tabbedPane;
 
-	private static List<GraphTab> graphTabs = new ArrayList<GraphTab>();;
+	private List<GraphTab> graphTabs = new ArrayList<GraphTab>();;
 
 	private static final long serialVersionUID = 1L;
 
 	private ActionPane actPane;
 
+	/**
+	 * 
+	 */
 	public GUIPane() {
 		// super(new GridLayout(1, 2));
 		super(new GridBagLayout());
@@ -53,6 +60,9 @@ public class GUIPane extends JPanel implements ChangeListener {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void showActionPane() {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = 1;
@@ -65,12 +75,20 @@ public class GUIPane extends JPanel implements ChangeListener {
 		this.add(actPane, c);
 	}
 
+	/**
+	 * 
+	 */
 	public void removeActionPane() {
 		this.remove(actPane);
 	}
 
 	// add a graph tab to the tabbed pane
-	static void addGraphTab(String label, Boolean CrGraph, Integer ID) {
+	/**
+	 * @param label
+	 * @param CrGraph
+	 * @param ID
+	 */
+	public void addGraphTab(String label, Boolean CrGraph, Integer ID) {
 		GraphTab newTab = new GraphTab(CrGraph, ID);
 		graphTabs.add(newTab);
 		// select the added tab
@@ -80,11 +98,17 @@ public class GUIPane extends JPanel implements ChangeListener {
 		// tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 	}
 
+	/**
+	 * @return
+	 */
 	public static int getTabNum() {
 		int count = tabbedPane.getTabCount();
 		return count;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
@@ -117,49 +141,49 @@ public class GUIPane extends JPanel implements ChangeListener {
 	
 	
 
+	/**
+	 * 
+	 */
 	public void updatePane() {
 
 		int index = tabbedPane.getSelectedIndex();
 		GraphTab graphTab = graphTabs.get(index);
 		graphTab.updateImage();
-		
-//		// toggle menus for the correct graph type
-//		if (graphTab.getCrGraph()) {
-//			Menu.enableCRMenu();
-//			Menu.disablePetriMenu();
-//		} else {
-//			Menu.enablePetriMenu();
-//			Menu.disableCRMenu();
-//		}
 		tabbedPane.setComponentAt(index, graphTab.getpanel());
 		tabbedPane.repaint();
-		
-		
 	}
 
+	/**
+	 * @return
+	 */
 	public GraphTab getCurrentTab() {
 		int index = tabbedPane.getSelectedIndex();
 		return graphTabs.get(index);
 	}
 
+	/**
+	 * 
+	 */
 	public void disableTabs() {
 		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
 			tabbedPane.setEnabledAt(i, false);
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void enableTabs() {
 		for (int i = 0; i < tabbedPane.getTabCount(); i++) {
 			tabbedPane.setEnabledAt(i, true);
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void updateActions() {
 		this.actPane.updateActionPane();
-	//	updatePane();
-	//	actPane.revalidate();
-	//	actPane.repaint();
-//		showActionPane();
 	}
 
 }

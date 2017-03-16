@@ -4,6 +4,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * @author MultiPeden
+ *
+ */
 public class MessageField {
 	
 	private JPanel msgpanel;
@@ -17,10 +21,16 @@ public class MessageField {
         msgpanel.setBorder(BorderFactory.createEtchedBorder());	
 	}
 	
+	/**
+	 * @return
+	 */
 	public JPanel getMsgPanel(){
 		return msgpanel;
 	}
 	
+	/**
+	 * @param msg
+	 */
 	public void setMsgText(String msg){
 		filler.setText(msg);
 	}

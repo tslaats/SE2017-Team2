@@ -23,6 +23,10 @@ public class GraphTab {
 	private boolean clickListenerActive;
 	private Integer id;
 
+	/**
+	 * @param CrGraph
+	 * @param id
+	 */
 	public GraphTab(Boolean CrGraph, Integer id) {
 		this.setId(id);
 		this.clickListenerActive = false;
@@ -62,10 +66,16 @@ public class GraphTab {
 
 	}
 
+	/**
+	 * @return
+	 */
 	public Container getpanel() {
 		return scrPane;
 	}
 
+	/**
+	 * @return
+	 */
 	public ImageIcon getIcon() {
 		return icon;
 	}
@@ -105,18 +115,30 @@ public class GraphTab {
 		return CrGraph;
 	}
 
+	/**
+	 * 
+	 */
 	public void activateClickListener() {
 		this.clickListenerActive = true;
 	}
 
+	/**
+	 * 
+	 */
 	public void deactivateClickListener() {
 		this.clickListenerActive = false;
 	}
 
+	/**
+	 * @return
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * @param id
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}

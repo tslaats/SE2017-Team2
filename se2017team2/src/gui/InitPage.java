@@ -9,6 +9,10 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * @author MultiPeden
+ *
+ */
 public class InitPage extends JPanel implements ActionListener {
 
 	/**
@@ -16,8 +20,10 @@ public class InitPage extends JPanel implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	protected JButton newCrButton, newPetriButton;
+	private Menu crMenu;
 
-	public InitPage() {
+	public InitPage(Menu crMenu) {
+		this.crMenu = crMenu;
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		JButton newPetriButton = new JButton("New Petri-Net");
@@ -41,13 +47,16 @@ public class InitPage extends JPanel implements ActionListener {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "new_cr") {
-			Menu.createGraph(true);
+			crMenu.createGraph(true);
 ///			Main.updateUserMsg("Added a new CR Graph");
 		} else {
-			Menu.createGraph(false);
+			crMenu.createGraph(false);
 	//		Main.updateUserMsg("Added a new Petri Net");
 		}
 	}
