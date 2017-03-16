@@ -50,31 +50,32 @@ public class CrDrawing {
 		  g.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 		  Collection<CrObject> graf = crgraph.getCrObjects();
 		  for (CrObject o: graf) {
-		    	if (o.getClass().equals(Event.class)) {
-		    		Event e = (Event) o;
-		    		this.drawEvent(g, e);
-		    	}
-		    }
-		    for (CrObject o: graf) {
-		    	if (o.getClass().equals(Conditional.class)) {
-		    		Relation r = (Relation) o;
-		    		drawConditional(g, r.getIn(), r.getOut(), r.getID());
-		    	} else if (o.getClass().equals(Response.class)) {
-		    		Response r = (Response) o;
-		    		drawResponse(g, r.getIn(), r.getOut(), r.getID());
-		    	}
-		    	
-		    }
-		    g.dispose();
-		    return bi;
+	    	if (o.getClass().equals(Event.class)) {
+	    		Event e = (Event) o;
+	    		this.drawEvent(g, e);
+	    	}
+		  }
+	      for (CrObject o: graf) {
+	    	  if (o.getClass().equals(Conditional.class)) {
+	    		Relation r = (Relation) o;
+	    		drawConditional(g, r.getIn(), r.getOut(), r.getID());
+	    	  } else if (o.getClass().equals(Response.class)) {
+	    		Response r = (Response) o;
+	    		drawResponse(g, r.getIn(), r.getOut(), r.getID());
+	    	  }
+	    }
+	    g.dispose();
+	    return bi;
 	  }
 
 	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
-		  drawArrow(g, e1, e2, Color.BLUE,""+id);
+		  Color yellow = new Color(252,221,153);
+		  drawArrow(g, e1, e2, yellow,""+id);
 	  }
 	  
 	  private void drawResponse(Graphics2D g, Event e1, Event e2, int id) {
-		  drawArrow(g, e1, e2, Color.ORANGE, ""+id);
+		  Color blue = new Color(147,192,235);
+		  drawArrow(g, e1, e2, blue, ""+id);
 	  }
 	    
 	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id) {
@@ -158,8 +159,8 @@ public class CrDrawing {
 	  /**
 	   * Checks if a Position of an Event overlaps another an Event with Position(x,y)
 	   * @param p Position of an Event
-	   * @param x Coordinat of a position
-	   * @param y Coordinat of a position
+	   * @param x Coordinate of a position
+	   * @param y Coordinate of a position
 	   * @return
 	   */
 	  private boolean overlaps(Position p, int x, int y) {
@@ -179,12 +180,13 @@ public class CrDrawing {
 		  Position newPos = new Position(x,y);
 		  this.eventPos.add(newPos);
 		  event.setPosition(newPos);
-
-		  g.setColor(Color.BLACK);
+		  Color borderColor = new Color(229,228,222);
+		  g.setColor(borderColor);
 		  g.drawRect(x-1, y-1, EVENT_WIDTH+1, EVENT_HEIGHT+1);
-		  g.setColor(Color.LIGHT_GRAY);
+		  Color backColor = new Color(249,246,237);
+		  g.setColor(backColor);
 		  g.fillRect(x, y, EVENT_WIDTH, EVENT_HEIGHT);
-		  g.setColor(Color.BLACK);
+		  g.setColor(borderColor);
 		  // DRAWS LINE		  
 		  g.drawLine(x, y+LINE_HEIGHT, x+EVENT_WIDTH, y+LINE_HEIGHT);
 		  // draw texts under line
@@ -193,7 +195,7 @@ public class CrDrawing {
 		  
 		  // draw Petri
 		  if (event.getPetrinet() != null) {
-			  g.setColor(Color.BLACK);
+			  g.setColor(borderColor);
 			  g.drawRect(x+MARGIN, y+LINE_HEIGHT+MARGIN, EVENT_WIDTH-(MARGIN*2), 
 					  EVENT_HEIGHT-LINE_HEIGHT-(MARGIN*2));
 		  }
