@@ -15,8 +15,6 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	
 	private Map<Integer, CrObject> crObjects = new HashMap<>();
 	
-	
-
 	public CrGraph(String name) {
 		super(name);
 		
