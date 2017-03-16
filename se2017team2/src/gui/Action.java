@@ -20,7 +20,7 @@ public class Action<T> {
 		
 	@Override
 	public String toString() {
-		return this.name + " (" + this.getId() + ")";
+		return "(" + this.getId() + ") " + this.name;
 	}
 
 	public int getId() {

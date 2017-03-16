@@ -29,7 +29,7 @@ public abstract class Graph {
 	 * 
 	 */
 	private String name;
-	
+
 	protected Graph(String name) {
 		this.name = name;
 		latestID++;
@@ -37,7 +37,6 @@ public abstract class Graph {
 	}
 
 	/**
-	 * 
 	 * @param  
 	 */
 	public void setGraphType(GraphTypes graphType) {
@@ -55,4 +54,10 @@ public abstract class Graph {
 	private void setID(int id) {
 		ID = id;
 	} 
+	
+	public String getName() {
+		return name;
+	}
+
+
 };

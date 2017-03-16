@@ -40,14 +40,6 @@ public class GraphTab {
 		// this.image = createImageIcon("images/test.png");
 		try {
 			this.image = new ImageIcon(Main.guiControlller.draw());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		if (this.image == null) {
-			this.panel = makeTextPanel("Unable to load graph first");
-		} else {
 			this.panel = new JLabel(image);
 			this.panel.addMouseListener(new MouseAdapter() {
 				@Override
@@ -59,7 +51,12 @@ public class GraphTab {
 					}
 				}
 			});
+		} catch (Exception e1) {
+			this.panel = makeTextPanel("Unable to load graph first");
+			Main.updateUserMsg(e1.getMessage());
 		}
+
+
 
 		this.scrPane = new JScrollPane(panel);
 		// add(scrPane);
