@@ -194,10 +194,15 @@ public class CrDrawing {
 		  int x = event.getX();
 		  int y = event.getY();
 		  for (Position p: eventPos) {
-			  if (overlaps(p, x, y)) {
-				  System.out.println(event.getName());
-				  x += EVENT_WIDTH + MOVE_EVENT_X_RIGHT;
+			  while (overlaps(p, x, y)) {
+				  x += EVENT_WIDTH;
+				  if (x + EVENT_WIDTH >= IMAGE_WIDTH) {
+					  y += EVENT_HEIGHT + 30;
+					  x = 10;
+				  }
 			  }
+			  if (overlaps(p,x-1,y)) 
+				  x += EVENT_WIDTH + p.x() - x + MOVE_EVENT_X_RIGHT;
 		  }
 		  // SHOULD THE NEW POSITION BE SAVED IN THE GRAPHOBJECT?
 		  Position newPos = new Position(x,y);
