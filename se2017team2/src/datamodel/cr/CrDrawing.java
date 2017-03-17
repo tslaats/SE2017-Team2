@@ -36,7 +36,7 @@ public class CrDrawing {
 	private static final int LINE_HEIGHT = EVENT_HEIGHT / 5;
 	private static final int EVENT_WIDTH = EVENT_HEIGHT-LINE_HEIGHT;
 
-    private static final int YJUMP = 10;
+    private static final int CIRCLE_RADIUS = 10;
 	private static final int MOVE_EVENT_X_RIGHT = 30;
 	private static final int MARGIN = 3;
     
@@ -70,15 +70,15 @@ public class CrDrawing {
 
 	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
 		  Color yellow = new Color(252,221,153);
-		  drawArrow(g, e1, e2, yellow,""+id);
+		  drawArrow(g, e1, e2, yellow,""+id, true);
 	  }
 	  
 	  private void drawResponse(Graphics2D g, Event e1, Event e2, int id) {
 		  Color blue = new Color(147,192,235);
-		  drawArrow(g, e1, e2, blue, ""+id);
+		  drawArrow(g, e1, e2, blue, ""+id, false);
 	  }
 	    
-	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id) {
+	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id, boolean isConditional) {
 		  int x1 = e1.getX();
 		  int y1 = e1.getY();
 		  int x2 = e2.getX();
@@ -96,11 +96,11 @@ public class CrDrawing {
 		  Position pnew2 = new Position(x2, y2);
 		  // UPDATE THE POSITION WITH NEW X values
 		  while(relationPos.contains(pnew1)) {
-			  y1 += YJUMP;
+			  y1 += CIRCLE_RADIUS;
 			  pnew1 = new Position(x1, y1);
 		  } 
 		  while(relationPos.contains(pnew2)) {
-			  y2 += YJUMP;
+			  y2 += CIRCLE_RADIUS;
 			  pnew2 = new Position(x2, y2);
 		  } 
 		  relationPos.add(pnew1); 
@@ -124,7 +124,16 @@ public class CrDrawing {
 	      // Set the font
 	      g.setFont(font);
 	      // Draw horizontal arrow starting in (0, 0)
-	      g.drawLine(0, 0, len, 0);
+	      if (isConditional) {
+		      len -= CIRCLE_RADIUS;
+		      g.drawLine(0, 0, len-ARR_SIZE, 0);
+
+	    	  g.fillRoundRect(len, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
+	      }
+	      else {
+		      g.drawLine(CIRCLE_RADIUS, 0, len-ARR_SIZE, 0);
+	    	  g.fillRoundRect(0, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
+	      }
 	      g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
 	                    new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
 	      //reset
