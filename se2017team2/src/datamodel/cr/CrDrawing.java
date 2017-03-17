@@ -198,7 +198,7 @@ public class CrDrawing {
 	   * @return
 	   */
 	  private boolean overlaps(Position p, int x, int y) {
-		  return x < p.x() + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_WIDTH > p.y();
+		  return x < p.x() + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_HEIGHT > p.y();
 	  }
 	  
 	  private void drawEvent(Graphics2D g, Event event) {
