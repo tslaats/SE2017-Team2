@@ -62,22 +62,22 @@ public class Menu implements ActionListener {
 		// Build the first menu.
 		menu = new JMenu("New");
 		menu.setMnemonic(KeyEvent.VK_A);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for CR-graphs");
+		menu.getAccessibleContext().setAccessibleDescription("Menu for CR Graphs");
 		menuBar.add(menu);
 
 		// a group of JMenuItems
-		menuItem = new JMenuItem("New CR-graph", KeyEvent.VK_T);
+		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR-graph");
+		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR Graph");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_cr");
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("New Petri-graph", KeyEvent.VK_T);
+		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri-graph");
+		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri Net");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_petri");
 		menu.add(menuItem);

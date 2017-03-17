@@ -26,8 +26,8 @@ public class InitPage extends JPanel implements ActionListener {
 		this.crMenu = crMenu;
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		JButton newPetriButton = new JButton("New Petri-Net");
-		JButton newCrButton = new JButton("New CR-graph");
+		JButton newPetriButton = new JButton("New Petri Net");
+		JButton newCrButton = new JButton("New CR Graph");
 
 		newCrButton.addActionListener(this);
 		newCrButton.setActionCommand("new_cr");
