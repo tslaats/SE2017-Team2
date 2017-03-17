@@ -10,7 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import datamodel.Position;
 
 /**
@@ -37,7 +36,7 @@ public class CrDrawing {
 	private static final int EVENT_WIDTH = EVENT_HEIGHT-LINE_HEIGHT;
 
     private static final int CIRCLE_RADIUS = 10;
-	private static final int MOVE_EVENT_X_RIGHT = 30;
+	private static final int MOVE_EVENT_X_RIGHT = 50;
 	private static final int MARGIN = 3;
     
 	public BufferedImage draw(CrGraph crgraph) {
@@ -69,13 +68,13 @@ public class CrDrawing {
 	  }
 
 	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
-		  Color yellow = new Color(252,221,153);
-		  drawArrow(g, e1, e2, yellow,""+id, true);
+		  //Color yellow = new Color(252,221,153);
+		  drawArrow(g, e1, e2, Color.ORANGE,""+id, true);
 	  }
 	  
 	  private void drawResponse(Graphics2D g, Event e1, Event e2, int id) {
-		  Color blue = new Color(147,192,235);
-		  drawArrow(g, e1, e2, blue, ""+id, false);
+		  //Color blue = new Color(147,192,235);
+		  drawArrow(g, e1, e2, Color.BLUE, ""+id, false);
 	  }
 	    
 	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id, boolean isConditional) {
@@ -109,7 +108,9 @@ public class CrDrawing {
 		  g.setColor(c);
 		  int ARR_SIZE = 8;
 		  Stroke oldS = g.getStroke();
-		  g.setStroke(new BasicStroke(ARR_SIZE/3));
+		  int strokeSize = ARR_SIZE/4;
+		  Stroke newS = new BasicStroke(strokeSize);
+		  g.setStroke(newS);
 
 	      double dx = x2 - x1, dy = y2 - y1;
 	      double angle = Math.atan2(dy, dx);
@@ -119,27 +120,28 @@ public class CrDrawing {
 	      g.transform(at);
 		  Font font = new Font("Times New Roman", Font.BOLD, 18);
 	      FontMetrics metrics = g.getFontMetrics(font);
-	      // Determine the X coordinate for the text
-	      // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
-	      // Set the font
 	      g.setFont(font);
+
 	      // Draw horizontal arrow starting in (0, 0)
 	      if (isConditional) {
+		      g.drawString(id, (len/2)-metrics.stringWidth(id), -strokeSize);
 		      len -= CIRCLE_RADIUS;
 		      g.drawLine(0, 0, len-ARR_SIZE, 0);
-
 	    	  g.fillRoundRect(len, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
 	      }
 	      else {
+		      g.drawString(id, CIRCLE_RADIUS+(len/2)-metrics.stringWidth(id), -strokeSize);
+
 		      g.drawLine(CIRCLE_RADIUS, 0, len-ARR_SIZE, 0);
 	    	  g.fillRoundRect(0, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
 	      }
 	      g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
 	                    new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
-	      //reset
+	      // Set the font
+	    //reset
 	      g.setStroke(oldS);
+	      
 	      //g.setColor(Color.BLACK);
-	      g.drawString(id, (len/2)-metrics.stringWidth(id), -2);
 
 	      g.setTransform(oldXForm);
 	  }
