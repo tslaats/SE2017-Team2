@@ -25,9 +25,9 @@ import petriVisualization.PetriDrawer;
 public class Petrinet extends Graph implements Visualization, Semantics<Transition> {
 	
 	// Default starting and end position of the initial places
-	private final Position placeStartPos = new Position(100,100);
+	private final Position placeStartPos = new Position(100,250);
 	
-	private final Position placeEndPos = new Position(500,100);
+	private final Position placeEndPos = new Position(1000,250);
 	
 	private PetriDrawer petriDrawer;
 	
@@ -164,7 +164,7 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	 * @throws Exception If the ID does not exist or if it can't be deleted
 	 */
 	public void deleteTranistion(int transitionID) throws Exception {
-		if (!this.places.containsKey(transitionID)) {
+		if (!this.transitions.containsKey(transitionID)) {
 			throw new Exception("The given transitionID: " +transitionID+ " does not exist");
 		}
 		
