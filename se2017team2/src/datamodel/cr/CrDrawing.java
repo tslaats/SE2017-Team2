@@ -66,6 +66,63 @@ public class CrDrawing {
 	    g.dispose();
 	    return bi;
 	  }
+	
+	  /**
+	   * Gives a list of 40 position that bounds the event
+	   * @param e
+	   * @return
+	   */
+	  private ArrayList<Position> bounds(Event e) {
+		  ArrayList<Position> list = new ArrayList<Position>();
+		  int xstart = e.getX();
+		  int ystart = e.getY();
+			
+		  for (int i = xstart; i <= xstart + EVENT_WIDTH;i += CIRCLE_RADIUS) {
+			  list.add(new Position(i,ystart));
+			  list.add(new Position(i,ystart + EVENT_HEIGHT));
+		  }
+		  for (int i = ystart; i <= ystart + EVENT_HEIGHT;i += CIRCLE_RADIUS) {
+			  list.add(new Position(xstart,ystart));
+			  list.add(new Position(xstart + EVENT_WIDTH,ystart));
+		  }
+		  return list;
+	  }
+	  private class Tuple<X, Y> { 
+		  public final X f; 
+		  public final Y s; 
+		  public Tuple(X x, Y y) { 
+		    this.f = x; 
+		    this.s = y; 
+		  } 
+		} 
+	  private double distance(Position p1, Position p2) {
+		  return Math.sqrt(Math.pow((p1.x()-p2.x()), 2) + Math.pow((p1.y()-p2.y()), 2));
+	  }
+	  
+	  private int closer(int v1, int v2) {
+		  return v2-v1;
+	  }
+
+	  private Tuple<Position, Position> shortest(Event e1, Event e2) {
+		  ArrayList<Position> boundsE1 = bounds(e1);
+		  ArrayList<Position> boundsE2 = bounds(e2);
+		  Tuple<Position, Position> shortest = new Tuple<Position, Position>(e1.getPosition(), e2.getPosition());
+		  Double dis = Double.MAX_VALUE;
+		  for (Position p1 : boundsE1) {
+			  for (Position p2 : boundsE2) { 
+				  if (distance(p1,p2) <= dis && !relationPos.contains(p1)&& !relationPos.contains(p2)) {
+					  if (distance(p1,p2) == dis) {
+						  // check if closer to middle
+						  System.out.println("same distance");
+					  } else {
+						  dis = distance(p1,p2);
+						  shortest = new Tuple<Position, Position>(p1, p2);
+					  }
+				  }
+			  } 
+		  }
+		  return shortest;
+	  }
 
 	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
 		  //Color yellow = new Color(252,221,153);
@@ -78,32 +135,15 @@ public class CrDrawing {
 	  }
 	    
 	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id, boolean isConditional) {
-		  int x1 = e1.getX();
-		  int y1 = e1.getY();
-		  int x2 = e2.getX();
-		  int y2 = e2.getY();
-		  if (x2 > x1) {
-			  // Right side on e2
-			  x1 += EVENT_WIDTH;
-		  }
-		  else {
-			  // left side on e1
-			  x2 += EVENT_WIDTH;
-		  }
-		  Position pnew1 = new Position(x1, y1);
-		  /// GET THE TRANSOFRMED x2,y2
-		  Position pnew2 = new Position(x2, y2);
-		  // UPDATE THE POSITION WITH NEW X values
-		  while(relationPos.contains(pnew1)) {
-			  y1 += CIRCLE_RADIUS;
-			  pnew1 = new Position(x1, y1);
-		  } 
-		  while(relationPos.contains(pnew2)) {
-			  y2 += CIRCLE_RADIUS;
-			  pnew2 = new Position(x2, y2);
-		  } 
-		  relationPos.add(pnew1); 
-		  relationPos.add(pnew2); 
+		  Tuple<Position, Position> tuple = shortest(e1, e2);
+		  Position p1 = tuple.f;
+		  Position p2 = tuple.s;
+		  int x1 = p1.x();
+		  int y1 = p1.y();
+		  int x2 = p2.x();
+		  int y2 = p2.y();
+		  relationPos.add(p1); 
+		  relationPos.add(p2); 
 		  AffineTransform oldXForm = g.getTransform();
 		  g.setColor(c);
 		  int ARR_SIZE = 8;
@@ -138,11 +178,9 @@ public class CrDrawing {
 	      g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
 	                    new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
 	      // Set the font
-	    //reset
+	      //reset
 	      g.setStroke(oldS);
-	      
 	      //g.setColor(Color.BLACK);
-
 	      g.setTransform(oldXForm);
 	  }
 	  
@@ -198,7 +236,7 @@ public class CrDrawing {
 	   * @return
 	   */
 	  private boolean overlaps(Position p, int x, int y) {
-		  return x < p.x() + EVENT_WIDTH+MARGIN && x + EVENT_WIDTH+MARGIN > p.x() && y < p.y() + EVENT_HEIGHT+MARGIN && y + EVENT_HEIGHT+MARGIN > p.y();
+		  return x < p.x() + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_HEIGHT > p.y();
 	  }
 	  
 	  private void drawEvent(Graphics2D g, Event event) {
@@ -248,7 +286,6 @@ public class CrDrawing {
 		  if (event.isPending()) {
 			g.setColor(Color.BLUE);
 		  	g.drawString("\u0021", x + EVENT_WIDTH - (MARGIN*3), (y+EVENT_HEIGHT)-LINE_HEIGHT+MARGIN);
-
 		  }  
 	  }
 }

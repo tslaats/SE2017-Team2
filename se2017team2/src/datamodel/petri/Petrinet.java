@@ -16,6 +16,7 @@ import datamodel.Visualization;
 import datamodel.Position;
 import datamodel.petri.Place;
 import datamodel.petri.Transition;
+import petriVisualization.PetriDrawer;
 
 /************************************************************/
 /**
@@ -24,10 +25,11 @@ import datamodel.petri.Transition;
 public class Petrinet extends Graph implements Visualization, Semantics<Transition> {
 	
 	// Default starting and end position of the initial places
-	private final Position placeStartPos = new Position(1,1);
+	private final Position placeStartPos = new Position(100,100);
 	
-
-	private final Position placeEndPos = new Position(10,1);
+	private final Position placeEndPos = new Position(500,100);
+	
+	private PetriDrawer petriDrawer;
 	
 	/**
 	 * The start Place, which can't be deleted
@@ -66,7 +68,15 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 		// Now store them in the places HashMap
 		this.places.put(this.start.id, this.start);
 		this.places.put(this.end.id, this.end);
+		
+		initializePetridrawer();
 	}
+	
+	private void initializePetridrawer(){
+		petriDrawer = new PetriDrawer();
+		petriDrawer.setZoom(0.8f);
+	}
+	
 	
 	/**
 	 * Get Transition objects contained in the HashMap
@@ -101,10 +111,14 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	 * @param pos Position of the new Place
 	 */
 	public int addPlace(Position pos) {
+		
+		// (Jacob - petri visualation team 2)
+		// Update the pos to scale after the zoom of the petri window
+		pos.setX( (int) Math.floor(pos.x()/petriDrawer.getZoom()));
+		pos.setY( (int) Math.floor(pos.y()/petriDrawer.getZoom()));
+		
 		Place newPlace = new Place(pos);
-		
-		this.places.put(newPlace.getID(), newPlace);
-		
+		this.places.put(newPlace.getID(), newPlace);	
 		return newPlace.getID();
 	}
 	
@@ -259,7 +273,7 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	@Override
 	public BufferedImage draw() {
 		// TODO Auto-generated method stub
-		return null;
+		return petriDrawer.draw(this);
 		
 	}
 
