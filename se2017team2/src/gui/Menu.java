@@ -37,7 +37,6 @@ public class Menu implements ActionListener {
 	private Boolean isPending;
 	private GUIPane guiPane;
 
-
 	/**
 	 * @author MultiPeden
 	 *
@@ -242,8 +241,11 @@ public class Menu implements ActionListener {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
 
@@ -264,17 +266,14 @@ public class Menu implements ActionListener {
 			break;
 		case "new_event":
 
-	
-			
 			JTextField nameField = new JTextField();
 			JRadioButton pending = new JRadioButton();
 			Object[] message1 = { "Please enter the name of the new Event:", nameField, "Pending?:", pending };
 
 			option = JOptionPane.showConfirmDialog(null, message1, "Add Event", JOptionPane.OK_CANCEL_OPTION);
-			
-			
-			this.isPending = pending.isSelected(); 
-			
+
+			this.isPending = pending.isSelected();
+
 			// prompt the user to enter the name of the new Event
 			String nameEvent = nameField.getText();
 
@@ -397,21 +396,12 @@ public class Menu implements ActionListener {
 			}
 			break;
 		case "new_place":
-
-			// prompt the user to enter the name of the new Place
-			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Place");
-
-			// if the name is successfully entered, add Place
-			if (name != null) {
-				disableMenubar();
-				GraphTab graphtab = Main.getActiveTab();
-				Main.disableTabs();
-				graphtab.activateClickListener();
-				this.clickArgument = name;
-				Main.updateUserMsg(String.format("Please click where you want to ad Place: %s", name));
-				clickType = ClickType.PLACE;
-			}
-
+			//  add Place
+			disableMenubar();
+			Main.disableTabs();
+			Main.getActiveTab().activateClickListener();
+			Main.updateUserMsg(String.format("Please click where you want to ad the Place"));
+			clickType = ClickType.PLACE;
 			break;
 		case "delete_place":
 			// prompt the user to enter the id of the place to delete
@@ -440,9 +430,9 @@ public class Menu implements ActionListener {
 			// if the name is successfully entered, add Transition
 			if (name != null) {
 				disableMenubar();
-				GraphTab graphtab = Main.getActiveTab();
+				GraphTab actGraphtab = Main.getActiveTab();
 				Main.disableTabs();
-				graphtab.activateClickListener();
+				actGraphtab.activateClickListener();
 				this.clickArgument = name;
 				Main.updateUserMsg(String.format("Please click where you want to ad Transition: %s", name));
 				clickType = ClickType.TRANSITION;
@@ -472,7 +462,6 @@ public class Menu implements ActionListener {
 			disableMenubar();
 			menuSimulation.setEnabled(true);
 			Main.disableTabs();
-			Main.updateUserMsg("Started Simulation");
 			break;
 		case "stop_simulation":
 			Main.hidePossibleActions();
@@ -532,7 +521,6 @@ public class Menu implements ActionListener {
 		}
 		Main.guiPane.updatePane();
 	}
-
 
 	/**
 	 * @param CrGraph
@@ -647,7 +635,7 @@ public class Menu implements ActionListener {
 	 * @param position
 	 */
 	public void createPlace(Position position) {
-		String namePlace= clickArgument;
+		String namePlace = clickArgument;
 		try {
 			Main.guiControlller.createPlace(position);
 			Main.updateUserMsg(String.format("Added Place: %s", namePlace));

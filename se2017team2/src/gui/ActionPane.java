@@ -69,7 +69,6 @@ public class ActionPane extends JPanel implements ActionListener {
 		actions.removeAll();
 		try {
 			posActions = Main.guiControlller.getPossibleActions();
-			System.out.println(posActions.size());
 			String actionName;
 			int i = 0;
 			for (Action<?> posAction : posActions) {
@@ -86,10 +85,9 @@ public class ActionPane extends JPanel implements ActionListener {
 			actions.revalidate();
 			actions.repaint();
 			this.repaint();
+			Main.updateUserMsg("Started Simulation");
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			Main.updateUserMsg(e.getMessage());
 		}
 	}
