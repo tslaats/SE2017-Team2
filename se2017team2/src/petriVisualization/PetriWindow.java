@@ -121,63 +121,62 @@ public class PetriWindow extends JComponent {
 		int displaceP2x = 0;
 		int displaceP2y = 0;
 		
-		if(p1.x < p2.x){
+		if(p1.x + nodeSize < p2.x){
 			displaceP1x = nodeSize;
 			displaceP2x = -nodeSize;
 		}
-		if (p1.x > p2.x){
+		if (p1.x - nodeSize > p2.x){
 			displaceP1x = -nodeSize;
 			displaceP2x = nodeSize;
 		}
-		if(p1.y < p2.y){
+		if(p1.y + nodeSize < p2.y){
 			displaceP1y = nodeSize;
 			displaceP2y = -nodeSize;
 		}
-		if (p1.y > p2.y){
+		if (p1.y - nodeSize > p2.y){
 			displaceP1y = -nodeSize;
 			displaceP2y = nodeSize;
 		}
 		
 		
-		if(edge.midPoints.size() > 0){
-			g.drawLine(
-					Scale(p1.x + displaceP1x),
-					Scale(p1.y + displaceP1y),
-					Scale(edge.midPoints.get(0).x),
-					Scale(edge.midPoints.get(0).y));
-			
-			for(int i = 0; i < edge.midPoints.size(); i++){
-				
-				if(i + 1 < edge.midPoints.size()){
-				
-					Point midPoint1 = edge.midPoints.get(i);
-					Point midPoint2 = edge.midPoints.get(i + 1);
-					
-					g.drawLine(
-							Scale(midPoint1.x),
-							Scale(midPoint1.y),
-							Scale(midPoint2.x),
-							Scale(midPoint2.y));			
-				}
-				else{
-					
-					Point midPoint1 = edge.midPoints.get(i);
-		 			g.drawLine(
-							Scale(midPoint1.x),
-							Scale(midPoint1.y),
-							Scale(p2.x + displaceP2x),
-							Scale(p2.y + displaceP2y));					
-				}
-			}		
-		}
-		else{
-			// Draws the line between the nodes
-			g.drawLine(
-					Scale(p1.x + displaceP1x),
-					Scale(p1.y + displaceP1y),
-					Scale(p2.x + displaceP2x),
-					Scale(p2.y + displaceP2y));			
-		}
+//		if(edge.midPoints.size() > 0){
+//			g.drawLine(
+//					Scale(p1.x + displaceP1x),
+//					Scale(p1.y + displaceP1y),
+//					Scale(edge.midPoints.get(0).x),
+//					Scale(edge.midPoints.get(0).y));
+//			
+//			for(int i = 0; i < edge.midPoints.size(); i++){
+//				
+//				if(i + 1 < edge.midPoints.size()){
+//				
+//					Point midPoint1 = edge.midPoints.get(i);
+//					Point midPoint2 = edge.midPoints.get(i + 1);
+//					
+//					g.drawLine(
+//							Scale(midPoint1.x),
+//							Scale(midPoint1.y),
+//							Scale(midPoint2.x),
+//							Scale(midPoint2.y));			
+//				}
+//				else{
+//					
+//					Point midPoint1 = edge.midPoints.get(i);
+//		 			g.drawLine(
+//							Scale(midPoint1.x),
+//							Scale(midPoint1.y),
+//							Scale(p2.x + displaceP2x),
+//							Scale(p2.y + displaceP2y));					
+//				}
+//			}		
+//		}
+//		else{
+//			// Draws the line between the nodes
+//		g.drawLine(
+//				Scale(p1.x + displaceP1x),
+//				Scale(p1.y + displaceP1y),
+//				Scale(p2.x + displaceP2x),
+//				Scale(p2.y + displaceP2y));			
 
 		drawArrowLine(g,
 				p1.x + displaceP1x,

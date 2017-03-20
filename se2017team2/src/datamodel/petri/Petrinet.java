@@ -150,6 +150,12 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	 * @param name Name of the new Transition
 	 */
 	public int addTransition(Position pos, String name) {
+		
+		// (Jacob - petri visualation team 2)
+		// Update the pos to scale after the zoom of the petri window
+		pos.setX( (int) Math.floor(pos.x()/petriDrawer.getZoom()));
+		pos.setY( (int) Math.floor(pos.y()/petriDrawer.getZoom()));
+		
 		Transition t = new Transition(pos, name);
 		
 		this.transitions.put(t.getID(), t);

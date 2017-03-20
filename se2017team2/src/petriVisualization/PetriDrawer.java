@@ -39,6 +39,7 @@ public class PetriDrawer {
 	}
 	
 	public BufferedImage draw(Petrinet petrinet){
+		PetriConverter.clearPetriConverter();
 		PetriConverter.convertPetri(petrinet);
 		petriWindow.updateGraph(PetriConverter.nodes, PetriConverter.edges);
 		
