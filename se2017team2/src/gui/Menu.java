@@ -36,6 +36,7 @@ public class Menu implements ActionListener {
 	private ClickType clickType;
 	private Boolean isPending;
 	private GUIPane guiPane;
+	private Boolean nested;
 
 	/**
 	 * @author MultiPeden
@@ -100,6 +101,20 @@ public class Menu implements ActionListener {
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_event");
+		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Add PetriNet to Event");
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("new_subpetri");
+		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Delete PetriNet from Event");
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_subpetri");
 		submenu.add(menuItem);
 		menuCR.add(submenu);
 
@@ -172,6 +187,21 @@ public class Menu implements ActionListener {
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_transition");
 		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Add CR Graph to Transition");
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("new_subcr");
+		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Delete CR Graph from Transition");
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_subcr");
+		submenu.add(menuItem);
+
 		MenuPetri.add(submenu);
 
 		submenu = new JMenu("Arc");
@@ -268,11 +298,14 @@ public class Menu implements ActionListener {
 
 			JTextField nameField = new JTextField();
 			JRadioButton pending = new JRadioButton();
-			Object[] message1 = { "Please enter the name of the new Event:", nameField, "Pending?:", pending };
+			JRadioButton nestedButton = new JRadioButton();
+			Object[] message1 = { "Please enter the name of the new Event:", nameField, "Pending?:", pending,
+					"Do you want to add a nested Petri Net", nestedButton };
 
 			option = JOptionPane.showConfirmDialog(null, message1, "Add Event", JOptionPane.OK_CANCEL_OPTION);
 
 			this.isPending = pending.isSelected();
+			this.nested = nestedButton.isSelected();
 
 			// prompt the user to enter the name of the new Event
 			String nameEvent = nameField.getText();
@@ -396,7 +429,7 @@ public class Menu implements ActionListener {
 			}
 			break;
 		case "new_place":
-			//  add Place
+			// add Place
 			disableMenubar();
 			Main.disableTabs();
 			Main.getActiveTab().activateClickListener();
@@ -425,10 +458,22 @@ public class Menu implements ActionListener {
 		case "new_transition":
 
 			// prompt the user to enter the name of the new Transition
-			name = JOptionPane.showInputDialog(inputDialog, "Please enter the name of the new Transition");
+
+			JTextField TransitionNameField = new JTextField();
+			JRadioButton nestedCRButton = new JRadioButton();
+			Object[] TransitionMessage = { "Please enter the name of the new Transition:", TransitionNameField,
+					"Do you want to add a nested CR graph", nestedCRButton };
+
+			option = JOptionPane.showConfirmDialog(null, TransitionMessage, "Add Transition",
+					JOptionPane.OK_CANCEL_OPTION);
+
+			this.nested = nestedCRButton.isSelected();
+
+			// prompt the user to enter the name of the new Transition
+			name = TransitionNameField.getText();
 
 			// if the name is successfully entered, add Transition
-			if (name != null) {
+			if (option == JOptionPane.OK_OPTION) {
 				disableMenubar();
 				GraphTab actGraphtab = Main.getActiveTab();
 				Main.disableTabs();
@@ -437,6 +482,7 @@ public class Menu implements ActionListener {
 				Main.updateUserMsg(String.format("Please click where you want to ad Transition: %s", name));
 				clickType = ClickType.TRANSITION;
 			}
+
 			break;
 		case "delete_transition":
 			// prompt the user to enter the id of the transition to delete
@@ -514,6 +560,61 @@ public class Menu implements ActionListener {
 				}
 			}
 			break;
+		case "new_subcr":
+
+			CustomOptionPane pane = new CustomOptionPane("Add sub Graph to Transition", "Create New CR Graph",
+					"Add reference to existing CR Graph");
+			if (pane.getOption() == JOptionPane.OK_OPTION) {
+				String graphIDString = pane.getContent();
+				if (graphIDString == null) {
+					int crID = createGraph(true);
+				} else {
+					try {
+						int crID = Integer.parseInt(graphIDString);
+					} catch (NumberFormatException e2) {
+						Main.updateUserMsg(invID);
+					}
+				}
+			}
+			break;
+		case "delete_subcr":
+			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
+			break;
+		case "new_subpetri":
+
+			CustomOptionPane pane1 = new CustomOptionPane("Add sub Graph to Event", "Create New Petri Net",
+					"Add reference to existing Petri Net");
+			if (pane1.getOption() == JOptionPane.OK_OPTION) {
+				String graphIDString = pane1.getContent();
+				if (graphIDString == null) {
+					int PetriID = createGraph(false);
+				} else {
+					try {
+						int PetriID = Integer.parseInt(graphIDString);
+					} catch (NumberFormatException e2) {
+						Main.updateUserMsg(invID);
+					}
+				}
+			}
+			break;
+		case "delete_subpetri":
+
+			DeleteSubGraphOptionPane paneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
+					"Delete only refence to Petri Net", "Delete Petri Net(cannot be undone)");
+			if (paneDel.getOption() == JOptionPane.OK_OPTION) {
+				String graphIDString = paneDel.getContent();
+				if (graphIDString == null) {
+				//	int PetriID = createGraph(false);
+				} else {
+					try {
+						int PetriID = Integer.parseInt(graphIDString);
+					} catch (NumberFormatException e2) {
+						Main.updateUserMsg(invID);
+					}
+				}
+			}
+
+			break;
 		default:
 			System.out.println(action);
 			Main.updateUserMsg("Invalid Button pressed!");
@@ -525,20 +626,26 @@ public class Menu implements ActionListener {
 	/**
 	 * @param CrGraph
 	 */
-	public void createGraph(Boolean CrGraph) {
+	public int createGraph(Boolean CrGraph) {
 		JFrame dialog = new JFrame("dialog");
-		// prompt the user to enter the name of the new petri graph
-		String name = JOptionPane.showInputDialog(dialog, "Please enter the name of the graph");
+		String name;
+		int ID = -1;
+		if (CrGraph) {
+			// prompt the user to enter the name of the new graph
+			name = JOptionPane.showInputDialog(dialog, "Please enter the name of the new CR graph");
+		} else {
+			name = JOptionPane.showInputDialog(dialog, "Please enter the name of the new Petri Net");
+		}
 		if (name != null) {
 			try {
 				int tabNum = GUIPane.getTabNum() + 1;
 				if (CrGraph) {
-					int ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.CR);
+					ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.CR);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new CR Graph");
 					guiPane.addGraphTab(name + " #" + tabNum, true, ID);
 				} else {
-					int ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.PETRI);
+					ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.PETRI);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new Petri Graph");
 					guiPane.addGraphTab(name + " #" + tabNum, false, ID);
@@ -549,7 +656,7 @@ public class Menu implements ActionListener {
 			}
 			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
 		}
-
+		return ID;
 	}
 
 	/**
@@ -655,9 +762,20 @@ public class Menu implements ActionListener {
 			break;
 		case EVENT:
 			createEvent(position);
+
+			if (this.nested) {
+				Main.guiPane.updatePane();
+				int petriID = createGraph(false);
+			}
+			this.nested = false;
 			break;
 		case TRANSITION:
 			createTransition(position);
+			if (this.nested) {
+				Main.guiPane.updatePane();
+				int CRid = createGraph(true);
+			}
+			this.nested = false;
 			break;
 		default:
 			Main.updateUserMsg("Invalid ClickEvent");
