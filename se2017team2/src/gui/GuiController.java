@@ -162,10 +162,11 @@ public class GuiController {
 	 *            Position of the Transition
 	 * @param name
 	 *            Name of the Transition
+	 * @return 
 	 * @throws Exception
 	 *             If the Transition could not be added
 	 */
-	public void createTransition(Position pos, String name) throws Exception {
+	public int createTransition(Position pos, String name) throws Exception {
 		// Make sure that active graph is a Petri Net
 		if (!this.isActiveGraphPetri()) {
 			throw new Exception("The active graph is not Petri Net");
@@ -173,6 +174,7 @@ public class GuiController {
 
 		Petrinet petrinet = (Petrinet) this.graphs.get(ActiveGraphID);
 		petrinet.addTransition(pos, name);
+		return petrinet.getID();
 	}
 
 	/**
@@ -243,7 +245,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was problem creating the Event
 	 */
-	public void createEvent(Position pos, String name) throws Exception {
+	public int createEvent(Position pos, String name) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -251,6 +253,7 @@ public class GuiController {
 
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
 		crGraph.addEvent(pos, name);
+		return crGraph.getID();
 	}
 	
 	/**
@@ -265,7 +268,7 @@ public class GuiController {
 	 * @throws Exception
 	 *             If there was problem creating the Event
 	 */
-	public void createEvent(Position pos, String name, boolean isPending) throws Exception {
+	public int createEvent(Position pos, String name, boolean isPending) throws Exception {
 		// Make sure that active graph is a Cr Graph
 		if (!this.isActiveGraphCr()) {
 			throw new Exception("The active graph is not Cr Graph");
@@ -273,6 +276,7 @@ public class GuiController {
 
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
 		crGraph.addEvent(pos, name, isPending);
+		return crGraph.getID();
 	}
 
 	/**
