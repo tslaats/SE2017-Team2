@@ -562,59 +562,83 @@ public class Menu implements ActionListener {
 			break;
 		case "new_subcr":
 
-			CustomOptionPane pane = new CustomOptionPane("Add sub Graph to Transition", "Please enter ID of the Transition", "Create New CR Graph",
-					"Add reference to existing CR Graph", "Petri Net");
+			CustomOptionPane pane = new CustomOptionPane("Add sub Graph to Transition",
+					"Please enter ID of the Transition", "Create New CR Graph", "Add reference to existing CR Graph",
+					"Petri Net");
 			if (pane.getOption() == JOptionPane.OK_OPTION) {
-				String graphIDString = pane.getContent();
+
+				String graphIDString = pane.getGraphId();
+				String transitionIDString = pane.getGraphObjId();
 				if (graphIDString == null) {
-					int crID = createGraph(true);
+					// int PetriID = createGraph(false);
+					try {
+						int transitiontID = Integer.parseInt(transitionIDString);
+						addNestedGraph(transitiontID, true, -1);
+					} catch (NumberFormatException e2) {
+
+						Main.updateUserWarning(invID);
+					}
 				} else {
 					try {
 						int crID = Integer.parseInt(graphIDString);
+						int transitionID = Integer.parseInt(transitionIDString);
+						addNestedGraph(transitionID, true, crID);
 					} catch (NumberFormatException e2) {
 						Main.updateUserWarning(invID);
 					}
 				}
 			}
+
 			break;
 		case "delete_subcr":
-			
-			DeleteSubGraphOptionPane paneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Transition",
-					"Delete refence to CR Graph", "Delete CR Graph entirely(cannot be undone)");
-			if (paneDel.getOption() == JOptionPane.OK_OPTION) {
-				String graphIDString = paneDel.getContent();
 
+			DeleteSubGraphOptionPane CRpaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Transition",
+					"Delete refence to CR Graph", "Delete CR Graph entirely(cannot be undone)");
+			if (CRpaneDel.getOption() == JOptionPane.OK_OPTION) {
+				String eventIDstring = CRpaneDel.getContent();
 				try {
-					int PetriID = Integer.parseInt(graphIDString);
-					if (paneDel.deleteOnlyReference()) {
-						// delete reference to petri
-					} else {
-						// delete reference to petri
-						// delete petri
-						// 	Main.guiControlller.deleteArc(incomingID, outgoingID);
+					int eventID = Integer.parseInt(eventIDstring);
+					try {
+						// delete reference to CR
+						Main.guiControlller.unbindNestedGraph(eventID);
+					} catch (Exception e1) {
+						Main.updateUserWarning(e1.getMessage());
+						break;
+					}
+					if (!CRpaneDel.deleteOnlyReference()) {
+						// delete CR
+						// todo Main.guiControlller.deleteGraph(graphID);
 					}
 
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
-
 				}
 			}
 
-			
-			
 			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
 			break;
 		case "new_subpetri":
 
-			CustomOptionPane pane1 = new CustomOptionPane("Add sub Graph to Event", "Please enter ID of the Event", "Create New Petri Net",
-					"Add reference to existing Petri Net", "CR Graph");
+			CustomOptionPane pane1 = new CustomOptionPane("Add sub Graph to Event", "Please enter ID of the Event",
+					"Create New Petri Net", "Add reference to existing Petri Net", "CR Graph");
 			if (pane1.getOption() == JOptionPane.OK_OPTION) {
-				String graphIDString = pane1.getContent();
+
+				String graphIDString = pane1.getGraphId();
+				String eventIDString = pane1.getGraphObjId();
 				if (graphIDString == null) {
-					int PetriID = createGraph(false);
+					// int PetriID = createGraph(false);
+					try {
+						int eventID = Integer.parseInt(eventIDString);
+						addNestedGraph(eventID, false, -1);
+					} catch (NumberFormatException e2) {
+
+						Main.updateUserWarning(invID);
+					}
 				} else {
 					try {
 						int PetriID = Integer.parseInt(graphIDString);
+						int eventID = Integer.parseInt(eventIDString);
+						addNestedGraph(eventID, false, PetriID);
 					} catch (NumberFormatException e2) {
 						Main.updateUserWarning(invID);
 					}
@@ -626,21 +650,23 @@ public class Menu implements ActionListener {
 			DeleteSubGraphOptionPane PetripaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
 					"Delete refence to Petri Net", "Delete Petri Net entirely(cannot be undone)");
 			if (PetripaneDel.getOption() == JOptionPane.OK_OPTION) {
-				String graphIDString = PetripaneDel.getContent();
-
+				String eventIDstring = PetripaneDel.getContent();
 				try {
-					int PetriID = Integer.parseInt(graphIDString);
-					if (PetripaneDel.deleteOnlyReference()) {
+					int eventID = Integer.parseInt(eventIDstring);
+					try {
 						// delete reference to petri
-					} else {
-						// delete reference to petri
+						Main.guiControlller.unbindNestedGraph(eventID);
+					} catch (Exception e1) {
+						Main.updateUserWarning(e1.getMessage());
+						break;
+					}
+					if (!PetripaneDel.deleteOnlyReference()) {
 						// delete petri
-						// 	Main.guiControlller.deleteArc(incomingID, outgoingID);
+						// todo Main.guiControlller.deleteGraph(graphID);
 					}
 
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
-
 				}
 			}
 
@@ -739,11 +765,13 @@ public class Menu implements ActionListener {
 
 	/**
 	 * @param position
+	 * @return
 	 */
-	public void createEvent(Position position) {
+	public int createEvent(Position position) {
 		String nameEvent = clickArgument;
+		int Id = -1;
 		try {
-			Main.guiControlller.createEvent(position, nameEvent, this.isPending);
+			Id = Main.guiControlller.createEvent(position, nameEvent, this.isPending);
 			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
 			Main.updateUserWarning(e1.getMessage());
@@ -751,21 +779,24 @@ public class Menu implements ActionListener {
 			this.isPending = false;
 		}
 		this.isPending = false;
+		return Id;
 	}
 
 	/**
 	 * @param position
+	 * @return
 	 */
-	public void createTransition(Position position) {
+	public int createTransition(Position position) {
 		String name = clickArgument;
+		int transitionId = -1;
 		try {
-			Main.guiControlller.createTransition(position, name);
+			transitionId = Main.guiControlller.createTransition(position, name);
 			Main.updateUserMsg(String.format("Added Transition: %s", name));
 		} catch (Exception e1) {
 			Main.updateUserWarning(e1.getMessage());
 			this.clickArgument = "";
 		}
-
+		return transitionId;
 	}
 
 	/**
@@ -782,6 +813,41 @@ public class Menu implements ActionListener {
 	}
 
 	/**
+	 * Adds a nested graph to a graph-object
+	 * 
+	 * @param graphObjID
+	 *            ID of the graph-object to be added to a graph
+	 * @param crGraph
+	 *            true if the graph should be a CR graph, false if it should be
+	 *            a Petri Net
+	 * @param graphId
+	 *            ID of the graph the graph-object should be added to -1 if a
+	 *            new graph should be created
+	 */
+	public void addNestedGraph(int graphObjID, boolean crGraph, int graphId) {
+		int oldGraphID = GuiController.ActiveGraphID;
+
+		try {
+			if (graphId == -1) {
+				graphId = createGraph(crGraph);
+				GuiController.ActiveGraphID = oldGraphID;
+				Main.guiControlller.bindNestedGraph(graphObjID, graphId);
+				GuiController.ActiveGraphID = graphId;
+			} else {
+				Main.guiControlller.bindNestedGraph(graphObjID, graphId);
+			}
+		} catch (Exception e) {
+			Main.updateUserWarning(e.getMessage());
+			try {
+				Main.guiControlller.deleteGraph(graphId);
+			} catch (Exception e1) {
+				// do nothing
+			}
+		}
+
+	}
+
+	/**
 	 * @param position
 	 */
 	public void canvasClicked(Position position) {
@@ -791,21 +857,19 @@ public class Menu implements ActionListener {
 			createPlace(position);
 			break;
 		case EVENT:
-			createEvent(position);
-
+			int eventID = createEvent(position);
 			if (this.nested) {
-				Main.guiPane.updatePane();
-				int petriID = createGraph(false);
+				addNestedGraph(eventID, false, -1);
 			}
 			this.nested = false;
 			break;
 		case TRANSITION:
-			createTransition(position);
+			int transitionID = createTransition(position);
 			if (this.nested) {
-				Main.guiPane.updatePane();
-				int CRid = createGraph(true);
+				addNestedGraph(transitionID, true, -1);
 			}
 			this.nested = false;
+
 			break;
 		default:
 			Main.updateUserMsg("Invalid ClickEvent");

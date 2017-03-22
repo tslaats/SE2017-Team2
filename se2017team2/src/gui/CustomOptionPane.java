@@ -98,12 +98,18 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 		setVisible(false);
 	}
 
-	public String getContent() {
+	public String getGraphId() {
 		if (newGraph.isSelected()) {
 			return null;
 		} else {
 			return graphIDField.getText();
 		}
+	}
+
+	public String getGraphObjId() {
+
+		return eventIDField.getText();
+
 	}
 
 	@Override
