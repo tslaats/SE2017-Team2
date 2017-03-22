@@ -31,7 +31,6 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 	private JOptionPane optionPane;
 	private int option;
 	private JLabel label;
-	private JLabel IDLabel;
 
 	public DeleteSubGraphOptionPane(String head, String opt1, String opt2) {
 		super(new JFrame(), true);
@@ -83,12 +82,6 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 		this.label.setVisible(false);
 		this.add(label);
 
-		this.IDLabel = new JLabel("Please select one of the options");
-		this.IDLabel.setForeground(Color.red);
-		this.IDLabel.setAlignmentX(RIGHT_ALIGNMENT);
-		this.IDLabel.setBorder(new CompoundBorder(IDLabel.getBorder(), margin));
-		this.IDLabel.setVisible(false);
-		this.add(IDLabel);
 
 		this.pack();
 		this.setVisible(true);
@@ -101,12 +94,12 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 	}
 
 	public String getContent() {
-		if (newGraph.isSelected()) {
-			return null;
-		} else {
 			return graphIDField.getText();
-		}
 	}
+	
+	public Boolean deleteOnlyReference() {
+		return newGraph.isSelected();
+}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -114,27 +107,31 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 		case "new_graph":
 			exsitingGraph.setSelected(false);
 			// System.out.println(graphIDField.getText());
-		//	graphIDField.setEnabled(false);
+			// graphIDField.setEnabled(false);
 			break;
 		case "exsisting_graph":
 			newGraph.setSelected(false);
-			//graphIDField.setEnabled(true);
+			// graphIDField.setEnabled(true);
 			break;
 		case "Enter":
+
 			if (newGraph.isSelected() || newGraph.isSelected()) {
-				if (graphIDField.getText() != null) {
+
+				if (graphIDField.getText() != null ) {
 					this.option = JOptionPane.OK_OPTION;
 					System.out.println(getContent());
 					clearAndHide();
 				} else {
+					this.label.setText("Please select one of the options");
 					this.label.setVisible(true);
 					this.revalidate();
 					this.pack();
 					this.repaint();
 				}
 			} else {
-				this.IDLabel.setVisible(true);
 
+				this.label.setText("Please enter an ID");
+				this.label.setVisible(true);
 				this.revalidate();
 				this.pack();
 				this.repaint();

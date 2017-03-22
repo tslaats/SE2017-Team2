@@ -600,17 +600,23 @@ public class Menu implements ActionListener {
 		case "delete_subpetri":
 
 			DeleteSubGraphOptionPane paneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
-					"Delete only refence to Petri Net", "Delete Petri Net(cannot be undone)");
+					"Delete refence to Petri Net", "Delete Petri Net entirely(cannot be undone)");
 			if (paneDel.getOption() == JOptionPane.OK_OPTION) {
 				String graphIDString = paneDel.getContent();
-				if (graphIDString == null) {
-				//	int PetriID = createGraph(false);
-				} else {
-					try {
-						int PetriID = Integer.parseInt(graphIDString);
-					} catch (NumberFormatException e2) {
-						Main.updateUserMsg(invID);
+
+				try {
+					int PetriID = Integer.parseInt(graphIDString);
+					if (paneDel.deleteOnlyReference()) {
+						// delete reference to petri
+					} else {
+						// delete reference to petri
+						// delete petri
+						// 	Main.guiControlller.deleteArc(incomingID, outgoingID);
 					}
+
+				} catch (NumberFormatException e2) {
+					Main.updateUserMsg(invID);
+
 				}
 			}
 

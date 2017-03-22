@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -25,6 +26,7 @@ public class HintTextField extends JTextField implements FocusListener {
 	public void focusGained(FocusEvent e) {
 		if (this.getText().isEmpty()) {
 			super.setText("");
+			super.setForeground(Color.black);
 			showingHint = false;
 		}
 	}
@@ -33,6 +35,7 @@ public class HintTextField extends JTextField implements FocusListener {
 	public void focusLost(FocusEvent e) {
 		if (this.getText().isEmpty()) {
 			super.setText(hint);
+			super.setForeground(Color.gray);
 			showingHint = true;
 		}
 	}
