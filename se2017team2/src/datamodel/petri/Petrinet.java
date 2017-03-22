@@ -13,6 +13,7 @@ import java.util.Map;
 import datamodel.Graph;
 import datamodel.Semantics;
 import datamodel.Visualization;
+import datamodel.cr.Event;
 import datamodel.Position;
 import datamodel.petri.Place;
 import datamodel.petri.Transition;
@@ -49,6 +50,11 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	private Map<Integer, Place> places = new HashMap<>();
 
 	/**
+	 *  HashMap of Events which refer to this Petrinet
+	 */
+	private Map<Integer, Event> parentEvents = new HashMap<>();
+	
+	/**
 	 * Creates a new Petri Net with a default start Place and end Place
 	 * 
 	 * @param name Name of the Petri Net
@@ -77,6 +83,13 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 		petriDrawer.setZoom(0.8f);
 	}
 	
+	public void addParentEvent(Event e) {
+		this.parentEvents.put(e.getID(), e);
+	}
+	
+	public void removeParentEvent(int eventID) {
+		this.parentEvents.remove(eventID);
+	}	
 	
 	/**
 	 * Get Transition objects contained in the HashMap
@@ -98,6 +111,14 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	
 	public Map<Integer, Transition> getTransitions() {
 		return transitions;
+	}
+	
+	public Transition getTransition(int transID) throws Exception {
+		if (!this.transitions.containsKey(transID)) {
+			throw new Exception("There does not exist a transition with ID: " + transID);
+		}
+		
+		return this.transitions.get(transID);
 	}
 
 	public Map<Integer, Place> getPlaces() {
@@ -294,6 +315,21 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 
 	public Place getEnd() {
 		return end;
+	}
+
+	@Override
+	public void deleteGraph() {
+	    // Remove this graph from all parent Events
+		for (Event e : this.parentEvents.values()) {
+			if (e != null) {
+				if (e.getPetrinet() != null) {
+					if (e.getPetrinet().getID() == this.getID()) {
+						e.setPetrinet(null);
+					}
+				}
+			}
+		}
+		
 	}
 
 };

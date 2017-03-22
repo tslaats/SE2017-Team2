@@ -141,4 +141,6 @@ public abstract class PetriObject {
 		return pos;
 	}
 	
+	
+	
 };

@@ -58,6 +58,12 @@ public abstract class Graph {
 	public String getName() {
 		return name;
 	}
-
+	
+	@Override
+	public String toString() {
+		return this.name + " (" + this.getID() + ")";
+	}
+	
+	public abstract void deleteGraph();
 
 };

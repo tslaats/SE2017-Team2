@@ -16,6 +16,7 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
+import datamodel.petri.Transition;
 
 /************************************************************/
 /**
@@ -466,12 +467,133 @@ public class GuiController {
 			throw new Exception("The given action and the active graph does not have matching types");
 		}
 		
-	}
-	
+	}	
 
 	public Map<Integer, Graph> getGraphs() {
 		return graphs;
 	}
+	
+	
+	/**
+	 * Binds the given graph object with the given nested graph
+	 * 
+	 * @param graphObjectID ID of the graph object (Event or Transition)
+	 * @param nestedGraphID ID of the nested graph (Petri Net or CR Graph)
+	 * @throws Exception If there was a problem binding the graph object with the nested graph
+	 */
+	public void bindNestedGraph(int graphObjectID, int nestedGraphID) throws Exception {
+		
+		Graph graph;
+		Graph nestedGraph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		if (!this.graphs.containsKey(nestedGraphID)) {
+			throw new Exception("The nested graph ID does not exist");
+		}
+		
+		graph = this.graphs.get(ActiveGraphID);
+		nestedGraph = this.graphs.get(nestedGraphID);
+		
+		if (this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			Event e = crgraph.getEvent(graphObjectID);
+			if (e.getPetrinet() != null) {
+				throw new Exception("Event: " + e.toString() + " already has a nested Petri net");
+			}
+			Petrinet nestedPetri = null;
+			try {
+				nestedPetri = (Petrinet) nestedGraph;
+			}
+			catch (Exception ex) {
+				throw new Exception("The nested graph: " + nestedGraph.toString() + " is not a Petri Net");
+			}
+			// Finally set the nested graph
+			e.setPetrinet(nestedPetri);
+			nestedPetri.addParentEvent(e);
+			
+		} else {
+			Petrinet petrinet = (Petrinet) graph;
+			Transition t = petrinet.getTransition(graphObjectID);
+			if (t.getCrGraph() != null) {
+				throw new Exception("Transition: " + t.toString() + " already has a nested CR Graph");
+			}
+			CrGraph nestedCr = null;
+			try {
+				nestedCr = (CrGraph) nestedGraph;
+			}
+			catch (Exception ex) {
+				throw new Exception("The nested graph: " + nestedGraph.toString() + " is not a CR Graph");
+			}
+			// Finally set the nested graph
+			t.setCrGraph(nestedCr);
+			nestedCr.addParentTransition(t);			
+		}		
+		
+	}
+	
+	/**
+	 * Unbinds the given graph object with a nested graph
+	 * 
+	 * @param graphObjectID ID of the graph object (Event or Transition)
+	 * @throws Exception If the graph object does not have a nested graph, or some other problem occurred
+	 */
+	public void unbindNestedGraph(int graphObjectID) throws Exception {
+		Graph graph;
+
+		if (!this.graphs.containsKey(ActiveGraphID)) {
+			throw new Exception("The ActiveGraphID does not exist");
+		}
+		
+		graph = this.graphs.get(ActiveGraphID);
+		
+		if (this.isActiveGraphCr()) {
+			CrGraph crgraph = (CrGraph) graph;
+			Event e = crgraph.getEvent(graphObjectID);
+			if (e.getPetrinet() == null) {
+				throw new Exception("Event: " + e.toString() + " does not have a nested Petri net");
+			}
+			Petrinet nestedPetri = e.getPetrinet();
+
+			// Finally remove the nested graph
+			e.setPetrinet(null);
+			nestedPetri.removeParentEvent(e.getID());
+			
+		} else {
+			Petrinet petrinet = (Petrinet) graph;
+			Transition t = petrinet.getTransition(graphObjectID);
+			if (t.getCrGraph() == null) {
+				throw new Exception("Transition: " + t.toString() + " does not have a nested CR Graph");
+			}
+			CrGraph nestedCr = t.getCrGraph();
+
+			// Finally remove the nested graph
+			t.setCrGraph(null);
+			nestedCr.removeParentTransition(t.getID());
+		}	
+	}
+	
+	/**
+	 * Deletes the graph with the given ID
+	 * 
+	 * @param graphID ID of the graph (Petri Net or CR Graph)
+	 * @throws Exception If the graph ID does not exist
+	 */
+	public void deleteGraph(int graphID) throws Exception {
+		if (!this.graphs.containsKey(graphID)) {
+			throw new Exception("The given ID: " + graphID + " does not correspond to any existing graph");
+		}
+		
+		Graph graph = this.graphs.get(graphID);
+		
+		// Remove from nested objects
+		graph.deleteGraph();
+		
+		// Finally remove the graph from the hashmap
+		this.graphs.remove(graphID);		
+	}
+	
 
 
 };

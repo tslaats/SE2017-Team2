@@ -7,6 +7,7 @@ import datamodel.Graph;
 import datamodel.Position;
 import datamodel.Semantics;
 import datamodel.Visualization;
+import datamodel.petri.Transition;
 
 public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 
@@ -15,12 +16,25 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	
 	private Map<Integer, CrObject> crObjects = new HashMap<>();
 	
+	/**
+	 * HashMap of Transitions which refer to this CR Graph
+	 */
+	private Map<Integer, Transition> transitionParents = new HashMap<>();
+	
 	public CrGraph(String name) {
 		super(name);
 		
 		this.setGraphType(GraphTypes.CR);
 		this.trace = new ArrayList<>();
 		//this.graph = new ArrayList<CrObject>();
+	}
+	
+	public void addParentTransition(Transition t) {
+		this.transitionParents.put(t.getID(), t);
+	}
+	
+	public void removeParentTransition(int transID) {
+		this.transitionParents.remove(transID);
 	}
 
 	/**
@@ -35,6 +49,26 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 	
 	public Map<Integer, CrObject> getCrObjects() {
 		return crObjects;
+	}
+	
+	
+	public Event getEvent(int eventID) throws Exception {
+		if (!this.crObjects.containsKey(eventID)) {
+			throw new Exception("The given ID: " + eventID + " does not refer to any existing CrObject");
+		}
+		
+		CrObject o = this.crObjects.get(eventID);
+		Event e = null;
+		
+		try {
+			e = (Event) o;
+		}
+		catch (Exception ex) {
+			throw new Exception("The given ID: " + eventID + " does not refer to an Event");
+		}
+		
+		return e;
+		
 	}
 	
 	/**
@@ -324,4 +358,18 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
     public boolean isDone() {
         return this.getPendingEvents().size() == 0;
     }
+
+	@Override
+	public void deleteGraph() {	
+	    // Remove this graph from all parent transitions
+		for (Transition t : this.transitionParents.values()) {
+			if (t != null) {
+				if (t.getCrGraph() != null) {
+					if (t.getCrGraph().getID() == this.getID()) {
+						t.setCrGraph(null);
+					}
+				}
+			}
+		}
+	}
 };

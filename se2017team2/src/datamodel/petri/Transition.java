@@ -45,4 +45,9 @@ public class Transition extends PetriObject {
 		this.crGraph = crGraph;
 	}
 	
+	@Override
+	public String toString() {
+		return this.name + " (" + this.id + ")";
+	}
+	
 };

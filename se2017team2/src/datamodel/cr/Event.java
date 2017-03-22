@@ -107,5 +107,11 @@ public class Event extends CrObject {
 	public void setPetrinet(Petrinet petri) {
 		this.petrinet = petri;
 	}
+	
+	@Override
+	public String toString() {
+		return this.name + " (" + this.ID + ")";
+	}
+	
 
 }
