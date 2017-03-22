@@ -173,8 +173,8 @@ public class GuiController {
 		}
 
 		Petrinet petrinet = (Petrinet) this.graphs.get(ActiveGraphID);
-		petrinet.addTransition(pos, name);
-		return petrinet.getID();
+		
+		return petrinet.addTransition(pos, name);
 	}
 
 	/**
@@ -252,8 +252,8 @@ public class GuiController {
 		}
 
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
-		crGraph.addEvent(pos, name);
-		return crGraph.getID();
+		
+		return crGraph.addEvent(pos, name);
 	}
 	
 	/**
@@ -275,8 +275,8 @@ public class GuiController {
 		}
 
 		CrGraph crGraph = (CrGraph) this.graphs.get(ActiveGraphID);
-		crGraph.addEvent(pos, name, isPending);
-		return crGraph.getID();
+		
+		return crGraph.addEvent(pos, name, isPending);
 	}
 
 	/**
