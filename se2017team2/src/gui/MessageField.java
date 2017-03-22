@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +34,15 @@ public class MessageField {
 	 * @param msg
 	 */
 	public void setMsgText(String msg){
+		filler.setForeground(Color.black);
+		filler.setText(msg);
+	}
+	
+	/**
+	 * @param msg
+	 */
+	public void setWarningText(String msg){
+		filler.setForeground(Color.red);
 		filler.setText(msg);
 	}
 	

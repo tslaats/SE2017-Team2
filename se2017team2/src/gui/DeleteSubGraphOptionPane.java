@@ -82,7 +82,6 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 		this.label.setVisible(false);
 		this.add(label);
 
-
 		this.pack();
 		this.setVisible(true);
 
@@ -94,12 +93,12 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 	}
 
 	public String getContent() {
-			return graphIDField.getText();
+		return graphIDField.getText();
 	}
-	
+
 	public Boolean deleteOnlyReference() {
 		return newGraph.isSelected();
-}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -115,9 +114,8 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 			break;
 		case "Enter":
 
-			if (newGraph.isSelected() || newGraph.isSelected()) {
-
-				if (graphIDField.getText() != null ) {
+			if (graphIDField.getText() != "") {
+				if (newGraph.isSelected() || exsitingGraph.isSelected()) {
 					this.option = JOptionPane.OK_OPTION;
 					System.out.println(getContent());
 					clearAndHide();

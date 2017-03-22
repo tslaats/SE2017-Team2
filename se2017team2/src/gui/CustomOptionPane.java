@@ -7,11 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 public class CustomOptionPane extends JDialog implements ActionListener {
 	/**
@@ -25,11 +30,16 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 	private JButton cancelButton;
 	private JOptionPane optionPane;
 	private int option;
+	private HintTextField eventIDField;
+	private JLabel label;
+	String graph;
 
-	public CustomOptionPane(String head, String opt1, String opt2) {
+	public CustomOptionPane(String head, String inputRequest, String opt1, String opt2, String graph) {
 		super(new JFrame(), true);
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.graph = graph;
 		// setLocationRelativeTo(null);
-
+		this.setTitle(head);
 		this.setLayout(new FlowLayout());
 		this.newGraph = new JRadioButton(opt1);
 		this.newGraph.setActionCommand("new_graph");
@@ -40,7 +50,9 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 		this.exsitingGraph.setActionCommand("exsisting_graph");
 		this.exsitingGraph.addActionListener(this);
 
-		this.graphIDField = new HintTextField("Please enter ID of the existing graph   ");
+		this.eventIDField = new HintTextField(inputRequest);
+
+		this.graphIDField = new HintTextField("Please enter ID of the existing " + graph);
 		this.graphIDField.setForeground(Color.gray);
 		this.graphIDField.setEnabled(false);
 
@@ -50,12 +62,21 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 		this.cancelButton = new JButton("Cancel");
 		this.cancelButton.addActionListener(this);
 
-		Object[] array = { head, newGraph, exsitingGraph, graphIDField };
+		Object[] array = { inputRequest, eventIDField, newGraph, exsitingGraph, graphIDField };
 		Object[] options = { this.okButton, this.cancelButton };
 
 		optionPane = new JOptionPane(array, JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION, null, options,
-				options[0]);
+				null);
 		setContentPane(optionPane);
+
+		label = new JLabel("Please select one of the options");
+		this.label.setForeground(Color.red);
+		this.label.setAlignmentX(RIGHT_ALIGNMENT);
+		Border border = this.label.getBorder();
+		Border margin = new EmptyBorder(10, 0, 0, 10);
+		this.label.setBorder(new CompoundBorder(border, margin));
+		this.label.setVisible(false);
+		this.add(label);
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent we) {
@@ -98,8 +119,29 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 			graphIDField.setEnabled(true);
 			break;
 		case "Enter":
-			this.option = JOptionPane.OK_OPTION;
-			clearAndHide();
+			if (eventIDField.getText() == "") {
+				this.label.setText("Please enter the ID of the Event");
+				// show warning
+				this.label.setVisible(true);
+				this.revalidate();
+				this.pack();
+				this.repaint();
+				System.out.println("EVENT");
+			} else if (this.exsitingGraph.isSelected() && this.graphIDField.getText() == "") {
+				this.label.setText("Please enter the ID of the " + graph);
+				System.out.println("graph");
+				// show warning
+				this.label.setVisible(true);
+				this.revalidate();
+				this.pack();
+				this.repaint();
+
+			} else {
+				System.out.println(eventIDField.getText());
+				this.option = JOptionPane.OK_OPTION;
+				clearAndHide();
+			}
+
 			break;
 		case "Cancel":
 			this.option = JOptionPane.CANCEL_OPTION;
@@ -111,7 +153,6 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 
 		}
 
-
 	}
 
 	public int getOption() {
@@ -119,4 +160,3 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 	}
 
 }
-

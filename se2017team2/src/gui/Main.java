@@ -115,6 +115,13 @@ public class Main {
 	public static void updateUserMsg(String msg) {
 		messageField.setMsgText(msg);
 	}
+	
+	/**
+	 * @param msg
+	 */
+	public static void updateUserWarning(String msg) {
+		messageField.setWarningText(msg);
+	}
 
 	/**
 	 * 

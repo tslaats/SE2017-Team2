@@ -334,10 +334,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deleteEvent(ID);
 						Main.updateUserMsg("Deleted eventID: " + ID);
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
@@ -356,10 +356,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.createCondition(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added condition from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 
 			}
@@ -378,10 +378,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deleteCondition(ID);
 						Main.updateUserMsg(String.format("Deleted condition %d", ID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 
@@ -402,10 +402,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.createResponse(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added response from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
@@ -421,10 +421,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deleteResponse(ID);
 						Main.updateUserMsg(String.format("Deleted response with ID %d", ID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
@@ -448,10 +448,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deletePlace(ID);
 						Main.updateUserMsg(String.format("Deleted place with ID %d", ID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
@@ -496,10 +496,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deleteTransition(ID);
 						Main.updateUserMsg(String.format("Deleted trasition with ID: %d", ID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
@@ -530,10 +530,10 @@ public class Menu implements ActionListener {
 						Main.guiControlller.createArc(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Added Arc from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 
@@ -553,17 +553,17 @@ public class Menu implements ActionListener {
 						Main.guiControlller.deleteArc(incomingID, outgoingID);
 						Main.updateUserMsg(String.format("Deleted Arc from %d to %d", incomingID, outgoingID));
 					} catch (Exception e1) {
-						Main.updateUserMsg(e1.getMessage());
+						Main.updateUserWarning(e1.getMessage());
 					}
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
 				}
 			}
 			break;
 		case "new_subcr":
 
-			CustomOptionPane pane = new CustomOptionPane("Add sub Graph to Transition", "Create New CR Graph",
-					"Add reference to existing CR Graph");
+			CustomOptionPane pane = new CustomOptionPane("Add sub Graph to Transition", "Please enter ID of the Transition", "Create New CR Graph",
+					"Add reference to existing CR Graph", "Petri Net");
 			if (pane.getOption() == JOptionPane.OK_OPTION) {
 				String graphIDString = pane.getContent();
 				if (graphIDString == null) {
@@ -572,35 +572,15 @@ public class Menu implements ActionListener {
 					try {
 						int crID = Integer.parseInt(graphIDString);
 					} catch (NumberFormatException e2) {
-						Main.updateUserMsg(invID);
+						Main.updateUserWarning(invID);
 					}
 				}
 			}
 			break;
 		case "delete_subcr":
-			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
-			break;
-		case "new_subpetri":
-
-			CustomOptionPane pane1 = new CustomOptionPane("Add sub Graph to Event", "Create New Petri Net",
-					"Add reference to existing Petri Net");
-			if (pane1.getOption() == JOptionPane.OK_OPTION) {
-				String graphIDString = pane1.getContent();
-				if (graphIDString == null) {
-					int PetriID = createGraph(false);
-				} else {
-					try {
-						int PetriID = Integer.parseInt(graphIDString);
-					} catch (NumberFormatException e2) {
-						Main.updateUserMsg(invID);
-					}
-				}
-			}
-			break;
-		case "delete_subpetri":
-
-			DeleteSubGraphOptionPane paneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
-					"Delete refence to Petri Net", "Delete Petri Net entirely(cannot be undone)");
+			
+			DeleteSubGraphOptionPane paneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Transition",
+					"Delete refence to CR Graph", "Delete CR Graph entirely(cannot be undone)");
 			if (paneDel.getOption() == JOptionPane.OK_OPTION) {
 				String graphIDString = paneDel.getContent();
 
@@ -615,7 +595,51 @@ public class Menu implements ActionListener {
 					}
 
 				} catch (NumberFormatException e2) {
-					Main.updateUserMsg(invID);
+					Main.updateUserWarning(invID);
+
+				}
+			}
+
+			
+			
+			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
+			break;
+		case "new_subpetri":
+
+			CustomOptionPane pane1 = new CustomOptionPane("Add sub Graph to Event", "Please enter ID of the Event", "Create New Petri Net",
+					"Add reference to existing Petri Net", "CR Graph");
+			if (pane1.getOption() == JOptionPane.OK_OPTION) {
+				String graphIDString = pane1.getContent();
+				if (graphIDString == null) {
+					int PetriID = createGraph(false);
+				} else {
+					try {
+						int PetriID = Integer.parseInt(graphIDString);
+					} catch (NumberFormatException e2) {
+						Main.updateUserWarning(invID);
+					}
+				}
+			}
+			break;
+		case "delete_subpetri":
+
+			DeleteSubGraphOptionPane PetripaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
+					"Delete refence to Petri Net", "Delete Petri Net entirely(cannot be undone)");
+			if (PetripaneDel.getOption() == JOptionPane.OK_OPTION) {
+				String graphIDString = PetripaneDel.getContent();
+
+				try {
+					int PetriID = Integer.parseInt(graphIDString);
+					if (PetripaneDel.deleteOnlyReference()) {
+						// delete reference to petri
+					} else {
+						// delete reference to petri
+						// delete petri
+						// 	Main.guiControlller.deleteArc(incomingID, outgoingID);
+					}
+
+				} catch (NumberFormatException e2) {
+					Main.updateUserWarning(invID);
 
 				}
 			}
@@ -658,7 +682,7 @@ public class Menu implements ActionListener {
 				}
 				Main.updateFrame();
 			} catch (Exception e1) {
-				Main.updateUserMsg(e1.getMessage());
+				Main.updateUserWarning(e1.getMessage());
 			}
 			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
 		}
@@ -722,7 +746,7 @@ public class Menu implements ActionListener {
 			Main.guiControlller.createEvent(position, nameEvent, this.isPending);
 			Main.updateUserMsg(String.format("Added Event: %s", nameEvent));
 		} catch (Exception e1) {
-			Main.updateUserMsg(e1.getMessage());
+			Main.updateUserWarning(e1.getMessage());
 			this.clickArgument = "";
 			this.isPending = false;
 		}
@@ -738,7 +762,7 @@ public class Menu implements ActionListener {
 			Main.guiControlller.createTransition(position, name);
 			Main.updateUserMsg(String.format("Added Transition: %s", name));
 		} catch (Exception e1) {
-			Main.updateUserMsg(e1.getMessage());
+			Main.updateUserWarning(e1.getMessage());
 			this.clickArgument = "";
 		}
 
@@ -753,7 +777,7 @@ public class Menu implements ActionListener {
 			Main.guiControlller.createPlace(position);
 			Main.updateUserMsg(String.format("Added Place: %s", namePlace));
 		} catch (Exception e1) {
-			Main.updateUserMsg(e1.getMessage());
+			Main.updateUserWarning(e1.getMessage());
 		}
 	}
 
