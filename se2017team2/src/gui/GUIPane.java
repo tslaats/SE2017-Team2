@@ -129,10 +129,14 @@ public class GUIPane extends JPanel implements ChangeListener {
 		if (graphTab.getCrGraph()) {
 			Menu.enableCRMenu();
 			Menu.disablePetriMenu();
+
 		} else {
 			Menu.enablePetriMenu();
 			Menu.disableCRMenu();
+
+
 		}
+		Menu.enableNewMenubar();
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
 		sourceTabbedPane.repaint();
 		
@@ -185,5 +189,30 @@ public class GUIPane extends JPanel implements ChangeListener {
 	public void updateActions() {
 		this.actPane.updateActionPane();
 	}
+	
+	/**
+	 * 
+	 */
+	public void deleteTabByGraphId(int graphId) {
+//		this.actPane.updateActionPane();
+		int index= -1;
+		int counter = 0;
+		System.out.println("delete grapg" + graphId);
+		for(GraphTab graphTab : graphTabs){
+			System.out.println(graphTab.getId());
+			if (graphTab.getId() == graphId){
+				index = counter;
+			}
+			counter ++;
+		}
+		if (index != -1){
+			graphTabs.remove(index);
+			tabbedPane.remove(index);
+		}
+		
+	}
+	
+	
+	
 
 }
