@@ -436,7 +436,12 @@ public class GuiController {
 			}
 		} else {
 			Petrinet petrinet = (Petrinet) graph;
-			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+			List<Transition> trans = petrinet.getPossibleActions();
+			// Create actions for each transition
+			for (Transition t : trans) {
+				Action<Transition> a = new Action<Transition>(t.getName(), t.getID(), GraphTypes.PETRI, t);
+				actions.add(a);
+			}
 		}		
 		
 		return actions;		
@@ -465,7 +470,10 @@ public class GuiController {
 			this.graphs.put(ActiveGraphID, updatedGraph);
 		}
 		else if (action.getGraphType() == GraphTypes.PETRI && this.isActiveGraphPetri()) {
-			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+			Petrinet petri = (Petrinet) graph;
+			// Execute the transition and update the graph entry in the hash map
+			Petrinet updatedGraph = petri.executeAction((Transition)action.getActionObject());
+			this.graphs.put(ActiveGraphID, updatedGraph);
 		}
 		else {
 			throw new Exception("The given action and the active graph does not have matching types");
