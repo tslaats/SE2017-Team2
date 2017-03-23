@@ -21,6 +21,7 @@ public class GUIPane extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 
 	private ActionPane actPane;
+	private Boolean simulation;
 
 	/**
 	 * 
@@ -30,7 +31,7 @@ public class GUIPane extends JPanel implements ChangeListener {
 		super(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
-
+		simulation = false;
 		actPane = new ActionPane();
 
 		// JScrollPane scroller = new JScrollPane(actPane);
@@ -106,8 +107,11 @@ public class GUIPane extends JPanel implements ChangeListener {
 		return count;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.
+	 * ChangeEvent)
 	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
@@ -121,10 +125,9 @@ public class GUIPane extends JPanel implements ChangeListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
+
 		graphTab.updateImage();
-		
+
 		// toggle menus for the correct graph type
 		if (graphTab.getCrGraph()) {
 			Menu.enableCRMenu();
@@ -134,16 +137,16 @@ public class GUIPane extends JPanel implements ChangeListener {
 			Menu.enablePetriMenu();
 			Menu.disableCRMenu();
 
+		}
 
+		if (simulation) {
+			Main.showPossibleActions();
 		}
 		Menu.enableNewMenubar();
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
 		sourceTabbedPane.repaint();
-		
-		
+
 	}
-	
-	
 
 	/**
 	 * 
@@ -189,30 +192,30 @@ public class GUIPane extends JPanel implements ChangeListener {
 	public void updateActions() {
 		this.actPane.updateActionPane();
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void deleteTabByGraphId(int graphId) {
-//		this.actPane.updateActionPane();
-		int index= -1;
+		// this.actPane.updateActionPane();
+		int index = -1;
 		int counter = 0;
-		System.out.println("delete grapg" + graphId);
-		for(GraphTab graphTab : graphTabs){
-			System.out.println(graphTab.getId());
-			if (graphTab.getId() == graphId){
+		for (GraphTab graphTab : graphTabs) {
+			if (graphTab.getId() == graphId) {
 				index = counter;
 			}
-			counter ++;
+			counter++;
 		}
-		if (index != -1){
+		if (index != -1) {
 			graphTabs.remove(index);
 			tabbedPane.remove(index);
 		}
-		
+
+	}
+
+	public void setSimulation(Boolean simulation){
+		this.simulation = true;
 	}
 	
 	
-	
-
 }

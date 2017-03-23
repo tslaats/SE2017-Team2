@@ -664,7 +664,7 @@ public class Menu implements ActionListener {
 						// delete C
 						Main.guiControlller.unbindNestedGraph(eventID, false);
 					} else {
-						int graphId =Main.guiControlller.unbindNestedGraph(eventID, true);
+						int graphId = Main.guiControlller.unbindNestedGraph(eventID, true);
 						guiPane.deleteTabByGraphId(graphId);
 					}
 				} catch (NumberFormatException e2) {
@@ -892,7 +892,6 @@ public class Menu implements ActionListener {
 			break;
 		}
 
-
 		Main.enableTabs();
 
 		this.clickArgument = "";
@@ -905,6 +904,7 @@ public class Menu implements ActionListener {
 	 * 
 	 */
 	public void disableMenubar() {
+		this.disabledMenus = new HashSet<JMenuItem>();
 		for (Component menuItem : menuBar.getComponents()) {
 			if (menuItem.isEnabled()) {
 				menuItem.setEnabled(false);
