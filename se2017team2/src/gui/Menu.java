@@ -600,7 +600,7 @@ public class Menu implements ActionListener {
 					int eventID = Integer.parseInt(eventIDstring);
 					try {
 						// delete reference to CR
-						Main.guiControlller.unbindNestedGraph(eventID);
+						Main.guiControlller.unbindNestedGraph(eventID, false);
 					} catch (Exception e1) {
 						Main.updateUserWarning(e1.getMessage());
 						break;
@@ -655,7 +655,7 @@ public class Menu implements ActionListener {
 					int eventID = Integer.parseInt(eventIDstring);
 					try {
 						// delete reference to petri
-						Main.guiControlller.unbindNestedGraph(eventID);
+						Main.guiControlller.unbindNestedGraph(eventID, false);
 					} catch (Exception e1) {
 						Main.updateUserWarning(e1.getMessage());
 						break;
