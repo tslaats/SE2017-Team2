@@ -45,8 +45,7 @@ public class PetriWindow extends JComponent {
 	public void paintComponent(Graphics g) {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, Scale(fontSize)));
 		g.setColor(new Color(0x00f0f0f0));
- 		
-		for (Edge edge : edges) {
+				for (Edge edge : edges) {
 			drawEdge(edge, g);
 		}
 		for (Node node : nodes) {
@@ -144,9 +143,6 @@ public class PetriWindow extends JComponent {
 
 	float displaceX = (float) Math.cos(m);
 	float displaceY = (float) Math.sin(m);
-	
-	System.out.println(displaceX);
-	System.out.println(displaceY);
 	
 	drawArrowLine(g,
 			p1.x,
