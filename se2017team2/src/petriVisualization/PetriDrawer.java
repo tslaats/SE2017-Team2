@@ -40,6 +40,7 @@ public class PetriDrawer {
 		return petriWindow.scale;
 	}
 	
+	
 	public BufferedImage draw(Petrinet petrinet){
 		petriConverter.clearPetriConverter();
 		petriConverter.convertPetri(petrinet);
