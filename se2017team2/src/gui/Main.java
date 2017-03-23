@@ -124,6 +124,15 @@ public class Main {
 	}
 
 	/**
+	 * @param msg
+	 */
+	public static void updateUserInput(String msg) {
+		messageField.setInputText(msg);
+	}
+	
+	
+
+	/**
 	 * 
 	 */
 	public static void showPossibleActions() {

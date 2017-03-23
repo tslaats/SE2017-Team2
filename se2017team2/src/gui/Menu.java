@@ -224,8 +224,8 @@ public class Menu implements ActionListener {
 
 		// Build the first menu.
 		menuSimulation = new JMenu("Simulation");
-		menuSimulation .setMnemonic(KeyEvent.VK_V);
-		menuSimulation .getAccessibleContext().setAccessibleDescription("Menu for Simulation");
+		menuSimulation.setMnemonic(KeyEvent.VK_V);
+		menuSimulation.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
 		menuBar.add(menuSimulation);
 
 		menuItem = new JMenuItem("Start Simulation", KeyEvent.VK_S);
@@ -317,7 +317,7 @@ public class Menu implements ActionListener {
 				Main.disableTabs();
 				graphtab.activateClickListener();
 				this.clickArgument = nameEvent;
-				Main.updateUserMsg(String.format("Please click where you want to ad event: %s", nameEvent));
+				Main.updateUserInput(String.format("Please click where you want to ad event: %s", nameEvent));
 				clickType = ClickType.EVENT;
 
 			}
@@ -433,7 +433,7 @@ public class Menu implements ActionListener {
 			disableMenubar();
 			Main.disableTabs();
 			Main.getActiveTab().activateClickListener();
-			Main.updateUserMsg(String.format("Please click where you want to ad the Place"));
+			Main.updateUserInput(String.format("Please click where you want to ad the Place"));
 			clickType = ClickType.PLACE;
 			break;
 		case "delete_place":
@@ -479,7 +479,7 @@ public class Menu implements ActionListener {
 				Main.disableTabs();
 				actGraphtab.activateClickListener();
 				this.clickArgument = name;
-				Main.updateUserMsg(String.format("Please click where you want to ad Transition: %s", name));
+				Main.updateUserInput(String.format("Please click where you want to ad Transition: %s", name));
 				clickType = ClickType.TRANSITION;
 			}
 
@@ -595,24 +595,27 @@ public class Menu implements ActionListener {
 			DeleteSubGraphOptionPane CRpaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Transition",
 					"Delete refence to CR Graph", "Delete CR Graph entirely(cannot be undone)");
 			if (CRpaneDel.getOption() == JOptionPane.OK_OPTION) {
-				String eventIDstring = CRpaneDel.getContent();
-				try {
-					int eventID = Integer.parseInt(eventIDstring);
-					try {
-						// delete reference to CR
-						Main.guiControlller.unbindNestedGraph(eventID, false);
-					} catch (Exception e1) {
-						Main.updateUserWarning(e1.getMessage());
-						break;
-					}
-					if (!CRpaneDel.deleteOnlyReference()) {
-						// delete CR
-						// todo Main.guiControlller.deleteGraph(graphID);
-					}
+				String transitionIDstring = CRpaneDel.getContent();
 
+				try {
+					// parse input as int
+					int transitionID = Integer.parseInt(transitionIDstring);
+					// delete reference to CR
+					if (CRpaneDel.deleteOnlyReference()) {
+						// delete C
+						Main.guiControlller.unbindNestedGraph(transitionID, false);
+					} else {
+						int graphId = Main.guiControlller.unbindNestedGraph(transitionID, true);
+						guiPane.deleteTabByGraphId(graphId);
+					}
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
+
+				} catch (Exception e1) {
+					Main.updateUserWarning(e1.getMessage());
+					break;
 				}
+
 			}
 
 			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
@@ -649,25 +652,29 @@ public class Menu implements ActionListener {
 
 			DeleteSubGraphOptionPane PetripaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Event",
 					"Delete refence to Petri Net", "Delete Petri Net entirely(cannot be undone)");
+
 			if (PetripaneDel.getOption() == JOptionPane.OK_OPTION) {
 				String eventIDstring = PetripaneDel.getContent();
-				try {
-					int eventID = Integer.parseInt(eventIDstring);
-					try {
-						// delete reference to petri
-						Main.guiControlller.unbindNestedGraph(eventID, false);
-					} catch (Exception e1) {
-						Main.updateUserWarning(e1.getMessage());
-						break;
-					}
-					if (!PetripaneDel.deleteOnlyReference()) {
-						// delete petri
-						// todo Main.guiControlller.deleteGraph(graphID);
-					}
 
+				try {
+					// parse input as int
+					int eventID = Integer.parseInt(eventIDstring);
+					// delete reference to CR
+					if (PetripaneDel.deleteOnlyReference()) {
+						// delete C
+						Main.guiControlller.unbindNestedGraph(eventID, false);
+					} else {
+						int graphId =Main.guiControlller.unbindNestedGraph(eventID, true);
+						guiPane.deleteTabByGraphId(graphId);
+					}
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
+
+				} catch (Exception e1) {
+					Main.updateUserWarning(e1.getMessage());
+					break;
 				}
+
 			}
 
 			break;
@@ -853,7 +860,8 @@ public class Menu implements ActionListener {
 	 * @param position
 	 */
 	public void canvasClicked(Position position) {
-
+		GraphTab graphtab = Main.getActiveTab();
+		graphtab.deactivateClickListener();
 		switch (clickType) {
 		case PLACE:
 			createPlace(position);
@@ -884,8 +892,7 @@ public class Menu implements ActionListener {
 			break;
 		}
 
-		GraphTab graphtab = Main.getActiveTab();
-		graphtab.deactivateClickListener();
+
 		Main.enableTabs();
 
 		this.clickArgument = "";
@@ -918,7 +925,7 @@ public class Menu implements ActionListener {
 	public static void enableNewMenubar() {
 		menuNew.setEnabled(true);
 	}
-	
+
 	public static void disableNewMenubar() {
 		menuNew.setEnabled(false);
 	}
