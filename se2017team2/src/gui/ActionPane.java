@@ -52,7 +52,11 @@ public class ActionPane extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Main.guiControlller.executeAction(posActions.get(Integer.parseInt(e.getActionCommand())));
+			
+			Action<?> action = posActions.get(Integer.parseInt(e.getActionCommand()));
+			Main.guiControlller.executeAction(action);
+			Main.updateUserMsg("Executed Action: " + action.getName());
+
 		} catch (Exception e1) {
 			Main.updateUserWarning(e1.getMessage());
 		}
