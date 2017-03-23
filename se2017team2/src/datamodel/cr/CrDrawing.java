@@ -126,7 +126,7 @@ public class CrDrawing {
 				  if (relationPos.contains(p2)) {
 					  continue;
 				  }
-				  if (distance(p1,p2) <= dis) {
+				  if (distance(p1,p2) <= dis && distance(p1,p2) > MOVE_EVENT_X_RIGHT) {
 					  dis = distance(p1,p2);
 					  shortest = new Tuple<Position, Position>(p1, p2);
 				  }
@@ -136,7 +136,7 @@ public class CrDrawing {
 	  }
 	  
 	  /**
-	   * Wrapper for drawing a Condtional relation
+	   * Wrapper for drawing a Conditional relation
 	   * @param g
 	   * @param e1
 	   * @param e2
@@ -307,7 +307,7 @@ public class CrDrawing {
 		  drawCenteredString(g, event.getName(),x,y, null);
 		  drawCenteredString(g, "(" +event.getID()+")",x,y-LINE_HEIGHT, null);
 		  
-		  // draw Petri
+		  // draw Petrinet
 		  Petrinet petri = event.getPetrinet();
 		  if (petri != null) {
 			  g.setColor(borderColor);
@@ -316,7 +316,7 @@ public class CrDrawing {
 			  drawCenteredString(g, petri.getName() + "(" +petri.getID()+")",x,
 					  y+(EVENT_HEIGHT-(LINE_HEIGHT*2)-(MARGIN*2)), new Font("Serif", Font.ITALIC, 12));
 		  }
-		  // draw checkmark
+		  // draw executed
 		  g.setFont(new Font("Serif", Font.BOLD, 16));
 		  if (event.isExecuted()) {
 			g.setColor(Color.GREEN);
