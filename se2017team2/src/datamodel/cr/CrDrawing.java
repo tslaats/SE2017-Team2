@@ -11,12 +11,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import datamodel.Position;
+import datamodel.petri.Petrinet;
 
-/**
- * 
- * @author Hjalte
- *
- */
 public class CrDrawing {
 	/**
 	 * Singleton accessor for visualization methods
@@ -224,11 +220,14 @@ public class CrDrawing {
 	   * @param text The String to draw.
 	   * @param rect The Rectangle to center the text in.
 	   */
-	  private void drawCenteredString(Graphics2D g, String text, int width, int height, int X, int Y) {
+	  private void drawCenteredString(Graphics2D g, String text, int X, int Y, Font f) {
 	      // Get the FontMetrics
-		  Font font = new Font("Serif", Font.TRUETYPE_FONT, 12);
+		  Font font = f;
+		  if (f == null) {
+			  font = new Font("Serif", Font.TRUETYPE_FONT, 12);
+		  }
 	      FontMetrics metrics = g.getFontMetrics(font);
-	      
+	      int width = EVENT_WIDTH;
 	      // Determine the X coordinate for the text
 	      int x = ((width - metrics.stringWidth(text)) / 2) + X;
 	      // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
@@ -306,14 +305,18 @@ public class CrDrawing {
 		  // DRAWS LINE		  
 		  g.drawLine(x, y+LINE_HEIGHT, x+EVENT_WIDTH, y+LINE_HEIGHT);
 		  // draw texts under line
-		  drawCenteredString(g, event.getName(), EVENT_WIDTH, EVENT_HEIGHT,x,y);
-		  drawCenteredString(g, "(" +event.getID()+")", EVENT_WIDTH, EVENT_HEIGHT,x,y-LINE_HEIGHT);
+		  drawCenteredString(g, event.getName(),x,y, null);
+		  drawCenteredString(g, "(" +event.getID()+")",x,y-LINE_HEIGHT, null);
 		  
 		  // draw Petri
-		  if (event.getPetrinet() != null) {
+		  Petrinet petri = event.getPetrinet();
+		  if (petri != null) {
 			  g.setColor(borderColor);
 			  g.drawRect(x+MARGIN, y+LINE_HEIGHT+MARGIN, EVENT_WIDTH-(MARGIN*2), 
 					  EVENT_HEIGHT-LINE_HEIGHT-(MARGIN*2));
+
+			  drawCenteredString(g, petri.getName() + "(" +petri.getID()+")",x,y+(EVENT_HEIGHT-(LINE_HEIGHT*2)-(MARGIN*2)), new Font("Serif", Font.ITALIC, 12));
+			  
 		  }
 		  // draw checkmark
 		  g.setFont(new Font("Serif", Font.BOLD, 16));
