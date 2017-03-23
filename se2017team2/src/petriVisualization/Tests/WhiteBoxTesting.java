@@ -43,11 +43,12 @@ public class WhiteBoxTesting {
 	private static void testPetriConverter(){
 		
 		Petrinet petrinet = new Petrinet("Test - PetriVisualization");
-        PetriConverter.convertPetri(petrinet);
+		PetriConverter petriConverter = new PetriConverter();
+		petriConverter.convertPetri(petrinet);
         
         PetriWindow petriWindow = new PetriWindow(true);
         petriWindow.setVisible(true);
-        petriWindow.updateGraph(PetriConverter.nodes, PetriConverter.edges);
+        petriWindow.updateGraph(petriConverter.nodes, petriConverter.edges);
 	
 	}
 }
