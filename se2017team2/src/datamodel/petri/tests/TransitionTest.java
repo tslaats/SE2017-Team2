@@ -18,7 +18,7 @@ public class TransitionTest {
 	private static Position pos = new Position(2,3);
 	
 	@Before
-	public static void setUpBeforeClass() throws Exception {
+	public void setUpBeforeClass() throws Exception {
 		transition = new Transition(pos, testname);
 	}
 

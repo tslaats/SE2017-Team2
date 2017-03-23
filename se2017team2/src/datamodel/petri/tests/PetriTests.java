@@ -15,7 +15,7 @@ public class PetriTests {
 	private static Petrinet petrinet;
 	
 	@Before
-	public static void setUpBeforeClass() throws Exception {
+	public void setUpBeforeClass() throws Exception {
 		petrinet = new Petrinet(testname);
 	}
 
