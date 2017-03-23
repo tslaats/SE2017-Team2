@@ -600,7 +600,7 @@ public class Menu implements ActionListener {
 					int eventID = Integer.parseInt(eventIDstring);
 					try {
 						// delete reference to CR
-						Main.guiControlller.unbindNestedGraph(eventID);
+						Main.guiControlller.unbindNestedGraph(eventID, false);
 					} catch (Exception e1) {
 						Main.updateUserWarning(e1.getMessage());
 						break;
@@ -655,7 +655,7 @@ public class Menu implements ActionListener {
 					int eventID = Integer.parseInt(eventIDstring);
 					try {
 						// delete reference to petri
-						Main.guiControlller.unbindNestedGraph(eventID);
+						Main.guiControlller.unbindNestedGraph(eventID, false);
 					} catch (Exception e1) {
 						Main.updateUserWarning(e1.getMessage());
 						break;
@@ -696,12 +696,12 @@ public class Menu implements ActionListener {
 			try {
 				int tabNum = GUIPane.getTabNum() + 1;
 				if (CrGraph) {
-					ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.CR);
+					ID = Main.guiControlller.createGraph(name, Graph.GraphTypes.CR);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new CR Graph");
 					guiPane.addGraphTab(name + " #" + tabNum, true, ID);
 				} else {
-					ID = Main.guiControlller.createGraph("name", Graph.GraphTypes.PETRI);
+					ID = Main.guiControlller.createGraph(name, Graph.GraphTypes.PETRI);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new Petri Graph");
 					guiPane.addGraphTab(name + " #" + tabNum, false, ID);
@@ -792,6 +792,7 @@ public class Menu implements ActionListener {
 		try {
 			transitionId = Main.guiControlller.createTransition(position, name);
 			Main.updateUserMsg(String.format("Added Transition: %s", name));
+			System.out.println(name);
 		} catch (Exception e1) {
 			Main.updateUserWarning(e1.getMessage());
 			this.clickArgument = "";

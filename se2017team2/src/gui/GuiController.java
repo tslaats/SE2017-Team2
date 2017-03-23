@@ -541,17 +541,19 @@ public class GuiController {
 	 * Unbinds the given graph object with a nested graph
 	 * 
 	 * @param graphObjectID ID of the graph object (Event or Transition)
+	 * @param deleteNestedGraph if true, the nested graph gets deleted as well
 	 * @throws Exception If the graph object does not have a nested graph, or some other problem occurred
 	 */
-	public void unbindNestedGraph(int graphObjectID) throws Exception {
+	public void unbindNestedGraph(int graphObjectID, boolean deleteNestedGraph) throws Exception {
 		Graph graph;
-
+		Graph nestedGraph;
+		
 		if (!this.graphs.containsKey(ActiveGraphID)) {
 			throw new Exception("The ActiveGraphID does not exist");
 		}
 		
 		graph = this.graphs.get(ActiveGraphID);
-		
+				
 		if (this.isActiveGraphCr()) {
 			CrGraph crgraph = (CrGraph) graph;
 			Event e = crgraph.getEvent(graphObjectID);
@@ -559,7 +561,8 @@ public class GuiController {
 				throw new Exception("Event: " + e.toString() + " does not have a nested Petri net");
 			}
 			Petrinet nestedPetri = e.getPetrinet();
-
+			nestedGraph = nestedPetri;
+			
 			// Finally remove the nested graph
 			e.setPetrinet(null);
 			nestedPetri.removeParentEvent(e.getID());
@@ -571,11 +574,17 @@ public class GuiController {
 				throw new Exception("Transition: " + t.toString() + " does not have a nested CR Graph");
 			}
 			CrGraph nestedCr = t.getCrGraph();
-
+			nestedGraph = nestedCr;
+			
 			// Finally remove the nested graph
 			t.setCrGraph(null);
 			nestedCr.removeParentTransition(t.getID());
-		}	
+		}
+		
+		// Delete the nested graph if set
+		if (deleteNestedGraph) {
+			this.deleteGraph(nestedGraph.getID());
+		}
 	}
 	
 	/**
