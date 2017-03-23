@@ -22,8 +22,8 @@ public class CrDrawing {
 	// Empty constructor
 	private CrDrawing() {}
 
-	private static final int IMAGE_WIDTH = 800;
-	private static final int IMAGE_HEIGHT = 600;
+	private static final int IMAGE_WIDTH = 960;
+	private static final int IMAGE_HEIGHT = 640;
 	private ArrayList<Position> relationPos;
 	private ArrayList<Position> eventPos;
 	
@@ -72,11 +72,11 @@ public class CrDrawing {
 		  int xstart = e.getX();
 		  int ystart = e.getY();
 			
-		  for (int i = xstart; i <= xstart + EVENT_WIDTH;i += CIRCLE_RADIUS+MARGIN) {
+		  for (int i = xstart; i <= xstart + EVENT_WIDTH;i += CIRCLE_RADIUS+(MARGIN*3)) {
 			  list.add(new Position(i,ystart));
 			  list.add(new Position(i,ystart + EVENT_HEIGHT));
 		  }
-		  for (int i = ystart; i <= ystart + EVENT_HEIGHT;i += CIRCLE_RADIUS+MARGIN) {
+		  for (int i = ystart; i <= ystart + EVENT_HEIGHT;i += CIRCLE_RADIUS+(MARGIN*3)) {
 			  list.add(new Position(xstart,i));
 			  list.add(new Position(xstart + EVENT_WIDTH,i));
 		  }
@@ -207,7 +207,6 @@ public class CrDrawing {
 	      }
 	      g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
 	                    new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 4);
-	      // Set the font
 	      //reset
 	      g.setStroke(oldS);
 	      g.setTransform(oldXForm);
@@ -314,9 +313,8 @@ public class CrDrawing {
 			  g.setColor(borderColor);
 			  g.drawRect(x+MARGIN, y+LINE_HEIGHT+MARGIN, EVENT_WIDTH-(MARGIN*2), 
 					  EVENT_HEIGHT-LINE_HEIGHT-(MARGIN*2));
-
-			  drawCenteredString(g, petri.getName() + "(" +petri.getID()+")",x,y+(EVENT_HEIGHT-(LINE_HEIGHT*2)-(MARGIN*2)), new Font("Serif", Font.ITALIC, 12));
-			  
+			  drawCenteredString(g, petri.getName() + "(" +petri.getID()+")",x,
+					  y+(EVENT_HEIGHT-(LINE_HEIGHT*2)-(MARGIN*2)), new Font("Serif", Font.ITALIC, 12));
 		  }
 		  // draw checkmark
 		  g.setFont(new Font("Serif", Font.BOLD, 16));
