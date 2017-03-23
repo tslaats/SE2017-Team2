@@ -544,9 +544,11 @@ public class GuiController {
 	 * @param deleteNestedGraph if true, the nested graph gets deleted as well
 	 * @throws Exception If the graph object does not have a nested graph, or some other problem occurred
 	 */
-	public void unbindNestedGraph(int graphObjectID, boolean deleteNestedGraph) throws Exception {
+	public int unbindNestedGraph(int graphObjectID, boolean deleteNestedGraph) throws Exception {
 		Graph graph;
 		Graph nestedGraph;
+		
+		int nestedGraphID = -1;
 		
 		if (!this.graphs.containsKey(ActiveGraphID)) {
 			throw new Exception("The ActiveGraphID does not exist");
@@ -583,8 +585,10 @@ public class GuiController {
 		
 		// Delete the nested graph if set
 		if (deleteNestedGraph) {
-			this.deleteGraph(nestedGraph.getID());
+			nestedGraphID = this.deleteGraph(nestedGraph.getID());
 		}
+		
+		return nestedGraphID;
 	}
 	
 	/**
@@ -593,7 +597,7 @@ public class GuiController {
 	 * @param graphID ID of the graph (Petri Net or CR Graph)
 	 * @throws Exception If the graph ID does not exist
 	 */
-	public void deleteGraph(int graphID) throws Exception {
+	public int deleteGraph(int graphID) throws Exception {
 		if (!this.graphs.containsKey(graphID)) {
 			throw new Exception("The given ID: " + graphID + " does not correspond to any existing graph");
 		}
@@ -605,6 +609,8 @@ public class GuiController {
 		
 		// Finally remove the graph from the hashmap
 		this.graphs.remove(graphID);		
+		
+		return graphID;
 	}
 	
 
