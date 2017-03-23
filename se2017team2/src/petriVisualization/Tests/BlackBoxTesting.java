@@ -22,9 +22,5 @@ public class BlackBoxTesting {
 		petrinet.addArc(petrinet.getEnd().getID(),t1);
 		
 		PetriDrawer petriDrawer = new PetriDrawer();
-		
-		
-		
-		
 	}
 }

@@ -10,12 +10,14 @@ public class PetriDrawer {
 
 	
 	private PetriWindow petriWindow;
+	private PetriConverter petriConverter;
 	
 	/**
 	 * Initialise a PetriDrawer
 	 */
 	public PetriDrawer(){
-		PetriConverter.clearPetriConverter();
+		petriConverter = new PetriConverter();
+		petriConverter.clearPetriConverter();
 		petriWindow = new PetriWindow(false);
 	}
 
@@ -38,10 +40,11 @@ public class PetriDrawer {
 		return petriWindow.scale;
 	}
 	
+	
 	public BufferedImage draw(Petrinet petrinet){
-		PetriConverter.clearPetriConverter();
-		PetriConverter.convertPetri(petrinet);
-		petriWindow.updateGraph(PetriConverter.nodes, PetriConverter.edges);
+		petriConverter.clearPetriConverter();
+		petriConverter.convertPetri(petrinet);
+		petriWindow.updateGraph(petriConverter.nodes, petriConverter.edges);
 		
 		BufferedImage bi = (BufferedImage) petriWindow.createImage(petriWindow.getWidth(), petriWindow.getHeight());
 		bi.createGraphics();
@@ -49,24 +52,4 @@ public class PetriDrawer {
 		petriWindow.paint(g);
 		return bi;					
 	}
-	
-	/**
-	 * Modify the @arc going from place to @transition. The initial and end point
-	 * of the arc is set. Adds a set of points, which the arc will pass through
-	 * in between.
-	 * 
-	 * @param place
-	 * @param transition
-	 * @param points
-	 */
-//	public void changeArc(Place place, Transition transition, ArrayList<Integer> points){
-//				
-//		if(points.size() % 2 == 1){
-//			System.out.println("Error - odd numbers of integers given as input");
-//			System.out.println("Nothing happened");
-//			return;
-//		}
-//
-//		PetriConverter.changeArc(place, transition, points);
-//	}
 }

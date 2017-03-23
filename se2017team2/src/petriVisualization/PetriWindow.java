@@ -45,16 +45,12 @@ public class PetriWindow extends JComponent {
 	public void paintComponent(Graphics g) {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, Scale(fontSize)));
 		g.setColor(new Color(0x00f0f0f0));
-
+				for (Edge edge : edges) {
+			drawEdge(edge, g);
+		}
 		for (Node node : nodes) {
 			drawNode(node, g);
 		}
-		
-		// (Paints edges on top of nodes to 		
-		for (Edge edge : edges) {
-			drawEdge(edge, g);
-		}
-		
 	}
 
 	private int Scale(int i) {
@@ -136,79 +132,24 @@ public class PetriWindow extends JComponent {
 		}
 	}
 
-	private void drawEdge(Edge edge, Graphics g) {
-		Point p1 = edge.n1.point;
-		Point p2 = edge.n2.point;
-		g.setColor(Color.BLACK);
-		
-		int displaceP1x = 0;
-		int displaceP1y = 0;
-		int displaceP2x = 0;
-		int displaceP2y = 0;
-		
-		if(p1.x + nodeSize < p2.x){
-			displaceP1x = nodeSize;
-			displaceP2x = -nodeSize;
-		}
-		if (p1.x - nodeSize > p2.x){
-			displaceP1x = -nodeSize;
-			displaceP2x = nodeSize;
-		}
-		if(p1.y + nodeSize < p2.y){
-			displaceP1y = nodeSize;
-			displaceP2y = -nodeSize;
-		}
-		if (p1.y - nodeSize > p2.y){
-			displaceP1y = -nodeSize;
-			displaceP2y = nodeSize;
-		}
-		
-		
-//		if(edge.midPoints.size() > 0){
-//			g.drawLine(
-//					Scale(p1.x + displaceP1x),
-//					Scale(p1.y + displaceP1y),
-//					Scale(edge.midPoints.get(0).x),
-//					Scale(edge.midPoints.get(0).y));
-//			
-//			for(int i = 0; i < edge.midPoints.size(); i++){
-//				
-//				if(i + 1 < edge.midPoints.size()){
-//				
-//					Point midPoint1 = edge.midPoints.get(i);
-//					Point midPoint2 = edge.midPoints.get(i + 1);
-//					
-//					g.drawLine(
-//							Scale(midPoint1.x),
-//							Scale(midPoint1.y),
-//							Scale(midPoint2.x),
-//							Scale(midPoint2.y));			
-//				}
-//				else{
-//					
-//					Point midPoint1 = edge.midPoints.get(i);
-//		 			g.drawLine(
-//							Scale(midPoint1.x),
-//							Scale(midPoint1.y),
-//							Scale(p2.x + displaceP2x),
-//							Scale(p2.y + displaceP2y));					
-//				}
-//			}		
-//		}
-//		else{
-//			// Draws the line between the nodes
-//		g.drawLine(
-//				Scale(p1.x + displaceP1x),
-//				Scale(p1.y + displaceP1y),
-//				Scale(p2.x + displaceP2x),
-//				Scale(p2.y + displaceP2y));			
 
-		drawArrowLine(g,
-				p1.x + displaceP1x,
-				p1.y + displaceP1y,
-				p2.x + displaceP2x,
-				p2.y + displaceP2y,	15, 15);
-	}
+	
+	private void drawEdge(Edge edge, Graphics g) {
+	Point p1 = edge.n1.point;
+	Point p2 = edge.n2.point;
+	g.setColor(Color.BLACK);
+	
+	float m = ((float) p2.y - (float) p1.y) / ((float) p2.x - (float) p1.x);
+
+	float displaceX = (float) Math.cos(m);
+	float displaceY = (float) Math.sin(m);
+	
+	drawArrowLine(g,
+			p1.x,
+			p1.y,
+			p2.x - (int) Math.floor(displaceX*(nodeSize+12)),
+			p2.y - (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
+}
 	
 	private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h){
         int dx = x2 - x1, dy = y2 - y1;
