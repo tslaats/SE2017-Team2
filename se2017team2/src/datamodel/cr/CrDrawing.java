@@ -49,21 +49,20 @@ public class CrDrawing {
 		  g.fillRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
 		  Collection<CrObject> graf = crgraph.getCrObjectValues();
 		  for (CrObject o: graf) {
-	    	if (o.getClass().equals(Event.class)) {
-	    		Event e = (Event) o;
-	    		this.drawEvent(g, e);
-	    	}
+			  if (o.getClass().equals(Event.class)) {
+				  Event e = (Event) o;
+		    	  this.drawEvent(g, e);
+			  }
+		      if (o.getClass().equals(Conditional.class)) {
+		    	  Relation r = (Relation) o;
+		    	  drawConditional(g, r.getIn(), r.getOut(), r.getID());
+		      } 
+		      else if (o.getClass().equals(Response.class)) {
+		    	  Response r = (Response) o;
+		    	  drawResponse(g, r.getIn(), r.getOut(), r.getID());
+		      }
 		  }
-	      for (CrObject o: graf) {
-	    	  if (o.getClass().equals(Conditional.class)) {
-	    		Relation r = (Relation) o;
-	    		drawConditional(g, r.getIn(), r.getOut(), r.getID());
-	    	  } else if (o.getClass().equals(Response.class)) {
-	    		Response r = (Response) o;
-	    		drawResponse(g, r.getIn(), r.getOut(), r.getID());
-	    	  }
-	    }
-	    g.dispose();
+	      g.dispose();
 	    return bi;
 	  }
 	
@@ -77,71 +76,106 @@ public class CrDrawing {
 		  int xstart = e.getX();
 		  int ystart = e.getY();
 			
-		  for (int i = xstart; i <= xstart + EVENT_WIDTH;i += CIRCLE_RADIUS) {
+		  for (int i = xstart; i <= xstart + EVENT_WIDTH;i += CIRCLE_RADIUS+MARGIN) {
 			  list.add(new Position(i,ystart));
 			  list.add(new Position(i,ystart + EVENT_HEIGHT));
 		  }
-		  for (int i = ystart; i <= ystart + EVENT_HEIGHT;i += CIRCLE_RADIUS) {
-			  list.add(new Position(xstart,ystart));
-			  list.add(new Position(xstart + EVENT_WIDTH,ystart));
+		  for (int i = ystart; i <= ystart + EVENT_HEIGHT;i += CIRCLE_RADIUS+MARGIN) {
+			  list.add(new Position(xstart,i));
+			  list.add(new Position(xstart + EVENT_WIDTH,i));
 		  }
 		  return list;
 	  }
+	  
+	  /**
+	   * A tuple class
+	   * @param <X>
+	   * @param <Y>
+	   */
 	  private class Tuple<X, Y> { 
 		  public final X f; 
 		  public final Y s; 
 		  public Tuple(X x, Y y) { 
-		    this.f = x; 
-		    this.s = y; 
+			  this.f = x; 
+			  this.s = y; 
 		  } 
-		} 
+	  } 
+	 
+	  /**
+	   * Returns distance between two positions
+	   * @param p1
+	   * @param p2
+	   * @return
+	   */
 	  private double distance(Position p1, Position p2) {
 		  return Math.sqrt(Math.pow((p1.x()-p2.x()), 2) + Math.pow((p1.y()-p2.y()), 2));
 	  }
-	  
-	  private int closer(int v1, int v2) {
-		  return v2-v1;
-	  }
 
+	  /**
+	   * Returns a tuple of the two Positions with the shortest distance between two events
+	   * @param e1
+	   * @param e2
+	   * @return
+	   */
 	  private Tuple<Position, Position> shortest(Event e1, Event e2) {
 		  ArrayList<Position> boundsE1 = bounds(e1);
 		  ArrayList<Position> boundsE2 = bounds(e2);
 		  Tuple<Position, Position> shortest = new Tuple<Position, Position>(e1.getPosition(), e2.getPosition());
 		  Double dis = Double.MAX_VALUE;
 		  for (Position p1 : boundsE1) {
+			  if (relationPos.contains(p1)) {
+				  continue;
+			  }
 			  for (Position p2 : boundsE2) { 
-				  if (distance(p1,p2) <= dis && !relationPos.contains(p1)&& !relationPos.contains(p2)) {
-					  if (distance(p1,p2) == dis) {
-						  // check if closer to middle
-						  System.out.println("same distance");
-					  } else {
-						  dis = distance(p1,p2);
-						  shortest = new Tuple<Position, Position>(p1, p2);
-					  }
+				  if (relationPos.contains(p2)) {
+					  continue;
+				  }
+				  if (distance(p1,p2) <= dis) {
+					  dis = distance(p1,p2);
+					  shortest = new Tuple<Position, Position>(p1, p2);
 				  }
 			  } 
 		  }
 		  return shortest;
 	  }
-
+	  
+	  /**
+	   * Wrapper for drawing a Condtional relation
+	   * @param g
+	   * @param e1
+	   * @param e2
+	   * @param id
+	   */
 	  private void drawConditional(Graphics2D g, Event e1, Event e2, int id) {
 		  //Color yellow = new Color(252,221,153);
 		  drawArrow(g, e1, e2, Color.ORANGE,""+id, true);
 	  }
 	  
+	  /**
+	   * Wrapper for drawing a Response relation
+	   * @param g
+	   * @param e1
+	   * @param e2
+	   * @param id
+	   */
 	  private void drawResponse(Graphics2D g, Event e1, Event e2, int id) {
 		  //Color blue = new Color(147,192,235);
 		  drawArrow(g, e1, e2, Color.BLUE, ""+id, false);
 	  }
 	    
+	  /**
+	   * Draws an arrow representing a relation
+	   * @param g
+	   * @param e1
+	   * @param e2
+	   * @param c
+	   * @param id
+	   * @param isConditional
+	   */
 	  private void drawArrow(Graphics2D g, Event e1, Event e2, Color c, String id, boolean isConditional) {
 		  Tuple<Position, Position> tuple = shortest(e1, e2);
 		  Position p1 = tuple.f;
 		  Position p2 = tuple.s;
-		  int x1 = p1.x();
-		  int y1 = p1.y();
-		  int x2 = p2.x();
-		  int y2 = p2.y();
 		  relationPos.add(p1); 
 		  relationPos.add(p2); 
 		  AffineTransform oldXForm = g.getTransform();
@@ -152,10 +186,10 @@ public class CrDrawing {
 		  Stroke newS = new BasicStroke(strokeSize);
 		  g.setStroke(newS);
 
-	      double dx = x2 - x1, dy = y2 - y1;
+	      double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();
 	      double angle = Math.atan2(dy, dx);
 	      int len = (int) Math.sqrt(dx*dx + dy*dy);
-	      AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
+	      AffineTransform at = AffineTransform.getTranslateInstance(p1.x(), p1.y());
 	      at.concatenate(AffineTransform.getRotateInstance(angle));
 	      g.transform(at);
 		  Font font = new Font("Times New Roman", Font.BOLD, 18);
@@ -180,7 +214,6 @@ public class CrDrawing {
 	      // Set the font
 	      //reset
 	      g.setStroke(oldS);
-	      //g.setColor(Color.BLACK);
 	      g.setTransform(oldXForm);
 	  }
 	  
@@ -208,6 +241,7 @@ public class CrDrawing {
 	      if(metrics.stringWidth(text) < lineWidth) {
 	    	  g.drawString(text, x, y);
 	      }
+	      // draws on multiple lines
 	      else {
 	    	  String[] words = text.split(" ");
 	          String currentLine = words[0];
@@ -239,6 +273,11 @@ public class CrDrawing {
 		  return x < p.x() + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_HEIGHT > p.y();
 	  }
 	  
+	  /**
+	   * Function that draws a single event
+	   * @param g
+	   * @param event
+	   */
 	  private void drawEvent(Graphics2D g, Event event) {
 		  int x = event.getX();
 		  int y = event.getY();
