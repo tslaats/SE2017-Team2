@@ -129,10 +129,14 @@ public class GUIPane extends JPanel implements ChangeListener {
 		if (graphTab.getCrGraph()) {
 			Menu.enableCRMenu();
 			Menu.disablePetriMenu();
+
 		} else {
 			Menu.enablePetriMenu();
 			Menu.disableCRMenu();
+
+
 		}
+		Menu.enableNewMenubar();
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
 		sourceTabbedPane.repaint();
 		

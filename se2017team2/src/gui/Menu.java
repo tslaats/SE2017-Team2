@@ -28,7 +28,7 @@ public class Menu implements ActionListener {
 
 	private JMenuBar menuBar;
 	private JMenu menu, submenu;
-	private static JMenu menuCR, MenuPetri, menuSimulation;
+	private static JMenu menuCR, MenuPetri, menuSimulation, menuNew;
 	private JMenuItem menuItem;
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
@@ -60,10 +60,10 @@ public class Menu implements ActionListener {
 		this.clickArgument = "";
 
 		// Build the first menu.
-		menu = new JMenu("New");
-		menu.setMnemonic(KeyEvent.VK_A);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for CR Graphs");
-		menuBar.add(menu);
+		menuNew = new JMenu("New");
+		menuNew.setMnemonic(KeyEvent.VK_A);
+		menuNew.getAccessibleContext().setAccessibleDescription("Menu for CR Graphs");
+		menuBar.add(menuNew);
 
 		// a group of JMenuItems
 		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_T);
@@ -72,7 +72,7 @@ public class Menu implements ActionListener {
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR Graph");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_cr");
-		menu.add(menuItem);
+		menuNew.add(menuItem);
 
 		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_T);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
@@ -80,7 +80,7 @@ public class Menu implements ActionListener {
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri Net");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_petri");
-		menu.add(menuItem);
+		menuNew.add(menuItem);
 
 		// Build CR menu in the menu bar.
 		menuCR = new JMenu("CR");
@@ -224,8 +224,8 @@ public class Menu implements ActionListener {
 
 		// Build the first menu.
 		menuSimulation = new JMenu("Simulation");
-		menu.setMnemonic(KeyEvent.VK_V);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
+		menuSimulation .setMnemonic(KeyEvent.VK_V);
+		menuSimulation .getAccessibleContext().setAccessibleDescription("Menu for Simulation");
 		menuBar.add(menuSimulation);
 
 		menuItem = new JMenuItem("Start Simulation", KeyEvent.VK_S);
@@ -712,6 +712,7 @@ public class Menu implements ActionListener {
 			}
 			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
 		}
+		// Main.guiPane.updatePane();
 		return ID;
 	}
 
@@ -856,11 +857,14 @@ public class Menu implements ActionListener {
 		switch (clickType) {
 		case PLACE:
 			createPlace(position);
+			enableMenubar();
 			break;
 		case EVENT:
 			int eventID = createEvent(position);
 			if (this.nested) {
 				addNestedGraph(eventID, false, -1);
+			} else {
+				enableMenubar();
 			}
 			this.nested = false;
 			break;
@@ -868,11 +872,14 @@ public class Menu implements ActionListener {
 			int transitionID = createTransition(position);
 			if (this.nested) {
 				addNestedGraph(transitionID, true, -1);
+			} else {
+				enableMenubar();
 			}
 			this.nested = false;
 
 			break;
 		default:
+			enableMenubar();
 			Main.updateUserMsg("Invalid ClickEvent");
 			break;
 		}
@@ -880,9 +887,9 @@ public class Menu implements ActionListener {
 		GraphTab graphtab = Main.getActiveTab();
 		graphtab.deactivateClickListener();
 		Main.enableTabs();
-		enableMenubar();
-		this.clickArgument = "";
 
+		this.clickArgument = "";
+		this.clickType = null;
 		Main.guiPane.updatePane();
 
 	}
@@ -906,6 +913,14 @@ public class Menu implements ActionListener {
 		for (JMenuItem menuItem : disabledMenus) {
 			menuItem.setEnabled(true);
 		}
+	}
+
+	public static void enableNewMenubar() {
+		menuNew.setEnabled(true);
+	}
+	
+	public static void disableNewMenubar() {
+		menuNew.setEnabled(false);
 	}
 
 }
