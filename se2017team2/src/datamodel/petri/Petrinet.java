@@ -309,7 +309,7 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	}
 	
 	@Override
-	public Petrinet executeAction(Transition object) {
+	public Petrinet executeAction(Transition object) throws IllegalArgumentException{
 		boolean canSimulate = true;
 		for(PetriObject place : object.getIncoming().values()){
 			Place p = (Place) place;
@@ -333,7 +333,7 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 				Place p = (Place) place;
 				p.setToken(true);
 			}
-		}
+		} else throw new IllegalArgumentException("Attempted to simulate an illegal transition!");
         return this;
 	}
 
