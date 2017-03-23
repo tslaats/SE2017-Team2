@@ -151,8 +151,8 @@ public class PetriWindow extends JComponent {
 	drawArrowLine(g,
 			p1.x,
 			p1.y,
-			p2.x - (int) Math.floor(displaceX*nodeSize) - 15,
-			p2.y - (int) Math.floor(displaceY*nodeSize) - 15, 15, 15);
+			p2.x - (int) Math.floor(displaceX*(nodeSize+12)),
+			p2.y - (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
 }
 	
 	private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h){
