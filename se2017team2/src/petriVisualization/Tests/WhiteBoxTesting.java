@@ -17,9 +17,10 @@ import petriVisualization.Graph.Node;
 public class WhiteBoxTesting {
 
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws Exception{
 		
-		testPetriWindow();
+		//testPetriWindow();
+		testPetriConverter();
 	}
 	
 	private static void testPetriWindow(){
@@ -40,14 +41,26 @@ public class WhiteBoxTesting {
         petriWindow.updateGraph(nodes, edges);
 	}
 	
-	private static void testPetriConverter(){
+	private static void testPetriConverter() throws Exception{
+		
+		// instance of Petrinet defined by gui team
+		// two places created by default have id 1 and id 2
+		int p1 = 1;
+		int p2 = 2;
 		
 		Petrinet petrinet = new Petrinet("Test - PetriVisualization");
-        PetriConverter.convertPetri(petrinet);
+		
+		int t1 = petrinet.addTransition(new Position(200, 200), "Emil");
+		
+		petrinet.addArc(p1, t1);
+		petrinet.addArc(t1, p2);
+		
+		PetriConverter petriConverter = new PetriConverter();
+		petriConverter.convertPetri(petrinet);
         
         PetriWindow petriWindow = new PetriWindow(true);
-        petriWindow.setVisible(true);
-        petriWindow.updateGraph(PetriConverter.nodes, PetriConverter.edges);
+        petriWindow.scale = 0.8f;
+        petriWindow.updateGraph(petriConverter.nodes, petriConverter.edges);
 	
 	}
 }
