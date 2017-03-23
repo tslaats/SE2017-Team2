@@ -47,6 +47,7 @@ public class WhiteBoxTesting {
 		// two places created by default have id 1 and id 2
 		int p1 = 1;
 		int p2 = 2;
+		
 		Petrinet petrinet = new Petrinet("Test - PetriVisualization");
 		
 		int t1 = petrinet.addTransition(new Position(200, 200), "Emil");
