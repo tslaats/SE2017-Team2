@@ -1,6 +1,7 @@
 package petriVisualization;
 
 import java.awt.*;
+import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -80,11 +81,8 @@ public class PetriWindow extends JComponent {
 			
 			if(node.place != null){
 				String id = Integer.toString(node.place.getID());
-				g.drawString(id, Scale(node.point.x), Scale(node.point.y + nodeSize + displaceY));
-				
-				
-				//Remove comment lines, to display place names
-				//g.drawString(node.place.getName(), Scale(node.point.x - nodeSize/2), Scale(node.point.y - nodeSize - 10));
+				// Id of place
+				g.drawString("Place ID: " + id, Scale(node.point.x - nodeSize), Scale(node.point.y + nodeSize + displaceY));
 				
 				if(node.place.hasToken()){
 					
@@ -97,7 +95,17 @@ public class PetriWindow extends JComponent {
 		// Draw Transition
 		else if (node.type.equals("Transition")) {
 			g.fillRect(Scale(b.x), Scale(b.y), Scale(b.width), Scale(b.height));
-			g.setColor(Color.WHITE);
+			
+			
+			if(node.transition != null && node.transition.getCrGraph() != null){
+				g.setColor(Color.YELLOW);
+				g.setColor(new Color(255,240,200));
+			}
+			else{
+				g.setColor(Color.WHITE);
+			}
+			
+			
 			g.fillRect(Scale(b.x + borderWidth), Scale(b.y + borderWidth), Scale(b.width - borderWidth * 2),
 					Scale(b.height - borderWidth * 2));
 			
@@ -105,8 +113,25 @@ public class PetriWindow extends JComponent {
 			
 			if(node.transition != null){
 				String id = Integer.toString(node.transition.getID());
-				g.drawString(id, Scale(node.point.x), Scale(node.point.y + nodeSize + displaceY));		
-				g.drawString(node.transition.getName(), Scale(node.point.x - nodeSize/2), Scale(node.point.y - nodeSize - 10));
+				
+					
+				// Id of transition
+				g.drawString("Transition ID: " + id, Scale(node.point.x - nodeSize), Scale(node.point.y + nodeSize + displaceY));		
+				
+				// Name of transition
+				g.drawString(node.transition.getName(), Scale(node.point.x - nodeSize), Scale(node.point.y + nodeSize + displaceY + 20));
+			
+				if(node.transition.getCrGraph() != null){
+					
+					// CR graph ID
+					g.drawString("CR graph ID: " + Integer.toString(node.transition.getCrGraph().getID()),
+							Scale(node.point.x - nodeSize), Scale(node.point.y - nodeSize - 10));		
+					
+					// CR graph name
+					g.drawString(node.transition.getCrGraph().getName(),
+							Scale(node.point.x - nodeSize), Scale(node.point.y - nodeSize - 30));	
+					
+				}
 			}
 		}
 	}

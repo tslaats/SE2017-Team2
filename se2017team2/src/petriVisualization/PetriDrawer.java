@@ -30,7 +30,7 @@ public class PetriDrawer {
 	}
 	
 	/**
-	 * Get the current some value of the petrinet
+	 * Get the current s value of the petrinet
 	 * 
 	 * @return
 	 */
