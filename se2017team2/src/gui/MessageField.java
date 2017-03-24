@@ -46,4 +46,12 @@ public class MessageField {
 		filler.setText(msg);
 	}
 	
+	/**
+	 * @param msg
+	 */
+	public void setInputText(String msg){
+		filler.setForeground(Color.blue);
+		filler.setText(msg);
+	}
+	
 }

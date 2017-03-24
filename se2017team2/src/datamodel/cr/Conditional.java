@@ -1,7 +1,5 @@
 package datamodel.cr;
 
-import datamodel.cr.Relation.Type;
-
 public class Conditional extends Relation {
 
 	public Conditional(Event in, Event out) {

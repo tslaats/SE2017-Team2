@@ -51,12 +51,14 @@ public class ActionPane extends JPanel implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("button event");
-		System.out.println(e.getActionCommand());
 		try {
-			Main.guiControlller.executeAction(posActions.get(Integer.parseInt(e.getActionCommand())));
+			
+			Action<?> action = posActions.get(Integer.parseInt(e.getActionCommand()));
+			Main.guiControlller.executeAction(action);
+			Main.updateUserMsg("Executed Action: " + action.getName());
+
 		} catch (Exception e1) {
-			Main.updateUserMsg(e1.getMessage());
+			Main.updateUserWarning(e1.getMessage());
 		}
 		Main.guiPane.updatePane();
 		updateActionPane();
@@ -85,7 +87,7 @@ public class ActionPane extends JPanel implements ActionListener {
 			actions.revalidate();
 			actions.repaint();
 			this.repaint();
-			Main.updateUserMsg("Started Simulation");
+	
 
 		} catch (Exception e) {
 			Main.updateUserMsg(e.getMessage());

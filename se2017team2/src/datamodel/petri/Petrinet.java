@@ -5,6 +5,7 @@
 package datamodel.petri;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import datamodel.Position;
 import datamodel.petri.Place;
 import datamodel.petri.Transition;
 import petriVisualization.PetriDrawer;
+
 
 /************************************************************/
 /**
@@ -286,15 +288,53 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	
 	@Override
 	public List<Transition> getPossibleActions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Petrinet executeAction(Transition object) {
-		// TODO Auto-generated method stub
-        return this;
+		ArrayList<Transition> possibleActions = new ArrayList<Transition>();
+		ArrayList<Transition> transitions = new ArrayList<Transition>(getTransitionValues());
 		
+		for(Transition transition : transitions) {
+			boolean canSimulate = true;
+			for(PetriObject place : transition.getIncoming().values()){
+				Place p = (Place) place;
+				if(!p.hasToken()){
+					canSimulate = false;
+					break;
+				}
+				
+				
+			}
+			if(canSimulate) possibleActions.add(transition);
+		}
+		
+		return possibleActions;
+	}
+	
+	@Override
+	public Petrinet executeAction(Transition object) throws IllegalArgumentException{
+		boolean canSimulate = true;
+		for(PetriObject place : object.getIncoming().values()){
+			Place p = (Place) place;
+			if(!p.hasToken()){
+				canSimulate = false;
+				break;
+			}
+		}
+		
+		if(object.getCrGraph() != null && !object.getCrGraph().isDone()) {
+			canSimulate = false;
+		}
+		
+		if(canSimulate){
+			for(PetriObject place : object.getIncoming().values()){
+				Place p = (Place) place;
+				p.setToken(false);
+			}
+			
+			for(PetriObject place : object.getOutgoing().values()){
+				Place p = (Place) place;
+				p.setToken(true);
+			}
+		} else throw new IllegalArgumentException("Attempted to simulate an illegal transition!");
+        return this;
 	}
 
 	@Override

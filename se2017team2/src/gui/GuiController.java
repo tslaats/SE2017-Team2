@@ -436,7 +436,12 @@ public class GuiController {
 			}
 		} else {
 			Petrinet petrinet = (Petrinet) graph;
-			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+			List<Transition> trans = petrinet.getPossibleActions();
+			// Create actions for each transition
+			for (Transition t : trans) {
+				Action<Transition> a = new Action<Transition>(t.getName(), t.getID(), GraphTypes.PETRI, t);
+				actions.add(a);
+			}
 		}		
 		
 		return actions;		
@@ -465,7 +470,10 @@ public class GuiController {
 			this.graphs.put(ActiveGraphID, updatedGraph);
 		}
 		else if (action.getGraphType() == GraphTypes.PETRI && this.isActiveGraphPetri()) {
-			throw new UnsupportedOperationException("Simulation of Petri Nets are not yet supported");
+			Petrinet petri = (Petrinet) graph;
+			// Execute the transition and update the graph entry in the hash map
+			Petrinet updatedGraph = petri.executeAction((Transition)action.getActionObject());
+			this.graphs.put(ActiveGraphID, updatedGraph);
 		}
 		else {
 			throw new Exception("The given action and the active graph does not have matching types");
@@ -541,17 +549,21 @@ public class GuiController {
 	 * Unbinds the given graph object with a nested graph
 	 * 
 	 * @param graphObjectID ID of the graph object (Event or Transition)
+	 * @param deleteNestedGraph if true, the nested graph gets deleted as well
 	 * @throws Exception If the graph object does not have a nested graph, or some other problem occurred
 	 */
-	public void unbindNestedGraph(int graphObjectID) throws Exception {
+	public int unbindNestedGraph(int graphObjectID, boolean deleteNestedGraph) throws Exception {
 		Graph graph;
-
+		Graph nestedGraph;
+		
+		int nestedGraphID = -1;
+		
 		if (!this.graphs.containsKey(ActiveGraphID)) {
 			throw new Exception("The ActiveGraphID does not exist");
 		}
 		
 		graph = this.graphs.get(ActiveGraphID);
-		
+				
 		if (this.isActiveGraphCr()) {
 			CrGraph crgraph = (CrGraph) graph;
 			Event e = crgraph.getEvent(graphObjectID);
@@ -559,7 +571,8 @@ public class GuiController {
 				throw new Exception("Event: " + e.toString() + " does not have a nested Petri net");
 			}
 			Petrinet nestedPetri = e.getPetrinet();
-
+			nestedGraph = nestedPetri;
+			
 			// Finally remove the nested graph
 			e.setPetrinet(null);
 			nestedPetri.removeParentEvent(e.getID());
@@ -571,11 +584,19 @@ public class GuiController {
 				throw new Exception("Transition: " + t.toString() + " does not have a nested CR Graph");
 			}
 			CrGraph nestedCr = t.getCrGraph();
-
+			nestedGraph = nestedCr;
+			
 			// Finally remove the nested graph
 			t.setCrGraph(null);
 			nestedCr.removeParentTransition(t.getID());
-		}	
+		}
+		
+		// Delete the nested graph if set
+		if (deleteNestedGraph) {
+			nestedGraphID = this.deleteGraph(nestedGraph.getID());
+		}
+		
+		return nestedGraphID;
 	}
 	
 	/**
@@ -584,7 +605,7 @@ public class GuiController {
 	 * @param graphID ID of the graph (Petri Net or CR Graph)
 	 * @throws Exception If the graph ID does not exist
 	 */
-	public void deleteGraph(int graphID) throws Exception {
+	public int deleteGraph(int graphID) throws Exception {
 		if (!this.graphs.containsKey(graphID)) {
 			throw new Exception("The given ID: " + graphID + " does not correspond to any existing graph");
 		}
@@ -596,6 +617,8 @@ public class GuiController {
 		
 		// Finally remove the graph from the hashmap
 		this.graphs.remove(graphID);		
+		
+		return graphID;
 	}
 	
 
