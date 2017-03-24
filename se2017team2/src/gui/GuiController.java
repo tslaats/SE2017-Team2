@@ -16,6 +16,7 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
+import datamodel.petri.Place;
 import datamodel.petri.Transition;
 
 /************************************************************/
@@ -155,6 +156,23 @@ public class GuiController {
 		petrinet.deletePlace(placeID);
 	}
 
+	/**
+	 * Sets whether or not the given Place has a token or not
+	 * 
+	 * @param placeID ID of the Place
+	 * @param hasToken If true then the Place gets a token, if false then it does not
+	 * @throws Exception If the ID does not correspond to a existing Place
+	 */
+	public void changePlaceToken(int placeID, boolean hasToken) throws Exception {
+		// Make sure that active graph is a Petri Net
+		if (!this.isActiveGraphPetri()) {
+			throw new Exception("The active graph is not Petri Net");
+		}		
+		
+		Petrinet petrinet = (Petrinet) this.graphs.get(ActiveGraphID);
+		petrinet.changePlaceToken(placeID, hasToken);
+	}
+	
 	/**
 	 * Creates a Petri Transition
 	 * 

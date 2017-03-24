@@ -101,8 +101,9 @@ public class Main {
 			Menu.enableSimulationMenu();
 			panel.remove(initpage);
 			panel.add(guiPane);
-
+			frame.setMinimumSize(frame.getSize());
 			frame.pack();
+			frame.setMinimumSize(null);
 		}
 		// update canvas
 		frame.revalidate();
