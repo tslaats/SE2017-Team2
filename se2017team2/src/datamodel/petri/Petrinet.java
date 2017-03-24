@@ -166,6 +166,22 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 	}
 	
 	/**
+	 * Sets whether or not the given Place has a token or not
+	 * 
+	 * @param placeID ID of the Place
+	 * @param hasToken If true then the Place gets a token, if false then it does not
+	 * @throws Exception If the ID does not correspond to a existing Place
+	 */
+	public void changePlaceToken(int placeID, boolean hasToken) throws Exception {
+		if (!this.places.containsKey(placeID)) {
+			throw new Exception("The given placeID: " + placeID + " does not exist");
+		}
+		
+		Place p = this.places.get(placeID);
+		p.setToken(hasToken);
+	}
+	
+	/**
 	 * Adds a new Transition to the Petri Net
 	 * 
 	 * @return Id of the new Transition
