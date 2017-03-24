@@ -72,22 +72,23 @@ public class CrDrawing {
 		int xstart = e.getX();
 		int ystart = e.getY();
 		int jump = CIRCLE_RADIUS+(MARGIN*2);
-			
-		for (int i = xstart + (EVENT_WIDTH/2); i <= xstart + EVENT_WIDTH;i += jump) {
-			list.add(new Position(i,ystart));
-			list.add(new Position(i,ystart + EVENT_HEIGHT));
+		int nOfWidth = (EVENT_WIDTH/2) / jump;
+		
+		for (int i = 0; i <= nOfWidth;i++) {
+			int m = xstart + (EVENT_WIDTH/2);
+			list.add(new Position(m+(i*jump),ystart));
+			list.add(new Position(m-(i*jump),ystart));
+			list.add(new Position(m+(i*jump),ystart + EVENT_HEIGHT));
+			list.add(new Position(m+(i*jump),ystart + EVENT_HEIGHT));
 		}
-		for (int i = xstart + (EVENT_WIDTH/2)-jump; i > xstart;i -= jump) {
-			list.add(new Position(i,ystart));
-			list.add(new Position(i,ystart + EVENT_HEIGHT));
-		}
-		for (int i = ystart + (EVENT_HEIGHT/2); i <= ystart + EVENT_HEIGHT;i += jump) {
-			list.add(new Position(xstart,i));
-		  	list.add(new Position(xstart + EVENT_WIDTH,i));
-		}
-		for (int i = ystart + (EVENT_HEIGHT/2)- jump; i > ystart;i -= jump) {
-			list.add(new Position(xstart,i));
-		  	list.add(new Position(xstart + EVENT_WIDTH,i));
+		
+		int nOfHeight = (EVENT_HEIGHT/2) / jump;
+		for (int i = 0; i <= nOfHeight;i++) {
+			int m = ystart + (EVENT_HEIGHT/2);
+			list.add(new Position(xstart,m+(i*jump)));
+			list.add(new Position(xstart,m-(i*jump)));
+			list.add(new Position(xstart + EVENT_WIDTH,m+(i*jump)));
+			list.add(new Position(xstart + EVENT_WIDTH,m-(i*jump)));
 		}
 		return list;
 	}
@@ -191,23 +192,36 @@ public class CrDrawing {
 			
 		double dx = p2.x() - p1.x(), dy = p2.y() - p1.y();
 		double angle = Math.atan2(dy, dx);
+		
 		int len = (int) Math.sqrt(dx*dx + dy*dy);
 		AffineTransform at = AffineTransform.getTranslateInstance(p1.x(), p1.y());
 		at.concatenate(AffineTransform.getRotateInstance(angle));
 		g.transform(at);
-		Font font = new Font("Times New Roman", Font.BOLD, 18);
-		FontMetrics metrics = g.getFontMetrics(font);
-		g.setFont(font);
-		
-		// Draw horizontal arrow starting in (0, 0)
+		Font fontUp = new Font("Times New Roman", Font.BOLD, 18);
+		Font fontDw = new Font("Times New Roman", Font.BOLD, -18);
+		FontMetrics mUp = g.getFontMetrics(fontUp);
 		if (isConditional) {
-			g.drawString(id, (len/2)-metrics.stringWidth(id), -strokeSize);
+			if (p1.x() > p2.x()) {
+				g.setFont(fontDw);
+				g.drawString(id, (len/2), -strokeSize+MARGIN);
+			}
+			else {
+				g.setFont(fontUp);
+				g.drawString(id, (len/2)-mUp.stringWidth(id), -strokeSize);
+			}
 			len -= CIRCLE_RADIUS;
 			g.drawLine(0, 0, len-ARR_SIZE, 0);
 			g.fillRoundRect(len, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
 		}
 		else {
-			g.drawString(id, CIRCLE_RADIUS+(len/2)-metrics.stringWidth(id), -strokeSize);
+			if (p1.x() > p2.x()) {
+				g.setFont(fontDw);
+				g.drawString(id, CIRCLE_RADIUS+(len/2), -strokeSize+MARGIN);
+			}
+			else {
+				g.setFont(fontUp);
+				g.drawString(id, CIRCLE_RADIUS+(len/2)-mUp.stringWidth(id), -strokeSize);
+			}
 			g.drawLine(CIRCLE_RADIUS, 0, len-ARR_SIZE, 0);
 			g.fillRoundRect(0, -(CIRCLE_RADIUS/2), CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS);
 		}
