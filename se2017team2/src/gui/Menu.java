@@ -2,9 +2,6 @@ package gui;
 
 import java.awt.Component;
 import java.awt.event.*;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -27,12 +24,11 @@ import datamodel.Position;
 public class Menu implements ActionListener {
 
 	private JMenuBar menuBar;
-	private JMenu menu, submenu;
+	private JMenu submenu;
 	private static JMenu menuCR, MenuPetri, menuSimulation, menuNew;
 	private JMenuItem menuItem;
 	private JFrame inputDialog = new JFrame("InputDialog");
 	private String clickArgument;
-	private Set<JMenuItem> disabledMenus;
 	private ClickType clickType;
 	private Boolean isPending;
 	private GUIPane guiPane;
@@ -56,31 +52,47 @@ public class Menu implements ActionListener {
 
 		// Create the menu bar.
 		menuBar = new JMenuBar();
-		this.disabledMenus = new HashSet<JMenuItem>();
 		this.clickArgument = "";
 
 		// Build the first menu.
-		menuNew = new JMenu("New");
-		menuNew.setMnemonic(KeyEvent.VK_N);
-		menuNew.getAccessibleContext().setAccessibleDescription("Menu for CR Graphs");
+		menuNew = new JMenu("File");
+		menuNew.setMnemonic(KeyEvent.VK_F);
+		menuNew.getAccessibleContext().setAccessibleDescription("Menu for Graphs");
 		menuBar.add(menuNew);
 
-
 		// a group of JMenuItems
-		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_R);
+		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_C);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR Graph");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_cr");
 		menuNew.add(menuItem);
 
-		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_I);
+		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_P);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri Net");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_petri");
+		menuNew.add(menuItem);
+
+		menuItem = new JMenuItem("Delete CR Graph by ID", KeyEvent.VK_D);
+		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+		// ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("Deletes CR Graph by ID");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_cr");
+		menuNew.add(menuItem);
+
+		menuItem = new JMenuItem("Delete Petri Net by ID", KeyEvent.VK_E);
+		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+		// ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("Deletes  Petri Net by ID");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_petri");
 		menuNew.add(menuItem);
 
 		// Build CR menu in the menu bar.
@@ -93,9 +105,9 @@ public class Menu implements ActionListener {
 		submenu = new JMenu("Event");
 		submenu.setMnemonic(KeyEvent.VK_E);
 
-		
 		menuItem = new JMenuItem("Add");
-		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
+		// ActionEvent.ALT_MASK));
 		menuItem.setMnemonic(KeyEvent.VK_A);
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_event");
@@ -182,6 +194,19 @@ public class Menu implements ActionListener {
 		menuItem.setActionCommand("delete_place");
 		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Add Token from Place");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("add_token_place");
+		menuItem.setMnemonic(KeyEvent.VK_T);
+		submenu.add(menuItem);
+
+		menuItem = new JMenuItem("Delete Token from Place");
+		menuItem.addActionListener(this);
+		menuItem.setActionCommand("delete_token_place");
+		menuItem.setMnemonic(KeyEvent.VK_O);
+		submenu.add(menuItem);
+
 		MenuPetri.add(submenu);
 
 		submenu = new JMenu("Transition");
@@ -521,15 +546,19 @@ public class Menu implements ActionListener {
 			}
 			break;
 		case "start_simulation":
+
 			Main.showPossibleActions();
 			disableMenubar();
 			menuSimulation.setEnabled(true);
-			Main.disableTabs();
+
+			// Main.disableTabs();
 			break;
 		case "stop_simulation":
+			menuSimulation.setEnabled(false);
 			Main.hidePossibleActions();
 			Main.updateUserMsg("Stopped Simulation");
-			Main.enableTabs();
+
+			// Main.enableTabs();
 			enableMenubar();
 			break;
 		case "new_arc":
@@ -693,8 +722,72 @@ public class Menu implements ActionListener {
 				}
 
 			}
+			break;
+		case "delete_token_place":
+
+			JTextField placeIDField = new JTextField();
+			Object[] tokenMessage = { "Place Id:", placeIDField };
+			option = JOptionPane.showConfirmDialog(null, tokenMessage, "Remove Token from Place",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				try {
+					int placeID = Integer.parseInt(placeIDField.getText());
+					try {
+						Main.guiControlller.changePlaceToken(placeID, false);
+						Main.updateUserMsg(String.format("Removed token from Place ID: %d ", placeID));
+					} catch (Exception e1) {
+						Main.updateUserWarning(e1.getMessage());
+					}
+				} catch (NumberFormatException e2) {
+					Main.updateUserWarning(invID);
+				}
+			}
 
 			break;
+		case "add_token_place":
+
+			JTextField placeIDFieldAdd = new JTextField();
+			Object[] AddtokenMessage = { "Place Id:", placeIDFieldAdd };
+			option = JOptionPane.showConfirmDialog(null, AddtokenMessage, "Add Token to Place",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				try {
+					int placeID = Integer.parseInt(placeIDFieldAdd.getText());
+					Main.guiControlller.changePlaceToken(placeID, true);
+					Main.updateUserMsg(String.format("Added token to Place ID: %d ", placeID));
+				} catch (NumberFormatException e2) {
+					Main.updateUserWarning(invID);
+				} catch (Exception e1) {
+					Main.updateUserWarning(e1.getMessage());
+				}
+			}
+
+			break;
+		case "delete_cr":
+
+			JTextField CRidField = new JTextField();
+			Object[] delCRMessage = { "Place Id:", CRidField };
+			option = JOptionPane.showConfirmDialog(null, delCRMessage, "Add Token to Place",
+					JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				try {
+					ID = Integer.parseInt(CRidField.getText());
+					Main.guiControlller.deleteGraph(ID);
+					Main.updateUserMsg(String.format("Deleted graph with ID : %d ", ID));
+					guiPane.deleteTabByGraphId(ID);
+				} catch (NumberFormatException e2) {
+					Main.updateUserWarning(invID);
+				} catch (Exception e1) {
+					Main.updateUserWarning(e1.getMessage());
+				}
+			}
+
+			break;
+
+		case "delete_petri":
+
+			break;
+
 		default:
 			System.out.println(action);
 			Main.updateUserMsg("Invalid Button pressed!");
@@ -718,17 +811,16 @@ public class Menu implements ActionListener {
 		}
 		if (name != null) {
 			try {
-				int tabNum = GUIPane.getTabNum() + 1;
 				if (CrGraph) {
 					ID = Main.guiControlller.createGraph(name, Graph.GraphTypes.CR);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new CR Graph");
-					guiPane.addGraphTab(name + " #" + tabNum, true, ID);
+					guiPane.addGraphTab(name + " (" + ID + ")", true, ID);
 				} else {
 					ID = Main.guiControlller.createGraph(name, Graph.GraphTypes.PETRI);
 					GuiController.ActiveGraphID = ID;
 					Main.updateUserMsg("Added a new Petri Graph");
-					guiPane.addGraphTab(name + " #" + tabNum, false, ID);
+					guiPane.addGraphTab(name + " (" + ID + ")", false, ID);
 				}
 				Main.updateFrame();
 			} catch (Exception e1) {
@@ -921,11 +1013,9 @@ public class Menu implements ActionListener {
 	 * 
 	 */
 	public void disableMenubar() {
-		this.disabledMenus = new HashSet<JMenuItem>();
 		for (Component menuItem : menuBar.getComponents()) {
 			if (menuItem.isEnabled()) {
 				menuItem.setEnabled(false);
-				disabledMenus.add((JMenuItem) menuItem);
 			}
 		}
 	}
@@ -934,9 +1024,14 @@ public class Menu implements ActionListener {
 	 * 
 	 */
 	public void enableMenubar() {
-		for (JMenuItem menuItem : disabledMenus) {
-			menuItem.setEnabled(true);
+		Boolean isCRgrapg = Main.getActiveTab().getCrGraph();
+		if (isCRgrapg) {
+			menuCR.setEnabled(true);
+		} else {
+			MenuPetri.setEnabled(true);
 		}
+		menuNew.setEnabled(true);
+		menuSimulation.setEnabled(true);
 	}
 
 	public static void enableNewMenubar() {

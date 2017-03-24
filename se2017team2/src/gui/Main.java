@@ -137,8 +137,15 @@ public class Main {
 	 * 
 	 */
 	public static void showPossibleActions() {
-		guiPane.updateActions();
+		updatePossibleActions();
 		guiPane.showActionPane();
+	}
+	
+	/**
+	 * 
+	 */
+	public static void updatePossibleActions() {
+		guiPane.updateActions();
 	}
 
 

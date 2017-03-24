@@ -56,15 +56,13 @@ public class GUIPane extends JPanel implements ChangeListener {
 
 		this.setSize(this.getWidth(), tabbedPane.getHeight());
 
-		showActionPane();
-		removeActionPane();
-
 	}
 
 	/**
 	 * 
 	 */
 	public void showActionPane() {
+		setSimulation(true);
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridwidth = 1;
 		c.gridx = 0;
@@ -74,13 +72,18 @@ public class GUIPane extends JPanel implements ChangeListener {
 		c.fill = GridBagConstraints.VERTICAL;
 		c.anchor = GridBagConstraints.NORTH;
 		this.add(actPane, c);
+		this.revalidate();
+		this.repaint();
 	}
 
 	/**
 	 * 
 	 */
 	public void removeActionPane() {
+		setSimulation(false);
 		this.remove(actPane);
+		this.revalidate();
+		this.repaint();
 	}
 
 	// add a graph tab to the tabbed pane
@@ -93,7 +96,7 @@ public class GUIPane extends JPanel implements ChangeListener {
 		GraphTab newTab = new GraphTab(CrGraph, ID);
 		graphTabs.add(newTab);
 		// select the added tab
-		tabbedPane.addTab(label, newTab.getIcon(), newTab.getpanel(), "Does nothing");
+		tabbedPane.addTab(label, newTab.getIcon(), newTab.getpanel(), "");
 		int index = getTabNum();
 		tabbedPane.setSelectedIndex(index - 1);
 		// tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -128,24 +131,22 @@ public class GUIPane extends JPanel implements ChangeListener {
 
 		graphTab.updateImage();
 
-		// toggle menus for the correct graph type
-		if (graphTab.getCrGraph()) {
-			Menu.enableCRMenu();
-			Menu.disablePetriMenu();
-
-		} else {
-			Menu.enablePetriMenu();
-			Menu.disableCRMenu();
-
-		}
-
 		if (simulation) {
-			Main.showPossibleActions();
+			updateActions();
+		} else {
+			// toggle menus for the correct graph type
+			if (graphTab.getCrGraph()) {
+				Menu.enableCRMenu();
+				Menu.disablePetriMenu();
+
+			} else {
+				Menu.enablePetriMenu();
+				Menu.disableCRMenu();
+			}
+			Menu.enableNewMenubar();
 		}
-		Menu.enableNewMenubar();
 		sourceTabbedPane.setComponentAt(index, graphTab.getpanel());
 		sourceTabbedPane.repaint();
-
 	}
 
 	/**
@@ -154,11 +155,11 @@ public class GUIPane extends JPanel implements ChangeListener {
 	public void updatePane() {
 
 		int index = tabbedPane.getSelectedIndex();
-		if(index != -1){
-		GraphTab graphTab = graphTabs.get(index);
-		graphTab.updateImage();
-		tabbedPane.setComponentAt(index, graphTab.getpanel());
-		tabbedPane.repaint();
+		if (index != -1) {
+			GraphTab graphTab = graphTabs.get(index);
+			graphTab.updateImage();
+			tabbedPane.setComponentAt(index, graphTab.getpanel());
+			tabbedPane.repaint();
 		}
 	}
 
@@ -215,9 +216,8 @@ public class GUIPane extends JPanel implements ChangeListener {
 
 	}
 
-	public void setSimulation(Boolean simulation){
+	public void setSimulation(Boolean simulation) {
 		this.simulation = true;
 	}
-	
-	
+
 }
