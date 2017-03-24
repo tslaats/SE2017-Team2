@@ -63,7 +63,7 @@ public class Menu implements ActionListener {
 		// a group of JMenuItems
 		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_C);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR Graph");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_cr");
@@ -71,7 +71,7 @@ public class Menu implements ActionListener {
 
 		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_P);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, ActionEvent.CTRL_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri Net");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_petri");
@@ -196,7 +196,7 @@ public class Menu implements ActionListener {
 		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 
-		menuItem = new JMenuItem("Add Token from Place");
+		menuItem = new JMenuItem("Add Token to Place");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("add_token_place");
 		menuItem.setMnemonic(KeyEvent.VK_T);
@@ -828,6 +828,7 @@ public class Menu implements ActionListener {
 			// tabbedPane.setMnemonicAt(tabNum, KeyEvent.VK_1);
 		}
 		// Main.guiPane.updatePane();
+		enableMenubar();
 		return ID;
 	}
 
