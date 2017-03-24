@@ -77,23 +77,23 @@ public class Menu implements ActionListener {
 		menuItem.setActionCommand("new_petri");
 		menuNew.add(menuItem);
 
-		menuItem = new JMenuItem("Delete CR Graph by ID", KeyEvent.VK_D);
+		menuItem = new JMenuItem("Delete Graph by ID", KeyEvent.VK_D);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
 		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Deletes CR Graph by ID");
+		menuItem.getAccessibleContext().setAccessibleDescription("Deletes Graph by ID");
 		menuItem.addActionListener(this);
-		menuItem.setActionCommand("delete_cr");
+		menuItem.setActionCommand("delete_graph");
 		menuNew.add(menuItem);
 
-		menuItem = new JMenuItem("Delete Petri Net by ID", KeyEvent.VK_E);
-		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-		// ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Deletes  Petri Net by ID");
-		menuItem.addActionListener(this);
-		menuItem.setActionCommand("delete_petri");
-		menuNew.add(menuItem);
+//		menuItem = new JMenuItem("Delete Petri Net by ID", KeyEvent.VK_E);
+//		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+//		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+//		// ActionEvent.ALT_MASK));
+//		menuItem.getAccessibleContext().setAccessibleDescription("Deletes  Petri Net by ID");
+//		menuItem.addActionListener(this);
+//		menuItem.setActionCommand("delete_petri");
+//		menuNew.add(menuItem);
 
 		// Build CR menu in the menu bar.
 		menuCR = new JMenu("CR");
@@ -763,11 +763,11 @@ public class Menu implements ActionListener {
 			}
 
 			break;
-		case "delete_cr":
+		case "delete_graph":
 
 			JTextField CRidField = new JTextField();
-			Object[] delCRMessage = { "Place Id:", CRidField };
-			option = JOptionPane.showConfirmDialog(null, delCRMessage, "Add Token to Place",
+			Object[] delCRMessage = { "Graph ID:", CRidField };
+			option = JOptionPane.showConfirmDialog(null, delCRMessage, "Delete graph by ID",
 					JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
 				try {
@@ -777,16 +777,16 @@ public class Menu implements ActionListener {
 					guiPane.deleteTabByGraphId(ID);
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
+				} catch (ArrayIndexOutOfBoundsException e2) {
+			
 				} catch (Exception e1) {
 					Main.updateUserWarning(e1.getMessage());
 				}
 			}
-
+			Main.updateFrame();
 			break;
 
-		case "delete_petri":
 
-			break;
 
 		default:
 			System.out.println(action);

@@ -200,20 +200,12 @@ public class GUIPane extends JPanel implements ChangeListener {
 	 * 
 	 */
 	public void deleteTabByGraphId(int graphId) {
-		// this.actPane.updateActionPane();
-		int index = -1;
-		int counter = 0;
-		for (GraphTab graphTab : graphTabs) {
-			if (graphTab.getId() == graphId) {
-				index = counter;
+		for (int i = 0; i < graphTabs.size(); i++) {
+			if (graphTabs.get(i).getId() == graphId) {
+				graphTabs.remove(i);
+				tabbedPane.removeTabAt(i);
 			}
-			counter++;
 		}
-		if (index != -1) {
-			graphTabs.remove(index);
-			tabbedPane.remove(index);
-		}
-
 	}
 
 	public void setSimulation(Boolean simulation) {
