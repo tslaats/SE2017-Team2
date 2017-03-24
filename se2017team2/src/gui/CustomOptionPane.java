@@ -117,7 +117,6 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "new_graph":
 			exsitingGraph.setSelected(false);
-			// System.out.println(graphIDField.getText());
 			graphIDField.setEnabled(false);
 			break;
 		case "exsisting_graph":
@@ -132,10 +131,8 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 				this.revalidate();
 				this.pack();
 				this.repaint();
-				System.out.println("EVENT");
 			} else if (this.exsitingGraph.isSelected() && this.graphIDField.getText() == "") {
 				this.label.setText("Please enter the ID of the " + graph);
-				System.out.println("graph");
 				// show warning
 				this.label.setVisible(true);
 				this.revalidate();
@@ -143,7 +140,6 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 				this.repaint();
 
 			} else {
-				System.out.println(eventIDField.getText());
 				this.option = JOptionPane.OK_OPTION;
 				clearAndHide();
 			}
@@ -154,7 +150,7 @@ public class CustomOptionPane extends JDialog implements ActionListener {
 			clearAndHide();
 			break;
 		default:
-			System.out.println(e.getActionCommand() + " not supported");
+
 			break;
 
 		}

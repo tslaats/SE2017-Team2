@@ -51,8 +51,6 @@ public class GraphTab {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (clickListenerActive) {
-						System.out.println(e.getPoint());
-						// System.out.println(e.getX());
 						Main.imageClicked(new Position(e.getX(), e.getY()));
 					}
 				}
@@ -118,7 +116,7 @@ public class GraphTab {
 		try {
 			this.image.setImage(Main.guiControlller.draw());
 		} catch (Exception e) {
-			System.out.println("Unable to load graph");
+			Main.updateUserWarning("Unable to load graph");
 		}
 	}
 

@@ -86,14 +86,15 @@ public class Menu implements ActionListener {
 		menuItem.setActionCommand("delete_graph");
 		menuNew.add(menuItem);
 
-//		menuItem = new JMenuItem("Delete Petri Net by ID", KeyEvent.VK_E);
-//		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-//		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
-//		// ActionEvent.ALT_MASK));
-//		menuItem.getAccessibleContext().setAccessibleDescription("Deletes  Petri Net by ID");
-//		menuItem.addActionListener(this);
-//		menuItem.setActionCommand("delete_petri");
-//		menuNew.add(menuItem);
+		// menuItem = new JMenuItem("Delete Petri Net by ID", KeyEvent.VK_E);
+		// // menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
+		// // menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D,
+		// // ActionEvent.ALT_MASK));
+		// menuItem.getAccessibleContext().setAccessibleDescription("Deletes
+		// Petri Net by ID");
+		// menuItem.addActionListener(this);
+		// menuItem.setActionCommand("delete_petri");
+		// menuNew.add(menuItem);
 
 		// Build CR menu in the menu bar.
 		menuCR = new JMenu("CR");
@@ -778,7 +779,7 @@ public class Menu implements ActionListener {
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
 				} catch (ArrayIndexOutOfBoundsException e2) {
-			
+
 				} catch (Exception e1) {
 					Main.updateUserWarning(e1.getMessage());
 				}
@@ -786,10 +787,8 @@ public class Menu implements ActionListener {
 			Main.updateFrame();
 			break;
 
-
-
 		default:
-			System.out.println(action);
+
 			Main.updateUserMsg("Invalid Button pressed!");
 			break;
 		}
@@ -909,7 +908,6 @@ public class Menu implements ActionListener {
 		try {
 			transitionId = Main.guiControlller.createTransition(position, name);
 			Main.updateUserMsg(String.format("Added Transition: %s", name));
-			System.out.println(name);
 		} catch (Exception e1) {
 			Main.updateUserWarning(e1.getMessage());
 			this.clickArgument = "";

@@ -75,7 +75,6 @@ public class ActionPane extends JPanel implements ActionListener {
 			int i = 0;
 			for (Action<?> posAction : posActions) {
 				actionName = posAction.toString();
-				System.out.println(actionName);
 				JButton b1 = new JButton(actionName);
 				b1.setHorizontalAlignment(SwingConstants.LEFT);
 				b1.addActionListener(this);

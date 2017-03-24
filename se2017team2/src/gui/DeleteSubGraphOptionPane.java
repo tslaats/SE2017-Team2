@@ -105,19 +105,15 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 		switch (e.getActionCommand()) {
 		case "new_graph":
 			exsitingGraph.setSelected(false);
-			// System.out.println(graphIDField.getText());
-			// graphIDField.setEnabled(false);
 			break;
 		case "exsisting_graph":
 			newGraph.setSelected(false);
-			// graphIDField.setEnabled(true);
 			break;
 		case "Enter":
 
 			if (graphIDField.getText() != "") {
 				if (newGraph.isSelected() || exsitingGraph.isSelected()) {
 					this.option = JOptionPane.OK_OPTION;
-					System.out.println(getContent());
 					clearAndHide();
 				} else {
 					this.label.setText("Please select one of the options");
@@ -141,7 +137,7 @@ public class DeleteSubGraphOptionPane extends JDialog implements ActionListener 
 			clearAndHide();
 			break;
 		default:
-			System.out.println(e.getActionCommand() + " not supported");
+
 			break;
 
 		}

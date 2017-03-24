@@ -97,7 +97,6 @@ public class Main {
 			panel.setSize(400, 400);
 		} else {
 			// remove initpage and set guiPane with tabs
-			System.out.println("remove initpage");
 			Menu.enableSimulationMenu();
 			panel.remove(initpage);
 			panel.add(guiPane);
