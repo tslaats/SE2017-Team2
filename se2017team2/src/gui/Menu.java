@@ -61,22 +61,24 @@ public class Menu implements ActionListener {
 
 		// Build the first menu.
 		menu = new JMenu("New");
-		menu.setMnemonic(KeyEvent.VK_A);
+		menu.setMnemonic(KeyEvent.VK_N);
+
+		
 		menu.getAccessibleContext().setAccessibleDescription("Menu for CR Graphs");
 		menuBar.add(menu);
 
 		// a group of JMenuItems
-		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_T);
+		menuItem = new JMenuItem("New CR Graph", KeyEvent.VK_R);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new CR Graph");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_cr");
 		menu.add(menuItem);
 
-		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_T);
+		menuItem = new JMenuItem("New Petri Net", KeyEvent.VK_I);
 		// menuItem.setMnemonic(KeyEvent.VK_T); //used constructor instead
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("Creates a new Petri Net");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_petri");
@@ -84,16 +86,18 @@ public class Menu implements ActionListener {
 
 		// Build CR menu in the menu bar.
 		menuCR = new JMenu("CR");
-		menuCR.setMnemonic(KeyEvent.VK_N);
+		menuCR.setMnemonic(KeyEvent.VK_C);
 		menuCR.getAccessibleContext().setAccessibleDescription("This menu does nothing");
 		menuCR.setEnabled(false);
 		menuBar.add(menuCR);
 
 		submenu = new JMenu("Event");
-		submenu.setMnemonic(KeyEvent.VK_S);
+		submenu.setMnemonic(KeyEvent.VK_E);
 
+		
 		menuItem = new JMenuItem("Add");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.ALT_MASK));
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_event");
 		submenu.add(menuItem);
@@ -101,6 +105,7 @@ public class Menu implements ActionListener {
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_event");
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Add PetriNet to Event");
@@ -108,6 +113,7 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_subpetri");
+		menuItem.setMnemonic(KeyEvent.VK_P);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete PetriNet from Event");
@@ -115,44 +121,49 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_subpetri");
+		menuItem.setMnemonic(KeyEvent.VK_N);
 		submenu.add(menuItem);
 		menuCR.add(submenu);
 
 		submenu = new JMenu("Condition");
-		submenu.setMnemonic(KeyEvent.VK_S);
+		submenu.setMnemonic(KeyEvent.VK_C);
 
 		menuItem = new JMenuItem("Add");
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_condition");
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 		menuItem.setActionCommand("delete_condition");
 		menuCR.add(submenu);
 
 		submenu = new JMenu("Response");
-		submenu.setMnemonic(KeyEvent.VK_S);
+		submenu.setMnemonic(KeyEvent.VK_R);
 
 		menuItem = new JMenuItem("Add");
 		// menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_response");
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_response");
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 		menuCR.add(submenu);
 
 		// Build Petri menu in the menu bar.
 		MenuPetri = new JMenu("Petri");
-		MenuPetri.setMnemonic(KeyEvent.VK_N);
+		MenuPetri.setMnemonic(KeyEvent.VK_P);
 		MenuPetri.getAccessibleContext().setAccessibleDescription("This menu does nothing");
 		MenuPetri.setEnabled(false);
 
@@ -164,11 +175,13 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_place");
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_place");
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 		MenuPetri.add(submenu);
 
@@ -180,12 +193,13 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_transition");
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
-
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_transition");
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Add CR Graph to Transition");
@@ -193,6 +207,7 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_subcr");
+		menuItem.setMnemonic(KeyEvent.VK_T);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete CR Graph from Transition");
@@ -200,6 +215,7 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_subcr");
+		menuItem.setMnemonic(KeyEvent.VK_S);
 		submenu.add(menuItem);
 
 		MenuPetri.add(submenu);
@@ -212,11 +228,13 @@ public class Menu implements ActionListener {
 		// ActionEvent.ALT_MASK));
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("new_arc");
+		menuItem.setMnemonic(KeyEvent.VK_A);
 		submenu.add(menuItem);
 
 		menuItem = new JMenuItem("Delete");
 		menuItem.addActionListener(this);
 		menuItem.setActionCommand("delete_arc");
+		menuItem.setMnemonic(KeyEvent.VK_D);
 		submenu.add(menuItem);
 		MenuPetri.add(submenu);
 
@@ -224,8 +242,8 @@ public class Menu implements ActionListener {
 
 		// Build the first menu.
 		menuSimulation = new JMenu("Simulation");
-		menu.setMnemonic(KeyEvent.VK_V);
-		menu.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
+		menuSimulation.setMnemonic(KeyEvent.VK_S);
+		menuSimulation.getAccessibleContext().setAccessibleDescription("Menu for Simulation");
 		menuBar.add(menuSimulation);
 
 		menuItem = new JMenuItem("Start Simulation", KeyEvent.VK_S);

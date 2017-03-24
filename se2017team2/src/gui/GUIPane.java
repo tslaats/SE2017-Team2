@@ -147,10 +147,12 @@ public class GUIPane extends JPanel implements ChangeListener {
 	public void updatePane() {
 
 		int index = tabbedPane.getSelectedIndex();
+		if(index != -1){
 		GraphTab graphTab = graphTabs.get(index);
 		graphTab.updateImage();
 		tabbedPane.setComponentAt(index, graphTab.getpanel());
 		tabbedPane.repaint();
+		}
 	}
 
 	/**

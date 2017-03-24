@@ -1,6 +1,8 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,6 +30,7 @@ public class GraphTab {
 	 * @param id
 	 */
 	public GraphTab(Boolean CrGraph, Integer id) {
+
 		this.setId(id);
 		this.clickListenerActive = false;
 		this.CrGraph = CrGraph;
@@ -40,7 +43,10 @@ public class GraphTab {
 		// this.image = createImageIcon("images/test.png");
 		try {
 			this.image = new ImageIcon(Main.guiControlller.draw());
+			
+			
 			this.panel = new JLabel(image);
+			
 			this.panel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -56,9 +62,20 @@ public class GraphTab {
 			Main.updateUserMsg(e1.getMessage());
 		}
 
-
-
-		this.scrPane = new JScrollPane(panel);
+		// add to nested panel to avoid resizing of jlabel containing 
+		// the image icen in order to get the correct position of
+		// the MouseListener
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		this.panel.setMinimumSize(this.panel.getSize());
+		JPanel extraPanel = new JPanel(new FlowLayout());
+		extraPanel.add(this.panel );
+		
+		
+        // Now add the extra panel instead of l
+        mainPanel.add(extraPanel, BorderLayout.CENTER);
+		
+	
+		this.scrPane = new JScrollPane(extraPanel);
 		// add(scrPane);
 
 	}
