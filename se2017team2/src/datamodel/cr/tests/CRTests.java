@@ -20,7 +20,7 @@ public class CRTests {
 	private static CrGraph crgraph;
 	
 	@Before
-	public void setUpBeforeClass() throws Exception {
+	public void beforeEachTest() throws Exception {
 		crgraph = new CrGraph(testname);
 	}
 
