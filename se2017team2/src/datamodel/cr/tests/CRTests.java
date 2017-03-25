@@ -384,25 +384,12 @@ public class CRTests {
 		
 		
 		List<Event> returnlist = new ArrayList<>();
-		returnlist = crgraph.getPendingEvents();
+		returnlist = crgraph.getAllEvents();
 		
 		assertTrue(returnlist.contains(event1)
 				&& returnlist.contains(event2));
 	}
 
-	@Test
-	public void testGetPossibleActions() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testExecuteAction() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDraw() {
-		fail("Not yet implemented");
-	}
+	
 
 }
