@@ -6,10 +6,11 @@ import java.util.*;
 import datamodel.Graph;
 import datamodel.Position;
 import datamodel.Semantics;
+import datamodel.SimulationObject;
 import datamodel.Visualization;
 import datamodel.petri.Transition;
 
-public class CrGraph extends Graph implements Visualization, Semantics<Event> {
+public class CrGraph extends Graph implements Visualization, Semantics<Event>, SimulationObject {
 
 	private List<Event> trace;
 	//public ArrayList<CrObject> graph;
@@ -272,6 +273,19 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
         }
         return pendingList;
     }
+	
+	/**
+	 * 	@return List of all Events in the CR Graph
+	 */
+	public List<Event> getAllEvents() {
+	    List<Event> events = new ArrayList<>();
+        for (CrObject o : this.crObjects.values()) {
+            if (o instanceof Event) {
+            	events.add((Event) o);
+            }
+        }
+        return events;
+	}
 
     /**
      * @return current CR Graph trace
@@ -371,5 +385,19 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event> {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void startSimulation() {
+		for (Event e : this.getAllEvents()) {
+			e.startSimulation();
+		}
+	}
+
+	@Override
+	public void stopSimulation() {
+		for (Event e : this.getAllEvents()) {
+			e.stopSimulation();
+		}		
 	}
 };

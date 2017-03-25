@@ -8,7 +8,7 @@ package datamodel;
 /**
  * 
  */
-public abstract class Graph {
+public abstract class Graph implements SimulationObject {
 	
 	/**
 	 * The different types of graphs which are supported

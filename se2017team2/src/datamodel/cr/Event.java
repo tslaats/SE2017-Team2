@@ -1,18 +1,22 @@
 package datamodel.cr;
 
 import datamodel.Position;
+import datamodel.SimulationObject;
 import datamodel.petri.Petrinet;
 
 /*
  * Following the class diagram
  */
-public class Event extends CrObject {
+public class Event extends CrObject implements SimulationObject {
 	
 	private Position pos;
 	private String name;
 	private boolean pending;
 	private boolean executed;
 	private Petrinet petrinet;
+	
+	private boolean latestPending;
+	private boolean latestExecuted;
 	
 	/**
 	 * Basic Event constructor using default parameters
@@ -111,6 +115,18 @@ public class Event extends CrObject {
 	@Override
 	public String toString() {
 		return this.name + " (" + this.ID + ")";
+	}
+
+	@Override
+	public void startSimulation() {
+		this.latestExecuted = this.executed;
+		this.latestPending = this.pending;		
+	}
+
+	@Override
+	public void stopSimulation() {
+		this.executed = this.latestExecuted;
+		this.pending = this.latestPending;
 	}
 	
 

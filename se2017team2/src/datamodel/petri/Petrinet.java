@@ -13,6 +13,7 @@ import java.util.Map;
 
 import datamodel.Graph;
 import datamodel.Semantics;
+import datamodel.SimulationObject;
 import datamodel.Visualization;
 import datamodel.cr.Event;
 import datamodel.Position;
@@ -25,7 +26,7 @@ import petriVisualization.PetriDrawer;
 /**
  * 
  */
-public class Petrinet extends Graph implements Visualization, Semantics<Transition> {
+public class Petrinet extends Graph implements Visualization, Semantics<Transition>, SimulationObject {
 	
 	// Default starting and end position of the initial places
 	private final Position placeStartPos = new Position(100,250);
@@ -386,6 +387,20 @@ public class Petrinet extends Graph implements Visualization, Semantics<Transiti
 			}
 		}
 		
+	}
+
+	@Override
+	public void startSimulation() {
+		for (Place p : this.places.values()) {
+			p.startSimulation();
+		}
+	}
+
+	@Override
+	public void stopSimulation() {
+		for (Place p : this.places.values()) {
+			p.stopSimulation();
+		}		
 	}
 
 };

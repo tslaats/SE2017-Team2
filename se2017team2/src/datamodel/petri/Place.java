@@ -5,18 +5,21 @@
 package datamodel.petri;
 
 import datamodel.Position;
+import datamodel.SimulationObject;
 import datamodel.petri.PetriObject;
 
 /************************************************************/
 /**
  * 
  */
-public class Place extends PetriObject {
+public class Place extends PetriObject implements SimulationObject {
 	
 	/**
 	 * True if this Place holds a token
 	 */
 	private boolean token;
+	
+	private boolean latestValue;
 	
 	public Place(Position pos) {
 		super(pos);
@@ -29,6 +32,16 @@ public class Place extends PetriObject {
 
 	public void setToken(boolean token) {
 		this.token = token;
+	}
+
+	@Override
+	public void startSimulation() {
+		this.latestValue = this.token;		
+	}
+
+	@Override
+	public void stopSimulation() {
+		this.token = this.latestValue;	
 	}
 
 

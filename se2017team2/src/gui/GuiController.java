@@ -639,6 +639,24 @@ public class GuiController {
 		return graphID;
 	}
 	
+	/**
+	 * Starts the simulation by creating a "safe point" for each graph
+	 */
+	public void startSimulation() {
+		for (Graph g : this.graphs.values()) {
+			g.startSimulation();
+		}
+	}
+	
+	/**
+	 * Stops the simulation by restoring the latest "safe point" for each graph
+	 */
+	public void stopSimulation() {
+		for (Graph g : this.graphs.values()) {
+			g.stopSimulation();
+		}
+	}
+	
 
 
 };
