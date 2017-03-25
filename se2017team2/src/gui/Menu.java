@@ -388,7 +388,7 @@ public class Menu implements ActionListener {
 
 			incomingIDs = new JTextField();
 			outgoingIDs = new JTextField();
-			Object[] message = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+			Object[] message = { "Origin ID:", incomingIDs, "Destination ID:", outgoingIDs };
 
 			option = JOptionPane.showConfirmDialog(null, message, "Add Condition", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
@@ -433,7 +433,7 @@ public class Menu implements ActionListener {
 
 			incomingIDs = new JTextField();
 			outgoingIDs = new JTextField();
-			Object[] respMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+			Object[] respMessage = { "Origin ID:", incomingIDs, "Destination ID:", outgoingIDs };
 
 			option = JOptionPane.showConfirmDialog(null, respMessage, "Add response", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
@@ -547,7 +547,7 @@ public class Menu implements ActionListener {
 			}
 			break;
 		case "start_simulation":
-
+			Main.guiControlller.startSimulation();
 			Main.showPossibleActions();
 			disableMenubar();
 			menuSimulation.setEnabled(true);
@@ -555,6 +555,7 @@ public class Menu implements ActionListener {
 			// Main.disableTabs();
 			break;
 		case "stop_simulation":
+			Main.guiControlller.stopSimulation();
 			menuSimulation.setEnabled(false);
 			Main.hidePossibleActions();
 			Main.updateUserMsg("Stopped Simulation");
@@ -565,7 +566,7 @@ public class Menu implements ActionListener {
 		case "new_arc":
 			incomingIDs = new JTextField();
 			outgoingIDs = new JTextField();
-			Object[] arcMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+			Object[] arcMessage = { "Origin ID:", incomingIDs, "Destination ID:", outgoingIDs };
 
 			option = JOptionPane.showConfirmDialog(null, arcMessage, "Add Arc", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
@@ -588,7 +589,8 @@ public class Menu implements ActionListener {
 		case "delete_arc":
 			incomingIDs = new JTextField();
 			outgoingIDs = new JTextField();
-			Object[] delarcMessage = { "Incoming ID:", incomingIDs, "Outgoing ID:", outgoingIDs };
+			Object[] delarcMessage = { "Origin ID:", incomingIDs, "Destination ID:", outgoingIDs };
+
 
 			option = JOptionPane.showConfirmDialog(null, delarcMessage, "Delete Arc", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
