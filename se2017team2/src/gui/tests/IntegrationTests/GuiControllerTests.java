@@ -10,10 +10,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import datamodel.Graph;
+import datamodel.Graph.GraphTypes;
 import datamodel.Position;
 import datamodel.petri.Petrinet;
 import gui.GuiController;
 import datamodel.cr.CrGraph;
+import datamodel.cr.CrObject;
+import datamodel.cr.Event;
+import datamodel.cr.Response;
 import datamodel.petri.Place;
 import datamodel.petri.Transition;
 
@@ -22,10 +26,17 @@ public class GuiControllerTests {
 	private static final String testname = "Test";
 	
 	private static gui.GuiController controller; 
+	
+	private int crgraphid;
+	
+	private int petriid;
 
 	@Before
-	public static void setUpBefore() throws Exception {
+	public void setUpBefore() throws Exception {
 		controller = new gui.GuiController();
+		crgraphid = controller.createGraph(testname, GraphTypes.CR);
+		petriid = controller.createGraph(testname, GraphTypes.PETRI);
+	
 	}
 
 
@@ -255,8 +266,7 @@ public class GuiControllerTests {
 			GuiController.ActiveGraphID = graphid;
 			controller.createPlace(pos);
 			Petrinet petrinet = (Petrinet)controller.getActiveGraph();
-			List<Place> places = new ArrayList<>();
-			places = (List<Place>) petrinet.getPlaceValues();
+			ArrayList<Place> places = new ArrayList<Place>( petrinet.getPlaceValues());
 			
 			
 			
@@ -299,11 +309,15 @@ public class GuiControllerTests {
 			
 			Petrinet petrinet = (Petrinet)controller.getActiveGraph();
 			List<Place> places = new ArrayList<>();
-			places = (List<Place>) petrinet.getPlaceValues();
+			places = new ArrayList<Place>( petrinet.getPlaceValues());
 			
 			int placeid = places.get(1).getID();
 			
 			controller.changePlaceToken(placeid, true);
+			
+
+			places = new ArrayList<Place> (petrinet.getPlaceValues());
+			
 			
 			assertTrue(places.get(1).hasToken());
 		} catch(Exception e){
@@ -341,11 +355,9 @@ public class GuiControllerTests {
 			
 			controller.createTransition(pos, testname);
 
-			List<Transition> transitions = new ArrayList<>();
-			
 			Petrinet petrinet = (Petrinet) controller.getActiveGraph();
 			
-			transitions = (List<Transition>) petrinet.getTransitionValues();
+			ArrayList<Transition> transitions = new ArrayList<Transition>( petrinet.getTransitionValues());
 			
 			assertTrue(!transitions.isEmpty());
 			
@@ -384,16 +396,16 @@ public class GuiControllerTests {
 				
 				controller.createTransition(pos, testname);
 
-				List<Place> places = new ArrayList<>();
-				
 				Petrinet petrinet = (Petrinet) controller.getActiveGraph();
 				
-				places = (List<Place>) petrinet.getPlaceValues();
+				ArrayList<Place> places = new ArrayList<Place>(petrinet.getPlaceValues());
 				
 				Place place1 = places.get(0);
 				Place place2 = places.get(1);
 				
 				controller.createArc(place1.getID(), place2.getID());
+				
+				places = new ArrayList<Place>( petrinet.getPlaceValues());
 				
 				assertTrue(place2.getIncoming().containsKey(place1));
 				
@@ -415,16 +427,15 @@ public class GuiControllerTests {
 				
 				controller.createTransition(pos, testname);
 
-				List<Place> places = new ArrayList<>();
-				
 				Petrinet petrinet = (Petrinet) controller.getActiveGraph();
 				
-				places = (List<Place>) petrinet.getPlaceValues();
+				ArrayList<Place> places = new ArrayList<Place>( petrinet.getPlaceValues());
 				
 				Place place1 = places.get(0);
 				Place place2 = places.get(1);
 				
 				controller.createArc(place1.getID(), place2.getID());
+				places = new ArrayList<Place>( petrinet.getPlaceValues());
 				
 				assertTrue(place1.getOutgoing().containsValue(place2));
 				
@@ -450,58 +461,301 @@ public class GuiControllerTests {
 				return;
 			}
 			
-			
-			
+						
 		}
 	
 		@Test
-		public void testCreateEventPositionString(){
-			fail();
+		public void testCreateEventPositionStringPos(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).getPosition() == pos);
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
+		}
+		
+		@Test
+		public void testCreateEventPositionStringName(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).getName() == testname);
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
 		}
 		
 		@Test
 		public void testCreateEventPositionStringNotCRGraph(){
-			fail();
+			try{
+				controller.createEvent(null, testname);
+				
+				fail();
+				
+			} catch(Exception e){
+				return;
+
+			}
 		}
 		
 		@Test
-		public void testCreateEventIsPending(){
-			fail();
+		public void testCreateEventIsPendingName(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname, true);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).getName() == testname);
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
+		}
+		
+		@Test
+		public void testCreateEventIsPendingPosition(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname, true);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).getPosition() == pos);
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
+		}
+		
+		@Test
+		public void testCreateEventIsPendingIsPendingTrue(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname, true);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).isPending());
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
+		}
+		
+		@Test
+		public void testCreateEventIsPendingIsPendingFalse(){
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname, true);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				assertTrue(events.get(0).isPending());
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
 		}
 		
 		@Test
 		public void testCreateEventIsPendingNotCRGraph(){
-			fail();
+			try{
+				
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.PETRI);
+			
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(null, testname, true);
+				
+				fail();
+				
+			} catch(Exception e){
+				return;
+
+			}
 		}
 		
 		@Test
 		public void testDeleteEvent(){
-			fail();
+			try{
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.CR);
+				Position pos = new Position(3,5);
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.createEvent(pos, testname);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
+
+				Event event = events.get(0);
+				
+				controller.deleteEvent(event.getID());
+				
+				assertTrue(crgraph.getAllEvents().isEmpty());
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
 		}
 		
 		@Test
 		public void testDeleteEventNotCrGraph(){
-			fail();
+			try{
+				
+				int graphid = controller.createGraph(testname,  Graph.GraphTypes.PETRI);
+			
+				GuiController.ActiveGraphID = graphid;
+				
+				controller.deleteEvent(0);
+				
+				fail();
+				
+			} catch(Exception e){
+				return;
+
+			}
 		}
 		
 		@Test
 		public void testCreateResponse(){
-			fail();
+			try{
+				GuiController.ActiveGraphID = crgraphid;
+				
+				Position pos1 = new Position(4,5);
+				
+				Position pos2 = new Position(5,6);
+				
+				Event event1 = new Event(pos1, testname);
+				Event event2 = new Event(pos2, testname);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				crgraph.addEvent(event1);
+				crgraph.addEvent(event2);
+				
+				controller.createResponse(event1.getID(), event2.getID());
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
 		}
 		
 		@Test
 		public void testCreateResponseNotCrGraph(){
-			fail();
+			try{
+				GuiController.ActiveGraphID = petriid;
+				
+				controller.createResponse(-1, -1);
+				
+				fail();
+			} catch(Exception e){
+				return;
+			}
 		}
 		
 		@Test
 		public void testDeleteReponse(){
-			fail();
+			try{
+				GuiController.ActiveGraphID = crgraphid;
+				
+				Position pos1 = new Position(4,5);
+				
+				Position pos2 = new Position(5,6);
+				
+				Event event1 = new Event(pos1, testname);
+				Event event2 = new Event(pos2, testname);
+				
+				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
+				
+				crgraph.addEvent(event1);
+				crgraph.addEvent(event2);
+				
+				
+				controller.createResponse(event1.getID(), event2.getID());
+				
+				int responseid = -1;
+				ArrayList<CrObject> crobjects = new ArrayList<CrObject>(crgraph.getCrObjectValues());
+				
+				for(int i = 0; i < crobjects.size(); i++){
+					try{
+						Response response = (Response) crobjects.get(i);
+						responseid = response.getID();
+					} catch(Exception e){
+						
+					}
+				}
+				
+				
+				controller.deleteResponse(responseid);
+				
+				assertNull(crgraph.getCrObjects().get(responseid));
+				
+			} catch(Exception e){
+				e.printStackTrace();
+				fail();
+			}
 		}
 		
 		@Test
 		public void testDeleteReponseNotCrGraph(){
-			fail();
+			try{
+				GuiController.ActiveGraphID = petriid;
+				
+				controller.deleteResponse(-1);
+				
+				fail();
+			}catch(Exception e){
+				return;
+			}
 		}
 		
 		
