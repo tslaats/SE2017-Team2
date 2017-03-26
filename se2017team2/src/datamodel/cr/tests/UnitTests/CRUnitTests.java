@@ -1,4 +1,4 @@
-package datamodel.cr.tests;
+package datamodel.cr.tests.UnitTests;
 
 import static org.junit.Assert.*;
 
@@ -13,7 +13,7 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.cr.Event;
 
-public class CRTests {
+public class CRUnitTests {
 
 	private static final String testname = "Test";
 	
@@ -26,23 +26,22 @@ public class CRTests {
 
 
 	@Test
-	public void testCrGraph() {
-		assertTrue(crgraph.getGraphType() == Graph.GraphTypes.CR
-				&& crgraph.getName() == testname);
+	public void testCrGraph_Type() {
+		assertTrue(crgraph.getGraphType() == Graph.GraphTypes.CR);
 	}
 
+	@Test
+	public void testCrGraph_Name() {
+		assertTrue(crgraph.getName() == testname);
+	}
+	
 	@Test
 	public void testAddEvent() {
 		Position pos = new Position(3,5);
 		
 		int id = crgraph.addEvent(pos, testname);
 		
-		Event theevent = (Event)crgraph.getCrObjects().get(id);
-		
-		assertTrue(theevent.getX() == 3
-				&& theevent.getY() == 5
-				&& theevent.getName() == testname
-				&& !theevent.isExecuted());
+		assertNotNull(crgraph.getCrObjects().get(id));
 	}
 
 	@Test
@@ -77,7 +76,6 @@ public class CRTests {
 			fail();
 		}
 		
-		
 		assertNotNull(crgraph.getCrObjects().get(conditionID));
 	}
 
@@ -90,7 +88,6 @@ public class CRTests {
 		try{
 			crgraph.addCondition(eventID, eventID);
 		} catch(Exception e){
-			assertTrue(true);
 			return;
 		}
 		
@@ -106,7 +103,6 @@ public class CRTests {
 		try{
 			crgraph.addCondition(eventID+1, eventID);
 		} catch(Exception e){
-			assertTrue(true);
 			return;
 		}
 		
@@ -122,7 +118,6 @@ public class CRTests {
 		try{
 			crgraph.addCondition(eventID, eventID+1);
 		} catch(Exception e){
-			assertTrue(true);
 			return;
 		}
 		
@@ -172,7 +167,7 @@ public class CRTests {
 		try{
 			crgraph.deleteCondition(conditionID+incomingID+outgoingID);
 		} catch (Exception e){
-			assertTrue(true);
+			return;
 		}
 		
 	}
@@ -196,7 +191,7 @@ public class CRTests {
 		try{
 			crgraph.deleteCondition(incomingID);
 		} catch (Exception e){
-			assertTrue(true);
+			return;
 		}
 		
 	}
@@ -323,10 +318,9 @@ public class CRTests {
 		int incomingID = crgraph.addEvent(pos1, testname);
 		int outgoingID = crgraph.addEvent(pos2, testname);
 		
-		int responseID = -1;
 		
 		try{
-			responseID = crgraph.addResponse(incomingID, outgoingID);
+			crgraph.addResponse(incomingID, outgoingID);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -343,7 +337,7 @@ public class CRTests {
 	}
 
 	@Test
-	public void testGetPendingEvents() {
+	public void testGetPendingEvents_Contains() {
 		Position pos1 = new Position(3,5);
 		Position pos2 = new Position(5,7);
 		
@@ -362,12 +356,11 @@ public class CRTests {
 		List<Event> returnlist = new ArrayList<>();
 		returnlist = crgraph.getPendingEvents();
 		
-		assertTrue(returnlist.contains(event1)
-				&& !returnlist.contains(event2));
+		assertTrue(returnlist.contains(event1));
 	}
 	
 	@Test
-	public void testGetAllEvents() {
+	public void testGetPendingEvents_DoesNotContain() {
 		Position pos1 = new Position(3,5);
 		Position pos2 = new Position(5,7);
 		
@@ -384,12 +377,12 @@ public class CRTests {
 		
 		
 		List<Event> returnlist = new ArrayList<>();
-		returnlist = crgraph.getAllEvents();
+		returnlist = crgraph.getPendingEvents();
 		
-		assertTrue(returnlist.contains(event1)
-				&& returnlist.contains(event2));
+		assertTrue(!returnlist.contains(event2));
 	}
-
+	
+	
 	
 
 }

@@ -1,4 +1,4 @@
-package datamodel.petri.tests;
+package datamodel.petri.tests.UnitTests;
 
 import static org.junit.Assert.*;
 
@@ -8,31 +8,25 @@ import org.junit.Test;
 import datamodel.Position;
 import datamodel.petri.Petrinet;
 
-public class PetriTests {
+public class PetriUnitTests {
 
 	private static final String testname = "Test";
 	
 	private static Petrinet petrinet;
 	
 	@Before
-	public void setUpBeforeClass() throws Exception {
+	public void setUpBefore() throws Exception {
 		petrinet = new Petrinet(testname);
 	}
 
 	@Test
-	public void PetriConstructorTest() {
+	public void PetriConstructorTest_Name() {
 		
 		
-		assertTrue(petrinet.getStart().getPos().x() == 1
-				&& petrinet.getStart().getPos().y() == 1
-				&& petrinet.getStart().hasToken() 
-				&& !petrinet.getStart().getCanBeDeleted()
-				&& petrinet.getEnd().getPos().x() == 10
-				&& petrinet.getEnd().getPos().y() == 1
-				&& !petrinet.getEnd().getCanBeDeleted()
-				&& petrinet.getName() == testname);
+		assertTrue(petrinet.getName() == testname);
 		
 	}
+	
 	
 	@Test 
 	public void AddPlaceTest(){
@@ -41,11 +35,11 @@ public class PetriTests {
 		
 		int id = petrinet.addPlace(pos);
 		
-		assertTrue(petrinet.getPlaces().get(id).getPos().x() == 2
-				&& petrinet.getPlaces().get(id).getPos().y() == 3
-				&& petrinet.getPlaces().get(id).getCanBeDeleted());
+		assertNotNull(petrinet.getPlaces().get(id));
 	}
 
+	
+	
 	@Test
 	public void DeletePlaceTest(){
 		
@@ -74,7 +68,7 @@ public class PetriTests {
 			petrinet.deletePlace(999999999);
 			fail();
 		} catch(Exception e){
-			assertTrue(true);
+			return;
 		}
 		
 	}
@@ -88,7 +82,7 @@ public class PetriTests {
 			petrinet.deletePlace(id);
 			fail();
 		} catch(Exception e){
-			assertTrue(true);
+			return;
 		}
 	}
 	
@@ -100,9 +94,7 @@ public class PetriTests {
 		
 		int id = petrinet.addTransition(pos, testname);
 				
-		assertTrue(petrinet.getTransitions().get(id).getPos().x() == 5
-				&& petrinet.getTransitions().get(id).getPos().y() == 6
-				&& petrinet.getTransitions().get(id).getCanBeDeleted());
+		assertNotNull(petrinet.getTransitions().get(id));
 	}
 	
 	@Test
@@ -132,12 +124,12 @@ public class PetriTests {
 			petrinet.deleteTranistion(99999999);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+			return;
 		}
 	}
 	
 	@Test
-	public void AddArcTranstoPlace(){
+	public void AddArcTranstoPlaceOutgoing(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -152,12 +144,30 @@ public class PetriTests {
 			fail();
 		}
 		
-		assertTrue(petrinet.getTransitions().get(transID).getOutgoing().get(placeID).getID() == placeID
-				&& petrinet.getPlaces().get(placeID).getIncoming().get(transID).getID() == transID);
+		assertTrue(petrinet.getTransitions().get(transID).getOutgoing().get(placeID).getID() == placeID);
 	}
 	
 	@Test
-	public void AddArcPlacetoTrans(){
+	public void AddArcTranstoPlaceIncoming(){
+		
+		
+		Position pos1 = new Position(5,5);
+		Position pos2 = new Position(7,7);
+		int placeID = petrinet.addPlace(pos1);
+		int transID = petrinet.addTransition(pos2, testname);
+		
+		try{
+			petrinet.addArc(transID, placeID);
+		} catch (Exception e){
+			e.printStackTrace();
+			fail();
+		}
+		
+		assertTrue(petrinet.getPlaces().get(placeID).getIncoming().get(transID).getID() == transID);
+	}
+	
+	@Test
+	public void AddArcPlacetoTransOutgoing(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -172,8 +182,27 @@ public class PetriTests {
 			e.printStackTrace();
 			fail();
 		}
-		assertTrue(petrinet.getTransitions().get(transID).getIncoming().get(placeID).getID() == placeID
-				&& petrinet.getPlaces().get(placeID).getOutgoing().get(transID).getID() == transID);
+		assertTrue(petrinet.getPlaces().get(placeID).getOutgoing().get(transID).getID() == transID);
+	
+	}
+	
+	@Test
+	public void AddArcPlacetoTransIncoming(){
+		
+		
+		Position pos1 = new Position(5,5);
+		Position pos2 = new Position(7,7);
+
+		int placeID = petrinet.addPlace(pos1);
+		int transID = petrinet.addTransition(pos2, testname);
+		
+		try{
+			petrinet.addArc(placeID, transID);
+		} catch(Exception e){
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(petrinet.getTransitions().get(transID).getIncoming().get(placeID).getID() == placeID);
 	
 	}
 	
@@ -184,7 +213,7 @@ public class PetriTests {
 			petrinet.addArc(-1, -2);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+			
 		}
 	}
 	
@@ -202,7 +231,7 @@ public class PetriTests {
 			petrinet.addArc(transID1, transID2);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+			
 		}
 	}
 	
@@ -220,7 +249,7 @@ public class PetriTests {
 			petrinet.addArc(placeID1, placeID2);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+
 		}
 	}
 	
@@ -236,7 +265,7 @@ public class PetriTests {
 			petrinet.addArc(placeID, -2);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+
 		}
 	}
 	
@@ -252,7 +281,7 @@ public class PetriTests {
 			petrinet.addArc(-2, placeID);
 			fail();
 		} catch (Exception e){
-			assertTrue(true);
+
 		}
 	}
 	
@@ -269,9 +298,7 @@ public class PetriTests {
 		try{
 			petrinet.addArc(placeID, transID);
 		} catch(Exception e){
-			e.printStackTrace();
-			fail();
-			return;
+			
 		}
 		
 		try{
@@ -298,9 +325,7 @@ public class PetriTests {
 		try{
 			petrinet.addArc(placeID, transID);
 		} catch(Exception e){
-			e.printStackTrace();
-			fail();
-			return;
+			
 		}
 		
 		try{
@@ -327,9 +352,7 @@ public class PetriTests {
 		try{
 			petrinet.addArc(transID, placeID);
 		} catch(Exception e){
-			e.printStackTrace();
-			fail();
-			return;
+			
 		}
 		
 		try{
@@ -356,9 +379,7 @@ public class PetriTests {
 		try{
 			petrinet.addArc(transID, placeID);
 		} catch(Exception e){
-			e.printStackTrace();
-			fail();
-			return;
+
 		}
 		
 		try{
@@ -385,9 +406,7 @@ public class PetriTests {
 		try{
 			petrinet.addArc(transID, placeID);
 		} catch(Exception e){
-			e.printStackTrace();
-			fail();
-			return;
+
 		}
 		
 		try{

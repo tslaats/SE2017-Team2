@@ -1,4 +1,4 @@
-package datamodel.cr.tests;
+package datamodel.cr.tests.UnitTests;
 
 import static org.junit.Assert.*;
 
@@ -6,12 +6,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import datamodel.Position;
-import datamodel.cr.Conditional;
 import datamodel.cr.Event;
+import datamodel.cr.Relation.Type;
+import datamodel.cr.Response;
 
-public class ConditionalTests {
+public class ResponseUnitTest {
 
-	private static Conditional conditional;
+	private static Response response;
 	
 	private static Event eventIn;
 	
@@ -26,17 +27,21 @@ public class ConditionalTests {
 	private static final Position eventOutPos = new Position(6,7);
 	
 	@Before
-	public void setUpBeforeClass() throws Exception {
+	public static void setUpBefore() throws Exception {
 		eventIn = new Event(eventInPos, eventInName);
 		eventOut = new Event(eventOutPos, eventOutName);
-		conditional = new Conditional(eventIn, eventOut);
+		response = new Response(eventIn, eventOut);
+	}
+
+
+	@Test
+	public void testGetType() {
+		assertTrue(response.getType() == Type.Response);
 	}
 
 	@Test
-	public void testRelation() {
-		assertTrue(conditional.getIn().getID() == eventIn.getID()
-				&& conditional.getOut().getID() == eventOut.getID());
+	public void testResponse() {
+		assertNotNull(response);
 	}
-
 
 }
