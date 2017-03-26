@@ -96,7 +96,7 @@ public class GuiController {
 	}
 
 	// Returns true if the active graph is a Petri Net
-	private Boolean isActiveGraphPetri() throws Exception {
+	public Boolean isActiveGraphPetri() throws Exception {
 		if (!this.graphs.containsKey(ActiveGraphID)) {
 			throw new Exception("The ActiveGraphID: " + ActiveGraphID + " does not exist");
 		}
@@ -108,7 +108,7 @@ public class GuiController {
 	}
 
 	// Returns true if the active graph is a Cr Graph
-	private Boolean isActiveGraphCr() throws Exception {
+	public Boolean isActiveGraphCr() throws Exception {
 		if (!this.graphs.containsKey(ActiveGraphID)) {
 			throw new Exception("The ActiveGraphID does not exist");
 		}
