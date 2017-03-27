@@ -8,28 +8,41 @@ import org.junit.Test;
 import datamodel.Position;
 import datamodel.petri.Petrinet;
 
-public class PetriUnitTests {
+public class PetrinetUnitTests {
 
 	private static final String testname = "Test";
 	
+	private static final String testname2 = "Test2";
+	
 	private static Petrinet petrinet;
+	
+	private static Petrinet petrinet2;
 	
 	@Before
 	public void setUpBefore() throws Exception {
 		petrinet = new Petrinet(testname);
+		petrinet2 = new Petrinet(testname2);
 	}
 
 	@Test
-	public void PetriConstructorTest_Name() {
+	public void testPetriConstructorName1() {
 		
 		
 		assertTrue(petrinet.getName() == testname);
 		
 	}
 	
+	@Test
+	public void testPetriConstructorName2() {
+		
+		
+		assertTrue(petrinet2.getName() == testname2);
+		
+	}
+	
 	
 	@Test 
-	public void AddPlaceTest(){
+	public void testAddPlace(){
 		
 		Position pos = new Position(2,3);
 		
@@ -41,7 +54,7 @@ public class PetriUnitTests {
 	
 	
 	@Test
-	public void DeletePlaceTest(){
+	public void testDeletePlace(){
 		
 		Position pos = new Position(2,3);
 		
@@ -58,7 +71,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeletePlaceDoesNotContainKey(){
+	public void testDeletePlaceDoesNotContainKey(){
 		
 		Position pos = new Position(2,3);
 		
@@ -74,7 +87,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeletePlaceCannotBeDeleted(){
+	public void testDeletePlaceCannotBeDeleted(){
 		
 		int id = petrinet.getStart().getID();
 		
@@ -87,7 +100,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddTransitionTest(){
+	public void testAddTransition(){
 		
 		
 		Position pos = new Position(5,6);
@@ -98,7 +111,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteTransitionTest(){
+	public void testDeleteTransition(){
 		
 		
 		Position pos = new Position (5,5);
@@ -117,7 +130,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteTransitionDoesNotContainKey(){
+	public void testDeleteTransitionDoesNotContainKey(){
 		
 		
 		try{
@@ -129,7 +142,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcTranstoPlaceOutgoing(){
+	public void testAddArcTranstoPlaceOutgoing(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -148,7 +161,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcTranstoPlaceIncoming(){
+	public void testAddArcTranstoPlaceIncoming(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -167,7 +180,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcPlacetoTransOutgoing(){
+	public void testAddArcPlacetoTransOutgoing(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -187,7 +200,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcPlacetoTransIncoming(){
+	public void testAddArcPlacetoTransIncoming(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -207,7 +220,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcNoMatch(){
+	public void testAddArcNoMatch(){
 		
 		try{
 			petrinet.addArc(-1, -2);
@@ -218,7 +231,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcTtoT(){
+	public void testAddArcTtoT(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -236,7 +249,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcPtoP(){
+	public void testAddArcPtoP(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -254,7 +267,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcEndpointMismatch1(){
+	public void testAddArcEndpointMismatch1(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -262,7 +275,7 @@ public class PetriUnitTests {
 		int placeID = petrinet.addPlace(pos1);
 		
 		try{
-			petrinet.addArc(placeID, -2);
+			petrinet.addArc(placeID, 99999999);
 			fail();
 		} catch (Exception e){
 
@@ -270,7 +283,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void AddArcEndpointMismatch2(){
+	public void testAddArcEndpointMismatch2(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -278,7 +291,7 @@ public class PetriUnitTests {
 		int placeID = petrinet.addPlace(pos1);
 		
 		try{
-			petrinet.addArc(-2, placeID);
+			petrinet.addArc(99999999, placeID);
 			fail();
 		} catch (Exception e){
 
@@ -286,7 +299,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteArcPtoT1(){
+	public void testDeleteArcPtoT1(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -313,7 +326,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteArcPtoT2(){
+	public void testDeleteArcPtoT2(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -340,7 +353,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteArcTtoP1(){
+	public void testDeleteArcTtoP1(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -367,7 +380,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteArcTtoP2(){
+	public void testDeleteArcTtoP2(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -394,7 +407,7 @@ public class PetriUnitTests {
 	}
 	
 	@Test
-	public void DeleteArcNoMatch(){
+	public void testDeleteArcNoMatch(){
 		
 		
 		Position pos1 = new Position(5,5);
@@ -413,7 +426,7 @@ public class PetriUnitTests {
 			petrinet.deleteArc(999999, 999998);
 			fail();
 		} catch(Exception e){
-			assertTrue(true);
+			return;
 			
 		}
 		

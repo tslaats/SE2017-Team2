@@ -45,13 +45,11 @@ public class GuiControllerTests {
 	@Test
 	public void CreatePetrinetTest_getName() {
 		
-		Graph testgraph = new Petrinet(testname);
-		
 		try{
 			int graphid = controller.createGraph(testname, Graph.GraphTypes.PETRI);
 			
 			
-			assertTrue(controller.getGraphs().get(graphid).getName() == testgraph.getName());
+			assertTrue(controller.getGraphs().get(graphid).getName() == testname);
 			
 		} catch(Exception e){
 			e.printStackTrace();
@@ -335,7 +333,7 @@ public class GuiControllerTests {
 				
 			GuiController.ActiveGraphID = graphid;
 			
-			controller.changePlaceToken(1, true);
+			controller.changePlaceToken(graphid, true);
 			
 			fail();
 		} catch(Exception e){
@@ -509,6 +507,8 @@ public class GuiControllerTests {
 		@Test
 		public void testCreateEventPositionStringNotCRGraph(){
 			try{
+				GuiController.ActiveGraphID = petriid;
+				
 				controller.createEvent(null, testname);
 				
 				fail();
@@ -589,13 +589,13 @@ public class GuiControllerTests {
 				Position pos = new Position(3,5);
 				GuiController.ActiveGraphID = graphid;
 				
-				controller.createEvent(pos, testname, true);
+				controller.createEvent(pos, testname, false);
 				
 				CrGraph crgraph = (CrGraph) controller.getActiveGraph();
 				
 				ArrayList<Event> events = new ArrayList<Event>( crgraph.getAllEvents());
 
-				assertTrue(events.get(0).isPending());
+				assertTrue(!events.get(0).isPending());
 				
 			} catch(Exception e){
 				e.printStackTrace();
