@@ -59,8 +59,6 @@ Structure of the src folder:
     |   |   |-- crIcon.gif
     |   |   |-- middle.gif
     |   |   |-- PIcon.gif
-    |   |   |-- test.png
-    |   |   |-- test2.png
     |   |-- tests
     |       |-- IntegrationTests
     |       |   |-- GuiControllerTests.java
