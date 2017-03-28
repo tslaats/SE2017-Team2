@@ -2,11 +2,15 @@ package datamodel.petri.tests.UnitTests;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import datamodel.Position;
 import datamodel.petri.Petrinet;
+import datamodel.petri.Transition;
 
 public class PetrinetUnitTests {
 
@@ -14,14 +18,26 @@ public class PetrinetUnitTests {
 	
 	private static final String testname2 = "Test2";
 	
+	private static final String testname3 = "Test3";
+	
+	private static final String testname4 = "Test4";
+	
 	private static Petrinet petrinet;
 	
 	private static Petrinet petrinet2;
+	
+	private static Petrinet petrinet3;
+	
+	private static Petrinet petrinet4;
 	
 	@Before
 	public void setUpBefore() throws Exception {
 		petrinet = new Petrinet(testname);
 		petrinet2 = new Petrinet(testname2);
+		petrinet3 = new Petrinet(testname3);
+		petrinet4 = new Petrinet(testname4);
+		
+		
 	}
 
 	@Test
@@ -434,12 +450,258 @@ public class PetrinetUnitTests {
 	
 	
 	@Test
-	public void GetPossibleActionsTest(){
+	public void GetPossibleActionsOneAction(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet3.getStart().getID();
+		int end = petrinet3.getEnd().getID();
+		
+		int t1 = petrinet3.addTransition(pos, "A");
+		
+		try {
+			petrinet3.addArc(start, t1);
+			petrinet3.addArc(t1, end);
+		} catch(Exception e) {
+			return;
+		}
+		List<Transition> possibleActions = petrinet3.getPossibleActions();
+		
+		assertTrue(possibleActions.get(0).getID() == t1);
+	}
+	
+	@Test
+	public void GetPossibleActionsTestTwoActions(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet3.getStart().getID();
+		int end = petrinet3.getEnd().getID();
+		
+		int t1 = petrinet3.addTransition(pos, "A");
+		int t2 = petrinet3.addTransition(pos, "B");
+		
+		try {
+			petrinet3.addArc(start, t1);
+			petrinet3.addArc(start, t2);
+			
+			petrinet3.addArc(t1, end);
+			petrinet3.addArc(t2, end);
+		} catch(Exception e) {
+			return;
+		}
+		
+		List<Transition> possibleActions = petrinet3.getPossibleActions();
+
+		
+		assertTrue(possibleActions.size() == 2);
+	}
+	
+	@Test
+	public void GetPossibleActionsTestCompleteNet(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet3.getStart().getID();
+		int end = petrinet3.getEnd().getID();
+		
+		int t1 = petrinet3.addTransition(pos, "A");
+		int t2 = petrinet3.addTransition(pos, "B");
+		int t3 = petrinet3.addTransition(pos, "C");
+		int t4 = petrinet3.addTransition(pos, "D");
+		
+		int p1 = petrinet3.addPlace(pos);
+		int p2 = petrinet3.addPlace(pos);
+		int p3 = petrinet3.addPlace(pos);
+		int p4 = petrinet3.addPlace(pos);
+		
+		
+		petrinet3.getStart().setToken(false);
+		petrinet3.getPlaces().get(p4).setToken(true);
+		petrinet3.getPlaces().get(p1).setToken(true);
+		
+		
+		
+		try {
+			petrinet3.addArc(start, t1);
+			
+			petrinet3.addArc(t1, p1);
+			petrinet3.addArc(t1, p2);
+			
+			petrinet3.addArc(p1, t2);
+			petrinet3.addArc(p2, t3);
+			
+			petrinet3.addArc(t2, p3);
+			petrinet3.addArc(t3, p4);
+			
+			petrinet3.addArc(p3, t4);
+			petrinet3.addArc(p4, t4);
+			
+			
+			petrinet3.addArc(t4, end);
+		} catch(Exception e) {
+			return;
+		}
+		petrinet3.getStart().setToken(false);
+		
+		List<Transition> possibleActions = petrinet3.getPossibleActions();
+		
+		assertTrue(possibleActions.size() == 1 &&
+					possibleActions.get(0).getID() == t2);
+	}
+	
+	@Test
+	public void ExecuteActionTestOneAction(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet4.getStart().getID();
+		int end = petrinet4.getEnd().getID();
+		
+		int t1 = petrinet4.addTransition(pos, "A");
+		
+		try {
+			petrinet4.addArc(start, t1);
+			petrinet4.addArc(t1, end);
+		} catch(Exception e) {
+			return;
+		}
+		
+		assertTrue(petrinet4.getStart().hasToken());
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t1));
+		} catch(Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getEnd().hasToken());
+	}
+	
+	@Test
+	public void ExecuteActionTestTwoActions(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet4.getStart().getID();
+		int end = petrinet4.getEnd().getID();
+		
+		int t1 = petrinet4.addTransition(pos, "A");
+		int t2 = petrinet4.addTransition(pos, "B");
+		
+		try {
+			petrinet4.addArc(start, t1);
+			petrinet4.addArc(start, t2);
+			
+			petrinet4.addArc(t1, end);
+			petrinet4.addArc(t2, end);
+		} catch(Exception e) {
+			return;
+		}
+		
+		assertTrue(petrinet4.getStart().hasToken());
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t2));
+		} catch (Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getEnd().hasToken());
 		
 	}
 	
 	@Test
-	public void ExecuteActionTest(){
+	public void ExecuteActionTestFullNet(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet4.getStart().getID();
+		int end = petrinet4.getEnd().getID();
+		
+		int t1 = petrinet4.addTransition(pos, "A");
+		int t2 = petrinet4.addTransition(pos, "B");
+		int t3 = petrinet4.addTransition(pos, "C");
+		int t4 = petrinet4.addTransition(pos, "D");
+		
+		int p1 = petrinet4.addPlace(pos);
+		int p2 = petrinet4.addPlace(pos);
+		int p3 = petrinet4.addPlace(pos);
+		int p4 = petrinet4.addPlace(pos);
+		
+		
+		try {
+			petrinet4.addArc(start, t1);
+			
+			petrinet4.addArc(t1, p1);
+			petrinet4.addArc(t1, p2);
+			
+			petrinet4.addArc(p1, t2);
+			petrinet4.addArc(p2, t3);
+			
+			petrinet4.addArc(t2, p3);
+			petrinet4.addArc(t3, p4);
+			
+			petrinet4.addArc(p3, t4);
+			petrinet4.addArc(p4, t4);
+			
+			
+			petrinet4.addArc(t4, end);
+		} catch(Exception e) {
+			return;
+		}
+		
+		assertTrue(petrinet4.getStart().hasToken());
+		
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t1));
+		} catch(Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getPlaces().get(p1).hasToken() &&
+				petrinet4.getPlaces().get(p2).hasToken());
+		
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t2));
+		} catch(Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getPlaces().get(p3).hasToken() &&
+				petrinet4.getPlaces().get(p2).hasToken());
+		
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t3));
+		} catch(Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getPlaces().get(p3).hasToken() &&
+				petrinet4.getPlaces().get(p4).hasToken());
+		
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t4));
+		} catch(Exception e) {
+			return;
+		}
+		assertTrue(petrinet4.getEnd().hasToken());
+	}
+	
+	@Test
+	public void ExecuteActionTestIllegalActiont(){
+		Position pos = new Position(1,1);
+		
+		int start = petrinet4.getStart().getID();
+		int end = petrinet4.getEnd().getID();
+		
+		int t1 = petrinet4.addTransition(pos, "A");
+		int t2 = petrinet4.addTransition(pos, "B");
+		
+		int p1 = petrinet4.addPlace(pos);
+		
+		
+		try {
+			petrinet4.addArc(start, t1);
+			petrinet4.addArc(t1, p1);
+			petrinet4.addArc(p1, t2);
+			petrinet4.addArc(t2, end);
+		} catch(Exception e) {
+			return;
+		}
+		try {
+			petrinet4.executeAction(petrinet4.getTransition(t2));
+			fail("Expected exception did not occur");
+		} catch(Exception e) {
+			assertTrue(true);
+		}
 		
 	}
 	
