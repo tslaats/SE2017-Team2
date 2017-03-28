@@ -1,7 +1,6 @@
 package petriVisualization;
 
 import java.awt.*;
-import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;

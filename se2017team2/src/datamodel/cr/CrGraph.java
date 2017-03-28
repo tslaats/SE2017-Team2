@@ -123,6 +123,7 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event>, S
 			throw new Exception("There exists no Event with ID: " + eventID);
 		}
 		
+		@SuppressWarnings("unused")
 		Event e = null;
 		try {
 			e = (Event) this.crObjects.get(eventID);
@@ -186,6 +187,7 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event>, S
 			throw new Exception("There exists no Condition with ID: " + conID);
 		}
 		
+		@SuppressWarnings("unused")
 		Conditional c = null;
 		try {
 			c = (Conditional) this.crObjects.get(conID);
@@ -249,6 +251,7 @@ public class CrGraph extends Graph implements Visualization, Semantics<Event>, S
 			throw new Exception("There exists no Response with ID: " + resID);
 		}
 		
+		@SuppressWarnings("unused")
 		Response r = null;
 		try {
 			r = (Response) this.crObjects.get(resID);

@@ -16,7 +16,6 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
-import datamodel.petri.Place;
 import datamodel.petri.Transition;
 
 /************************************************************/
