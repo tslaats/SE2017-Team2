@@ -65,14 +65,6 @@ class SemanticsTest {
     }
 
     /**
-     * @return
-     */
-    private static CrGraph petriNetGraph() {
-        // TODO
-        return null;
-    }
-
-    /**
      * @param events
      * @return
      */
@@ -133,10 +125,6 @@ class SemanticsTest {
         Assertions.assertEquals(2, graph.getPossibleActions().size());
     }
 
-    @Test
-    public void testGetPossibleActionsPetriNetGraph() {
-        // TODO
-    }
 
     @Test()
     public void testExecuteActionBlockedEvent() throws Exception {
@@ -172,11 +160,6 @@ class SemanticsTest {
         Assertions.assertEquals("Event not executable", exception.getMessage());
     }
 
-    @Test
-    public void testExecuteActionPetriNetGraph() {
-        // TODO
-        CrGraph graph = petriNetGraph();
-    }
 
     @Test
     public void testIsDoneEventsOnlyGraph() {
@@ -194,12 +177,6 @@ class SemanticsTest {
     public void testIsDoneNoPendingEventsGraph() {
         CrGraph graph = noPendingEventsGraph();
         Assertions.assertEquals(true, graph.isDone());
-    }
-
-
-    @Test
-    public void testIsDonePetriNetGraph() {
-        // TODO
     }
 
     @Test
