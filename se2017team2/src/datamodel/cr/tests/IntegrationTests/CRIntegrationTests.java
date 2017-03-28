@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import datamodel.Graph;
 import datamodel.Position;
 import datamodel.cr.CrGraph;
+import datamodel.cr.CrObject;
 import datamodel.cr.Event;
 
 
@@ -59,7 +59,7 @@ public class CRIntegrationTests {
 	}
 	
 	@Test
-	public void testGetAllEventsContainsFirst() {
+	public void testPendingEventsContainsFirst() {
 		Position pos1 = new Position(3,5);
 		Position pos2 = new Position(5,7);
 		
@@ -75,10 +75,10 @@ public class CRIntegrationTests {
 		
 		
 		
-		List<Event> returnlist = new ArrayList<>();
-		returnlist = crgraph.getAllEvents();
 		
-		assertTrue(returnlist.contains(event1));
+		ArrayList<CrObject> returnlist = new ArrayList<CrObject>(crgraph.getPendingEvents());
+		
+		assertTrue(!returnlist.contains(event2));
 	}
 	
 	@Test

@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import datamodel.Position;
-import datamodel.cr.CrGraph;
 import datamodel.petri.Transition;
 
 public class TransitionUnitTest {

@@ -16,7 +16,6 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.cr.Event;
 import datamodel.petri.Petrinet;
-import datamodel.petri.Place;
 import datamodel.petri.Transition;
 
 /************************************************************/
@@ -73,27 +72,6 @@ public class GuiController {
 		return id;
 	}
 
-	/**
-	 * Deletes the specified Graph object
-	 * 
-	 * @param graphID
-	 *            ID of the graph to be deleted
-	 * @throws Exception
-	 *             If the given graphID does not exist
-	 */
-	public void deleteCrGraph(int graphID) throws Exception {
-
-		if (!this.graphs.containsKey(graphID)) {
-			throw new Exception("The given graphID does not exist");
-		}
-
-		// Remove graph from the HashMap and set its reference to null such that
-		// other graphs loses their reference to it as well.
-		Graph graph = this.graphs.get(graphID);
-		this.graphs.remove(graphID);
-		graph = null;
-
-	}
 
 	// Returns true if the active graph is a Petri Net
 	public Boolean isActiveGraphPetri() throws Exception {

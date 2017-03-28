@@ -99,7 +99,7 @@ public class Menu implements ActionListener {
 		// Build CR menu in the menu bar.
 		menuCR = new JMenu("CR");
 		menuCR.setMnemonic(KeyEvent.VK_C);
-		menuCR.getAccessibleContext().setAccessibleDescription("This menu does nothing");
+		//menuCR.getAccessibleContext().setAccessibleDescription("This menu does nothing");
 		menuCR.setEnabled(false);
 		menuBar.add(menuCR);
 
@@ -176,7 +176,7 @@ public class Menu implements ActionListener {
 		// Build Petri menu in the menu bar.
 		MenuPetri = new JMenu("Petri");
 		MenuPetri.setMnemonic(KeyEvent.VK_P);
-		MenuPetri.getAccessibleContext().setAccessibleDescription("This menu does nothing");
+		//MenuPetri.getAccessibleContext().setAccessibleDescription("This menu does nothing");
 		MenuPetri.setEnabled(false);
 
 		submenu = new JMenu("Place");
@@ -507,8 +507,11 @@ public class Menu implements ActionListener {
 			Object[] TransitionMessage = { "Please enter the name of the new Transition:", TransitionNameField,
 					"Do you want to add a nested CR graph", nestedCRButton };
 
-			option = JOptionPane.showConfirmDialog(null, TransitionMessage, "Add Transition",
-					JOptionPane.OK_CANCEL_OPTION);
+			 option = JOptionPane.showConfirmDialog(null, TransitionMessage,
+			 "Add Transition",
+			 JOptionPane.OK_CANCEL_OPTION);
+
+
 
 			this.nested = nestedCRButton.isSelected();
 
@@ -551,16 +554,12 @@ public class Menu implements ActionListener {
 			Main.showPossibleActions();
 			disableMenubar();
 			menuSimulation.setEnabled(true);
-
-			// Main.disableTabs();
 			break;
 		case "stop_simulation":
 			Main.guiControlller.stopSimulation();
 			menuSimulation.setEnabled(false);
 			Main.hidePossibleActions();
 			Main.updateUserMsg("Stopped Simulation");
-
-			// Main.enableTabs();
 			enableMenubar();
 			break;
 		case "new_arc":
@@ -590,7 +589,6 @@ public class Menu implements ActionListener {
 			incomingIDs = new JTextField();
 			outgoingIDs = new JTextField();
 			Object[] delarcMessage = { "Origin ID:", incomingIDs, "Destination ID:", outgoingIDs };
-
 
 			option = JOptionPane.showConfirmDialog(null, delarcMessage, "Delete Arc", JOptionPane.OK_CANCEL_OPTION);
 			if (option == JOptionPane.OK_OPTION) {
@@ -642,7 +640,7 @@ public class Menu implements ActionListener {
 		case "delete_subcr":
 
 			DeleteSubGraphOptionPane CRpaneDel = new DeleteSubGraphOptionPane("Delete sub Graph from Transition",
-					"Delete refence to CR Graph", "Delete CR Graph entirely(cannot be undone)");
+					"Delete reference to CR Graph", "Delete CR Graph entirely(cannot be undone)");
 			if (CRpaneDel.getOption() == JOptionPane.OK_OPTION) {
 				String transitionIDstring = CRpaneDel.getContent();
 
@@ -657,6 +655,7 @@ public class Menu implements ActionListener {
 						int graphId = Main.guiControlller.unbindNestedGraph(transitionID, true);
 						guiPane.deleteTabByGraphId(graphId);
 					}
+					Main.updateUserMsg("Subgraph deleted from transition ID: " + transitionID);
 				} catch (NumberFormatException e2) {
 					Main.updateUserWarning(invID);
 
@@ -667,7 +666,7 @@ public class Menu implements ActionListener {
 
 			}
 
-			Main.updateUserMsg("Delete sub CR Graph, Not implemented yet");
+
 			break;
 		case "new_subpetri":
 
@@ -1025,14 +1024,18 @@ public class Menu implements ActionListener {
 	 * 
 	 */
 	public void enableMenubar() {
-		Boolean isCRgrapg = Main.getActiveTab().getCrGraph();
-		if (isCRgrapg) {
-			menuCR.setEnabled(true);
-		} else {
-			MenuPetri.setEnabled(true);
+		try {
+			Boolean isCRgrapg = Main.getActiveTab().getCrGraph();
+			if (isCRgrapg) {
+				menuCR.setEnabled(true);
+			} else {
+				MenuPetri.setEnabled(true);
+			}
+			menuNew.setEnabled(true);
+			menuSimulation.setEnabled(true);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			menuNew.setEnabled(true);
 		}
-		menuNew.setEnabled(true);
-		menuSimulation.setEnabled(true);
 	}
 
 	public static void enableNewMenubar() {
