@@ -41,6 +41,9 @@ public class PetriWindow extends JComponent {
 		return new Dimension(width, height);
 	}
 
+	
+	
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, Scale(fontSize)));
@@ -138,18 +141,18 @@ public class PetriWindow extends JComponent {
 	Point p1 = edge.n1.point;
 	Point p2 = edge.n2.point;
 	g.setColor(Color.BLACK);
-	
-	float m = ((float) p2.y - (float) p1.y) / ((float) p2.x - (float) p1.x);
+	float m = (Math.abs((float) p2.y - (float) p1.y)) / ((float) p2.x - (float) p1.x);
 
-	float displaceX = (float) Math.cos(m);
-	float displaceY = (float) Math.sin(m);
+	double angle = Math.atan(m);
+	float displaceX = (float) Math.cos(angle);
+	float displaceY = (float) Math.sin(angle);
 	
 	drawArrowLine(g,
 			p1.x,
 			p1.y,
 			p2.x - (int) Math.floor(displaceX*(nodeSize+12)),
-			p2.y - (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
-}
+			p2.y + (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
+	}
 	
 	private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h){
         int dx = x2 - x1, dy = y2 - y1;
