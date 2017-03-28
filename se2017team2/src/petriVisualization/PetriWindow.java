@@ -11,6 +11,7 @@ import petriVisualization.Graph.Node;
 
 public class PetriWindow extends JComponent {
 
+	
 	private int width = 960;
 	private int height = 640;
 	private List<Node> nodes = new ArrayList<Node>();
