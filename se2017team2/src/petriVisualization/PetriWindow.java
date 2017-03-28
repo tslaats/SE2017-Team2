@@ -135,8 +135,6 @@ public class PetriWindow extends JComponent {
 		}
 	}
 
-
-	
 	private void drawEdge(Edge edge, Graphics g) {
 	Point p1 = edge.n1.point;
 	Point p2 = edge.n2.point;
