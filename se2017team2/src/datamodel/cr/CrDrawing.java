@@ -17,7 +17,7 @@ public class CrDrawing {
 	/**
 	 * Singleton accessor for visualization methods
 	 */
-	protected static CrDrawing instance = new CrDrawing();
+	public static CrDrawing instance = new CrDrawing();
 	
 	// Empty constructor
 	private CrDrawing() {}
@@ -34,7 +34,7 @@ public class CrDrawing {
     private static final int CIRCLE_RADIUS = 10;
 	private static final int MOVE_EVENT_X_RIGHT = 50;
 	private static final int MARGIN = 3;
-    
+	
 	public BufferedImage draw(CrGraph crgraph) {
 		relationPos = new ArrayList<Position>();
 		eventPos = new ArrayList<Position>();
@@ -62,11 +62,19 @@ public class CrDrawing {
 	    return bi;
 	}
 	
-	  /**
-	   * Gives a list of 40 position that bounds the event
-	   * @param e
-	   * @return
-	   */
+	public int getEventWidth() {
+		return EVENT_WIDTH;
+	}
+    
+	public int getEventHeight() {
+		return EVENT_HEIGHT;
+	}
+	
+  /**
+   * Gives a list of all possible positions that bounds the event
+   * @param e
+   * @return
+   */
 	private ArrayList<Position> bounds(Event e) {
 		ArrayList<Position> list = new ArrayList<Position>();
 		int xstart = e.getX();
@@ -79,7 +87,7 @@ public class CrDrawing {
 			list.add(new Position(m+(i*jump),ystart));
 			list.add(new Position(m-(i*jump),ystart));
 			list.add(new Position(m+(i*jump),ystart + EVENT_HEIGHT));
-			list.add(new Position(m+(i*jump),ystart + EVENT_HEIGHT));
+			list.add(new Position(m-(i*jump),ystart + EVENT_HEIGHT));
 		}
 		
 		int nOfHeight = (EVENT_HEIGHT/2) / jump;
@@ -133,12 +141,17 @@ public class CrDrawing {
 				continue;
 			}
 			for (Position p2 : boundsE2) { 
-				if (relationPos.contains(p2)) {
-					continue;
-				}
 				if (distance(p1,p2) < dis && distance(p1,p2) > MOVE_EVENT_X_RIGHT) {
 					dis = distance(p1,p2);
 					shortest = new Tuple<Position, Position>(p1, p2);
+				}
+			} 
+		}
+		if (shortest.f.equals(e1.getPosition())) {
+			for (Position p2 : boundsE2) { 
+				if (distance(e1.getPosition(),p2) < dis && distance(e1.getPosition(),p2) > MOVE_EVENT_X_RIGHT) {
+					dis = distance(e1.getPosition(),p2);
+					shortest = new Tuple<Position, Position>(e1.getPosition(), p2);
 				}
 			} 
 		}
@@ -289,7 +302,7 @@ public class CrDrawing {
 	 * @return
 	 */
 	private boolean overlaps(Position p, int x, int y) {
-		return x < p.x() + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_HEIGHT > p.y();
+		return x < p.x()+MOVE_EVENT_X_RIGHT + EVENT_WIDTH && x + EVENT_WIDTH > p.x() && y < p.y() + EVENT_HEIGHT && y + EVENT_HEIGHT > p.y();
 	}	
 	  
 	/**
@@ -301,15 +314,12 @@ public class CrDrawing {
 		int x = event.getX();
 		int y = event.getY();
 		for (Position p: eventPos) {
-			while (overlaps(p, x, y)) {
-				x += EVENT_WIDTH;
+			if (overlaps(p, x, y)) {
+				x = p.x() + EVENT_WIDTH + MOVE_EVENT_X_RIGHT;
 				if (x + EVENT_WIDTH >= IMAGE_WIDTH) {
-					y += EVENT_HEIGHT + 30;
+					y += EVENT_HEIGHT + MOVE_EVENT_X_RIGHT;
 					x = 10;
 				}
-			}
-			if (overlaps(p,x-1,y)) {
-				x += EVENT_WIDTH + p.x() - x + MOVE_EVENT_X_RIGHT;
 			}
 		}
 		// SHOULD THE NEW POSITION BE SAVED IN THE GRAPHOBJECT?
