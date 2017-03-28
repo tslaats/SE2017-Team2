@@ -34,8 +34,7 @@ public class ActionPane extends JPanel implements ActionListener {
 		JLabel label1 = new JLabel(" Possible Actions ", null, JLabel.CENTER);
 		add(label1, BorderLayout.NORTH);
 
-		actionsScrollPane = new JScrollPane(this.actions, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		actionsScrollPane = new JScrollPane(this.actions);
 		this.actions.setLayout(new BoxLayout(this.actions, BoxLayout.Y_AXIS));
 		this.add(actionsScrollPane, BorderLayout.CENTER);
 		// this.add(this.actions);

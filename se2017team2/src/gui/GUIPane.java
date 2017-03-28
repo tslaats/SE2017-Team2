@@ -209,7 +209,7 @@ public class GUIPane extends JPanel implements ChangeListener {
 	}
 
 	public void setSimulation(Boolean simulation) {
-		this.simulation = true;
+		this.simulation = simulation;
 	}
 
 }

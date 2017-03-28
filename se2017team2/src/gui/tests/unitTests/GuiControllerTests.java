@@ -84,7 +84,7 @@ public class GuiControllerTests {
 		try{
 			graphid = controller.createGraph(testname, Graph.GraphTypes.CR);
 			
-			controller.deleteCrGraph(graphid);
+			controller.deleteGraph(graphid);
 		} catch (Exception e){
 			e.printStackTrace();
 			fail();
