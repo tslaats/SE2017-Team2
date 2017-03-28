@@ -2,7 +2,7 @@
 Repository for the 2017 Software Engineering course at KU - Team 2
 
 Structure of the src folder:
-
+```
 |-- src
     |-- datamodel
     |   |-- Graph.java
@@ -75,3 +75,4 @@ Structure of the src folder:
         |   |-- Node.java
         |-- Tests
             |-- WhiteBoxTesting.java
+```
