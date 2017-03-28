@@ -1,4 +1,4 @@
-package datamodel.petri.tests;
+package datamodel.petri.tests.UnitTests;
 
 import static org.junit.Assert.*;
 
@@ -9,7 +9,7 @@ import datamodel.Position;
 import datamodel.cr.CrGraph;
 import datamodel.petri.Transition;
 
-public class TransitionTest {
+public class TransitionUnitTest {
 
 	private static final String testname = "test";
 	
@@ -18,16 +18,23 @@ public class TransitionTest {
 	private static Position pos = new Position(2,3);
 	
 	@Before
-	public void setUpBeforeClass() throws Exception {
+	public void setUpBefore() throws Exception {
 		transition = new Transition(pos, testname);
 	}
 
 	@Test
-	public void testTransition() {
-		assertTrue(transition.getCanBeDeleted()
-				&& transition.getPos().x() == 2
-				&& transition.getPos().y() == 3
-				&& transition.getName() == testname);
+	public void testTransitionCanBeDeleted() {
+		assertTrue(transition.getCanBeDeleted());
+	}
+	
+	@Test
+	public void testTransitionPosition() {
+		assertTrue(transition.getPos() == pos);
+	}
+	
+	@Test
+	public void testTransitionName() {
+		assertTrue(transition.getName() == testname);
 	}
 
 	@Test
@@ -39,16 +46,6 @@ public class TransitionTest {
 		assertTrue(transition.getName() == newname);
 	}
 
-	@Test
-	public void testSetCrGraph() {
-		String newname = "newname";
-		
-		CrGraph crgraph = new CrGraph(newname);
-		int id = crgraph.getID();
-		
-		transition.setCrGraph(crgraph);
-		
-		assertTrue(transition.getCrGraph().getID() == id);
-	}
+	
 
 }
