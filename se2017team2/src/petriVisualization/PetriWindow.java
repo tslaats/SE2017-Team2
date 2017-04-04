@@ -136,20 +136,34 @@ public class PetriWindow extends JComponent {
 	}
 
 	private void drawEdge(Edge edge, Graphics g) {
-	Point p1 = edge.n1.point;
-	Point p2 = edge.n2.point;
-	g.setColor(Color.BLACK);
-	float m = (Math.abs((float) p2.y - (float) p1.y)) / ((float) p2.x - (float) p1.x);
+		Point p1 = edge.n1.point;
+		Point p2 = edge.n2.point;
+		g.setColor(Color.BLACK);
 
-	double angle = Math.atan(m);
-	float displaceX = (float) Math.cos(angle);
-	float displaceY = (float) Math.sin(angle);
-	
-	drawArrowLine(g,
-			p1.x,
-			p1.y,
-			p2.x - (int) Math.floor(displaceX*(nodeSize+12)),
-			p2.y + (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
+		float m = ((float) p2.y - (float) p1.y) / ((float) p2.x - (float) p1.x);
+
+		double angle = Math.atan(m);
+		angle = Math.abs(angle);
+		
+		float displaceX;
+		if(p2.x >= p1.x){
+			displaceX = (float) Math.cos(angle);
+		}else{
+			displaceX = (float) - Math.cos(angle);
+		}
+		
+		float displaceY;
+		if(p2.y >= p1.y){
+			displaceY = (float) Math.sin(angle);
+		}else{
+			displaceY = (float) - Math.sin(angle);
+		}
+			
+		drawArrowLine(g,
+				p1.x,
+				p1.y,
+				p2.x - (int) Math.floor(displaceX*(nodeSize+12)),
+				p2.y - (int) Math.floor(displaceY*(nodeSize+12)), 15, 15);
 	}
 	
 	private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h){
